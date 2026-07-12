@@ -33,7 +33,23 @@ urls.append({
     "priority": "0.9"
 })
 
-# 1b. Info Pages
+# 1b. Distance Calculator Page
+urls.append({
+    "loc": f"{SITE_URL}distance.html",
+    "lastmod": current_date,
+    "changefreq": "weekly",
+    "priority": "0.8"
+})
+
+# 1c. Random Address Generator Page
+urls.append({
+    "loc": f"{SITE_URL}address-generator.html",
+    "lastmod": current_date,
+    "changefreq": "weekly",
+    "priority": "0.8"
+})
+
+# 1c. Info Pages
 for info in ["about.html", "contact.html", "privacy.html", "disclaimer.html"]:
     urls.append({
         "loc": f"{SITE_URL}{info}",

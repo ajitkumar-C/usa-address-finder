@@ -3,10 +3,14 @@ import csv
 import json
 import urllib.request
 import re
+import zipfile
+import io
 
 # Constants
 CSV_URL = "https://raw.githubusercontent.com/scpike/us-state-county-zip/master/geo-data.csv"
 CSV_FILE = "geo-data.csv"
+GEONAMES_URL = "http://download.geonames.org/export/zip/US.zip"
+GEONAMES_ZIP = "US.zip"
 DIST_DIR = "."
 STATE_DIR = os.path.join(DIST_DIR, "state")
 COUNTY_DIR = os.path.join(DIST_DIR, "county")
@@ -38,6 +42,36 @@ if not os.path.exists(CSV_FILE):
         exit(1)
 else:
     print("Using local geo-data.csv copy.")
+
+# Download GeoNames coordinates if not exists
+if not os.path.exists(GEONAMES_ZIP):
+    print("Downloading GeoNames US zip codes coordinates...")
+    try:
+        urllib.request.urlretrieve(GEONAMES_URL, GEONAMES_ZIP)
+        print("GeoNames dataset downloaded successfully.")
+    except Exception as e:
+        print("Error downloading GeoNames dataset:", e)
+else:
+    print("Using local US.zip coordinates copy.")
+
+geonames_coords = {}
+if os.path.exists(GEONAMES_ZIP):
+    try:
+        with zipfile.ZipFile(GEONAMES_ZIP) as zf:
+            with zf.open("US.txt") as f:
+                for line in f.read().decode('utf-8').splitlines():
+                    parts = line.split('\t')
+                    if len(parts) >= 11:
+                        z_code = parts[1]
+                        try:
+                            lat = float(parts[9])
+                            lon = float(parts[10])
+                            geonames_coords[z_code] = (lat, lon)
+                        except ValueError:
+                            pass
+        print(f"Loaded {len(geonames_coords)} coordinates from GeoNames.")
+    except Exception as e:
+        print("Error reading GeoNames ZIP:", e)
 
 # Process CSV data
 states_data = {}
@@ -99,7 +133,8 @@ with open(CSV_FILE, mode='r', encoding='utf-8') as f:
         state_entry['total_zips'] += 1
         
         # Populate ZIP index for search
-        zip_index[zipcode] = [abbr, county, city]
+        lat, lon = geonames_coords.get(zipcode, (None, None))
+        zip_index[zipcode] = [abbr, county, city, lat, lon]
         
         # Populate unique counties for index
         all_counties[county_key] = {
@@ -138,7 +173,7 @@ HEADER = """<!DOCTYPE html>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{title}</title>
     <meta name="description" content="{description}">
-    <link rel="stylesheet" href="{root_path}css/style.css">
+    <link rel="stylesheet" href="{root_path}css/style.css?v=2">
     <!-- Google Schema Markup -->
     {schema_markup}
 </head>
@@ -163,9 +198,19 @@ HEADER = """<!DOCTYPE html>
                 </svg>
                 <span>USA Address Finder</span>
             </a>
-            <nav style="display: flex; align-items: center; gap: 16px;">
+            <nav style="display: flex; align-items: center; gap: 12px;">
                 <ul class="nav-links">
+                    <li class="nav-close-wrapper">
+                        <button id="menu-close" class="menu-close-btn" aria-label="Close Navigation Menu">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="18" y1="6" x2="6" y2="18"></line>
+                                <line x1="6" y1="6" x2="18" y2="18"></line>
+                            </svg>
+                        </button>
+                    </li>
                     <li><a href="{root_path}index.html">Home</a></li>
+                    <li><a href="{root_path}distance.html">Distance Calculator</a></li>
+                    <li><a href="{root_path}address-generator.html">Address Generator</a></li>
                     <li><a href="{root_path}about.html">About</a></li>
                     <li><a href="{root_path}contact.html">Contact</a></li>
                 </ul>
@@ -175,7 +220,15 @@ HEADER = """<!DOCTYPE html>
                     <!-- Moon Icon -->
                     <svg class="moon-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display: none;"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
                 </button>
+                <button id="menu-toggle" class="menu-toggle-btn" aria-label="Toggle Navigation Menu" title="Toggle Navigation Menu">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
             </nav>
+            <div id="nav-overlay" class="nav-overlay"></div>
         </div>
     </header>
 """
@@ -252,6 +305,8 @@ FOOTER = """
                     <h3>Resources</h3>
                     <ul>
                         <li><a href="{root_path}index.html">Home Search</a></li>
+                        <li><a href="{root_path}distance.html">Distance Calculator</a></li>
+                        <li><a href="{root_path}address-generator.html">Address Generator</a></li>
                         <li><a href="{root_path}sitemap.xml">XML Sitemap</a></li>
                         <li><a href="https://github.com/scpike/us-state-county-zip" target="_blank" rel="noopener">Data Source</a></li>
                     </ul>
@@ -270,7 +325,7 @@ FOOTER = """
         <span id="toast-message">ZIP Code Copied!</span>
     </div>
 
-    <script src="{root_path}js/search.js"></script>
+    <script src="{root_path}js/search.js?v=2"></script>
 </body>
 </html>
 """
@@ -704,10 +759,257 @@ def generate_info_pages():
         
     print("All info pages generated successfully.")
 
+def generate_distance_page():
+    print("Generating ZIP code distance page (distance.html)...")
+    title = "ZIP Code Distance Calculator - Calculate Distance Between ZIP Codes"
+    description = "Calculate the distance between two U.S. ZIP codes based on latitude and longitude. Instant great-circle distance calculation in miles and kilometers."
+    
+    breadcrumbs_list = '<li><a href="index.html">Home</a></li><li class="active">Distance Calculator</li>'
+    breadcrumbs_html = BREADCRUMBS_HTML.format(breadcrumbs=breadcrumbs_list)
+    
+    # Body content of the distance page
+    body_content = """
+    <div class="container animate-fade-in" style="margin-top: 30px;">
+        <div class="detail-layout">
+            <div class="main-content">
+                <h2 class="section-title" style="margin-bottom: 24px;">ZIP Code Distance Calculator</h2>
+                <p style="margin-bottom: 24px; font-size: 15px; color: var(--text-secondary);">
+                    Enter two U.S. ZIP codes below to calculate the distance between them. The calculation is based on the geographic coordinates (latitude and longitude) of each ZIP code centroid using the Haversine formula.
+                </p>
+                
+                <div class="calculator-card" style="background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: var(--card-radius); padding: 24px; margin-bottom: 30px;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;" class="calc-inputs-grid">
+                        <div class="calc-field" style="position: relative;">
+                            <label for="zip1" style="display: block; font-weight: 600; font-size: 14px; margin-bottom: 8px; color: var(--text-primary);">Origin ZIP Code</label>
+                            <div class="search-bar-container" style="padding: 2px 2px 2px 12px; border: 1px solid var(--border-color); background: var(--bg-secondary);">
+                                <input type="text" id="zip1" class="search-input" placeholder="e.g. 90210" autocomplete="off" style="font-size: 14px; height: 38px;">
+                                <button id="clear-zip1" class="clear-search-btn" style="padding: 4px; margin-right: 2px;">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+                                </button>
+                            </div>
+                            <div id="suggestions-zip1" class="suggestions-box" style="top: 100%; max-height: 200px;"></div>
+                        </div>
+                        
+                        <div class="calc-field" style="position: relative;">
+                            <label for="zip2" style="display: block; font-weight: 600; font-size: 14px; margin-bottom: 8px; color: var(--text-primary);">Destination ZIP Code</label>
+                            <div class="search-bar-container" style="padding: 2px 2px 2px 12px; border: 1px solid var(--border-color); background: var(--bg-secondary);">
+                                <input type="text" id="zip2" class="search-input" placeholder="e.g. 10001" autocomplete="off" style="font-size: 14px; height: 38px;">
+                                <button id="clear-zip2" class="clear-search-btn" style="padding: 4px; margin-right: 2px;">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+                                </button>
+                            </div>
+                            <div id="suggestions-zip2" class="suggestions-box" style="top: 100%; max-height: 200px;"></div>
+                        </div>
+                    </div>
+                    
+                    <div style="text-align: center;">
+                        <button id="calculate-btn" class="search-btn" style="padding: 12px 30px; font-size: 15px; width: 100%; max-width: 300px; display: inline-flex; align-items: center; justify-content: center; gap: 8px;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m16 12-4-4-4 4M12 8v8"/></svg>
+                            <span>Calculate Distance</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="error-message" style="display: none; background: #fee2e2; border: 1px solid #fca5a5; color: #b91c1c; border-radius: 6px; padding: 14px 20px; font-size: 14px; font-weight: 500; margin-bottom: 24px; align-items: center; gap: 8px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                    <span id="error-text">Please enter valid ZIP codes.</span>
+                </div>
+                
+                <div id="result-container" style="display: none;">
+                    <div class="result-card" style="background: var(--bg-secondary); border: 2px solid var(--primary-color); border-radius: var(--card-radius); padding: 28px; box-shadow: var(--shadow-md); margin-bottom: 30px; position: relative; overflow: hidden;">
+                        <div style="position: absolute; top: 0; left: 0; right: 0; height: 4px; background: var(--primary-gradient);"></div>
+                        <h3 style="font-size: 18px; margin-bottom: 16px; text-align: center; color: var(--text-primary);">Calculation Results</h3>
+                        
+                        <div style="display: flex; justify-content: center; align-items: baseline; gap: 24px; flex-wrap: wrap; margin-bottom: 24px;">
+                            <div style="text-align: center;">
+                                <div id="dist-miles" style="font-family: var(--font-heading); font-size: 42px; font-weight: 800; color: var(--primary-color); line-height: 1;">0.0</div>
+                                <div style="font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-top: 4px;">Miles</div>
+                            </div>
+                            <div style="font-family: var(--font-heading); font-size: 36px; font-weight: 300; color: var(--border-color); line-height: 1;" class="dist-divider">|</div>
+                            <div style="text-align: center;">
+                                <div id="dist-km" style="font-family: var(--font-heading); font-size: 42px; font-weight: 800; color: var(--accent-color); line-height: 1;">0.0</div>
+                                <div style="font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-top: 4px;">Kilometers</div>
+                            </div>
+                        </div>
+
+                        <!-- Interactive SVG Visual Connection -->
+                        <div style="width: 100%; height: 80px; margin-bottom: 24px; display: flex; align-items: center; justify-content: center; background: var(--bg-tertiary); border-radius: 6px; border: 1px solid var(--border-color); padding: 0 30px; overflow: hidden;">
+                            <svg width="100%" height="60" viewBox="0 0 400 60" preserveAspectRatio="none" style="max-width: 500px;">
+                                <line x1="40" y1="30" x2="360" y2="30" stroke="var(--border-color)" stroke-width="3" stroke-dasharray="6,6" />
+                                <path id="svg-arc" d="M 40 30 Q 200 10 360 30" fill="none" stroke="var(--primary-color)" stroke-width="3" stroke-linecap="round" />
+                                
+                                <circle cx="40" cy="30" r="8" fill="var(--primary-color)" />
+                                <circle cx="40" cy="30" r="14" fill="none" stroke="var(--primary-color)" stroke-width="2" opacity="0.4">
+                                    <animate attributeName="r" values="8;16;8" dur="3s" repeatCount="indefinite"/>
+                                    <animate attributeName="opacity" values="0.6;0;0.6" dur="3s" repeatCount="indefinite"/>
+                                </circle>
+                                
+                                <circle cx="360" cy="30" r="8" fill="var(--accent-color)" />
+                                <circle cx="360" cy="30" r="14" fill="none" stroke="var(--accent-color)" stroke-width="2" opacity="0.4">
+                                    <animate attributeName="r" values="8;16;8" dur="3s" repeatCount="indefinite" begin="1.5s"/>
+                                    <animate attributeName="opacity" values="0.6;0;0.6" dur="3s" repeatCount="indefinite" begin="1.5s"/>
+                                </circle>
+                                
+                                <text x="40" y="52" font-size="10" font-weight="700" fill="var(--text-primary)" text-anchor="middle" id="svg-zip1">ZIP 1</text>
+                                <text x="360" y="52" font-size="10" font-weight="700" fill="var(--text-primary)" text-anchor="middle" id="svg-zip2">ZIP 2</text>
+                            </svg>
+                        </div>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px;" class="calc-results-grid">
+                            <div style="background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: 6px; padding: 16px;">
+                                <div style="font-size: 11px; font-weight: 700; color: var(--primary-color); text-transform: uppercase; margin-bottom: 6px;">From (Origin)</div>
+                                <h4 id="zip1-title" style="font-size: 16px; margin-bottom: 6px;">ZIP 1</h4>
+                                <div id="zip1-detail" style="font-size: 13px; color: var(--text-secondary); margin-bottom: 8px;">City, County, State</div>
+                                <div style="font-size: 12px; color: var(--text-muted); font-family: monospace;">Lat: <span id="zip1-lat">0.0</span>, Lon: <span id="zip1-lon">0.0</span></div>
+                            </div>
+                            
+                            <div style="background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: 6px; padding: 16px;">
+                                <div style="font-size: 11px; font-weight: 700; color: var(--accent-color); text-transform: uppercase; margin-bottom: 6px;">To (Destination)</div>
+                                <h4 id="zip2-title" style="font-size: 16px; margin-bottom: 6px;">ZIP 2</h4>
+                                <div id="zip2-detail" style="font-size: 13px; color: var(--text-secondary); margin-bottom: 8px;">City, County, State</div>
+                                <div style="font-size: 12px; color: var(--text-muted); font-family: monospace;">Lat: <span id="zip2-lat">0.0</span>, Lon: <span id="zip2-lon">0.0</span></div>
+                            </div>
+                        </div>
+                        
+                        <div style="border-top: 1px solid var(--border-color); padding-top: 16px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+                            <span style="font-size: 13px; color: var(--text-muted);">Share this distance calculation:</span>
+                            <div style="display: flex; gap: 8px; width: 100%; max-width: 380px;">
+                                <input type="text" id="share-url" readonly style="flex: 1; border: 1px solid var(--border-color); border-radius: 4px; padding: 6px 10px; font-size: 12px; background: var(--bg-tertiary); color: var(--text-secondary); outline: none;" onclick="this.select()">
+                                <button id="copy-share-btn" class="pill-btn active" style="font-size: 12px; padding: 6px 12px; white-space: nowrap;">Copy Link</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-section" style="margin-top: 40px; border-top: 1px solid var(--border-color); padding-top: 30px;">
+                    <h3 style="font-size: 18px; margin-bottom: 16px;">Frequently Asked Questions</h3>
+                    <div style="margin-bottom: 16px;">
+                        <h4 style="font-size: 14px; margin-bottom: 4px; color: var(--text-primary);">How is the distance calculated?</h4>
+                        <p style="font-size: 13.5px; color: var(--text-secondary);">
+                            We calculate the great-circle distance (straight-line distance "as the crow flies") using the Haversine formula. This mathematical equation accounts for the Earth's spherical shape based on the exact coordinates of the geographic centroids (center points) of each ZIP code area.
+                        </p>
+                    </div>
+                    <div style="margin-bottom: 16px;">
+                        <h4 style="font-size: 14px; margin-bottom: 4px; color: var(--text-primary);">Is this the driving distance?</h4>
+                        <p style="font-size: 13.5px; color: var(--text-secondary);">
+                            No, this calculator measures the straight-line distance, not road or driving distance. Real-world driving distances will usually be 10% to 30% longer depending on road layout, highway paths, and local terrain obstacles.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            {SIDEBAR_HTML}
+        </div>
+    </div>
+    """
+    
+    html = HEADER.format(title=title, description=description, root_path="", schema_markup="")
+    html += breadcrumbs_html
+    html += body_content.format(SIDEBAR_HTML=SIDEBAR_HTML)
+    html += FOOTER.format(root_path="")
+    
+    with open(os.path.join(DIST_DIR, "distance.html"), "w", encoding="utf-8") as f:
+        f.write(html)
+    print("Generated distance.html")
+
+def generate_address_generator_page():
+    print("Generating ZIP/State/City/County random address generator page (address-generator.html)...")
+    title = "Random Address Generator - Generate U.S. Street Addresses"
+    description = "Generate random, realistic U.S. street addresses based on ZIP code, state, city, or county. Perfect for testing, form validation, and dummy data generation."
+    
+    breadcrumbs_list = '<li><a href="index.html">Home</a></li><li class="active">Address Generator</li>'
+    breadcrumbs_html = BREADCRUMBS_HTML.format(breadcrumbs=breadcrumbs_list)
+    
+    # Body content of the address generator page
+    body_content = """
+    <div class="container animate-fade-in" style="margin-top: 30px;">
+        <div class="detail-layout">
+            <div class="main-content">
+                <h2 class="section-title" style="margin-bottom: 24px;">Random Address Generator</h2>
+                <p style="margin-bottom: 24px; font-size: 15px; color: var(--text-secondary);">
+                    Need test data or a random U.S. address? Select a scope below (State, County, City, or ZIP code) or generate completely random addresses across the entire United States.
+                </p>
+                
+                <div class="calculator-card" style="background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: var(--card-radius); padding: 24px; margin-bottom: 24px;">
+                    <div style="position: relative; margin-bottom: 20px;">
+                        <label for="gen-search" style="display: block; font-weight: 600; font-size: 14px; margin-bottom: 8px; color: var(--text-primary);">Filter by State, County, City, or ZIP Code</label>
+                        <div class="search-bar-container" style="padding: 2px 2px 2px 12px; border: 1px solid var(--border-color); background: var(--bg-secondary);">
+                            <div class="search-icon" style="color: var(--text-muted); margin-right: 8px;">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                            </div>
+                            <input type="text" id="gen-search" class="search-input" placeholder="Type State, County, City, or 5-digit ZIP..." autocomplete="off" style="font-size: 14px; height: 38px;">
+                            <button id="clear-gen" class="clear-search-btn" style="padding: 4px; margin-right: 2px;">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+                            </button>
+                        </div>
+                        <div id="suggestions-gen" class="suggestions-box" style="top: 100%; max-height: 250px;"></div>
+                    </div>
+                    
+                    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
+                        <div id="active-scope" style="font-size: 14px; font-weight: 600; color: var(--text-secondary); display: flex; align-items: center; gap: 6px;">
+                            <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #34d399;"></span>
+                            <span>Scope: <strong>United States (All)</strong></span>
+                        </div>
+                        
+                        <button id="generate-btn" class="search-btn" style="padding: 10px 24px; font-size: 14px; display: inline-flex; align-items: center; justify-content: center; gap: 8px;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+                            <span>Generate 6 Addresses</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="gen-error-message" style="display: none; background: #fee2e2; border: 1px solid #fca5a5; color: #b91c1c; border-radius: 6px; padding: 14px 20px; font-size: 14px; font-weight: 500; margin-bottom: 24px; align-items: center; gap: 8px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                    <span id="gen-error-text">Failed to generate addresses.</span>
+                </div>
+                
+                <div id="addresses-container" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px;" class="calc-results-grid">
+                    <!-- Cards will be dynamically generated by Javascript -->
+                </div>
+                
+                <div id="share-container" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--card-radius); padding: 20px; margin-bottom: 30px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; display: none;">
+                    <span style="font-size: 13px; color: var(--text-muted); font-weight: 500;">Share this generator configuration:</span>
+                    <div style="display: flex; gap: 8px; width: 100%; max-width: 420px;">
+                        <input type="text" id="gen-share-url" readonly style="flex: 1; border: 1px solid var(--border-color); border-radius: 4px; padding: 6px 10px; font-size: 12px; background: var(--bg-tertiary); color: var(--text-secondary); outline: none;" onclick="this.select()">
+                        <button id="gen-copy-share-btn" class="pill-btn active" style="font-size: 12px; padding: 6px 12px; white-space: nowrap;">Copy Link</button>
+                    </div>
+                </div>
+
+                <div class="faq-section" style="margin-top: 40px; border-top: 1px solid var(--border-color); padding-top: 30px;">
+                    <h3 style="font-size: 18px; margin-bottom: 16px;">Frequently Asked Questions</h3>
+                    <div style="margin-bottom: 16px;">
+                        <h4 style="font-size: 14px; margin-bottom: 4px; color: var(--text-primary);">Are these actual physical U.S. addresses?</h4>
+                        <p style="font-size: 13.5px; color: var(--text-secondary);">
+                            No. The geographic details (City, State, County, and ZIP code) are real data structures sourced from the U.S. Census Bureau. However, the street numbers and names are generated randomly using statistical naming patterns. They do not represent real physical houses, ensuring complete privacy compliance.
+                        </p>
+                    </div>
+                    <div style="margin-bottom: 16px;">
+                        <h4 style="font-size: 14px; margin-bottom: 4px; color: var(--text-primary);">What are these addresses useful for?</h4>
+                        <p style="font-size: 13.5px; color: var(--text-secondary);">
+                            They are highly valuable for web developers, software testers, and database administrators who require realistic dummy U.S. contact details to test forms, validation libraries, address lookup systems, or data structures without handling real personally identifiable information (PII).
+                        </p>
+                    </div>
+                </div>
+            </div>
+            {SIDEBAR_HTML}
+        </div>
+    </div>
+    """
+    
+    html = HEADER.format(title=title, description=description, root_path="", schema_markup="")
+    html += breadcrumbs_html
+    html += body_content.format(SIDEBAR_HTML=SIDEBAR_HTML)
+    html += FOOTER.format(root_path="")
+    
+    with open(os.path.join(DIST_DIR, "address-generator.html"), "w", encoding="utf-8") as f:
+        f.write(html)
+    print("Generated address-generator.html")
+
 # Main build execution
 if __name__ == "__main__":
     generate_homepage()
     generate_state_pages()
     generate_county_pages()
     generate_info_pages()
+    generate_distance_page()
+    generate_address_generator_page()
     print("All pages successfully built!")

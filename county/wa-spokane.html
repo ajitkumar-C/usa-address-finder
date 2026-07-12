@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spokane County ZIP Codes, Cities, & Zones - WA</title>
+    <meta name="description" content="Detailed list of all ZIP codes and cities in Spokane County, Washington (WA). Click to copy zip codes instantly.">
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- Google Schema Markup -->
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "AdministrativeArea", "name": "Spokane County", "containedInPlace": {"@type": "AdministrativeArea", "name": "Washington"}, "description": "County of Spokane located in Washington with 36 zip codes."}</script>
+</head>
+<body>
+    <header>
+        <div class="container nav-container">
+            <a href="../index.html" class="logo">
+                <svg class="flag-icon" width="34" height="22" viewBox="0 0 74 39" style="border-radius: 2px; box-shadow: var(--shadow-sm); border: 1px solid #112e51; display: inline-block; vertical-align: middle;">
+                    <rect width="74" height="39" fill="#B22234"/>
+                    <path d="M0,3h74M0,9h74M0,15h74M0,21h74M0,27h74M0,33h74" stroke="#FFFFFF" stroke-width="3"/>
+                    <rect width="30" height="21" fill="#3C3B6E"/>
+                    <g fill="#FFFFFF">
+                        <circle cx="6" cy="5" r="1"/>
+                        <circle cx="15" cy="5" r="1"/>
+                        <circle cx="24" cy="5" r="1"/>
+                        <circle cx="10" cy="10.5" r="1"/>
+                        <circle cx="20" cy="10.5" r="1"/>
+                        <circle cx="6" cy="16" r="1"/>
+                        <circle cx="15" cy="16" r="1"/>
+                        <circle cx="24" cy="16" r="1"/>
+                    </g>
+                </svg>
+                <span>USA Address Finder</span>
+            </a>
+            <nav style="display: flex; align-items: center; gap: 16px;">
+                <ul class="nav-links">
+                    <li><a href="../index.html">Home</a></li>
+                    <li><a href="../about.html">About</a></li>
+                    <li><a href="../contact.html">Contact</a></li>
+                </ul>
+                <button id="theme-toggle" class="theme-toggle-btn" title="Toggle Light/Dark Mode">
+                    <!-- Sun Icon -->
+                    <svg class="sun-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+                    <!-- Moon Icon -->
+                    <svg class="moon-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display: none;"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <ul class="breadcrumbs">
+            <li><a href="../index.html">Home</a></li><li><a href="../state/washington.html">Washington</a></li><li class="active">Spokane County</li>
+        </ul>
+    </div>
+
+            <div class="container animate-fade-in">
+                <div class="detail-layout">
+                    <div class="main-content">
+                        <div class="state-info-header">
+                            <div class="state-title-wrap">
+                                <span class="state-badge-large" style="background: var(--accent-gradient);">WA</span>
+                                <h2>Spokane County</h2>
+                            </div>
+                            <span style="font-size: 14px; color: var(--text-muted); font-weight: 600;">Washington</span>
+                        </div>
+
+                        <div class="state-meta-stats">
+                            <div class="meta-stat">
+                                <div class="meta-val">36</div>
+                                <div class="meta-lbl">ZIP Codes</div>
+                            </div>
+                            <div class="meta-stat">
+                                <div class="meta-val">23</div>
+                                <div class="meta-lbl">Cities/Towns</div>
+                            </div>
+                            <div class="meta-stat">
+                                <div class="meta-val">WA</div>
+                                <div class="meta-lbl">State</div>
+                            </div>
+                        </div>
+
+                        <div class="filter-box">
+                            <h3 style="font-size: 16px; margin-bottom: 8px;">Filter by City</h3>
+                            <input type="text" id="city-filter" class="filter-input" placeholder="Type city name to filter ZIP codes...">
+                            <div class="pill-filters" style="margin-top: 12px; display: flex; flex-wrap: wrap; gap: 8px;"><button class="pill-btn active" onclick="filterByPill('all', this)">All Cities</button><button class="pill-btn" onclick="filterByPill('airway-heights', this)">Airway heights</button><button class="pill-btn" onclick="filterByPill('chattaroy', this)">Chattaroy</button><button class="pill-btn" onclick="filterByPill('cheney', this)">Cheney</button><button class="pill-btn" onclick="filterByPill('colbert', this)">Colbert</button><button class="pill-btn" onclick="filterByPill('deer-park', this)">Deer park</button><button class="pill-btn" onclick="filterByPill('elk', this)">Elk</button><button class="pill-btn" onclick="filterByPill('espanola', this)">Espanola</button><button class="pill-btn" onclick="filterByPill('fairchild-air-fo', this)">Fairchild air fo</button><button class="pill-btn" onclick="filterByPill('fairfield', this)">Fairfield</button><button class="pill-btn" onclick="filterByPill('greenacres', this)">Greenacres</button><button class="pill-btn" onclick="filterByPill('latah', this)">Latah</button><button class="pill-btn" onclick="filterByPill('liberty-lake', this)">Liberty lake</button><button class="pill-btn" onclick="filterByPill('marshall', this)">Marshall</button><button class="pill-btn" onclick="filterByPill('mead', this)">Mead</button><button class="pill-btn" onclick="filterByPill('mica', this)">Mica</button><button class="pill-btn" onclick="filterByPill('newman-lake', this)">Newman lake</button><button class="pill-btn" onclick="filterByPill('otis-orchards', this)">Otis orchards</button><button class="pill-btn" onclick="filterByPill('rockford', this)">Rockford</button><button class="pill-btn" onclick="filterByPill('spangle', this)">Spangle</button><button class="pill-btn" onclick="filterByPill('spokane', this)">Spokane</button><button class="pill-btn" onclick="filterByPill('valleyford', this)">Valleyford</button><button class="pill-btn" onclick="filterByPill('veradale', this)">Veradale</button><button class="pill-btn" onclick="filterByPill('zcta-992hh', this)">Zcta 992hh</button></div>
+                        </div>
+
+                        <div id="zip-sections-container">
+                            
+                <div class="city-section" data-city="airway heights" data-city-slug="airway-heights">
+                    <h4 class="city-group-title">Airway heights (1 ZIPs)</h4>
+                    <div class="zip-grid">
+                        
+                    <div class="zip-card" onclick="copyZipCode('99001')">
+                        <span class="zip-code-text">99001</span>
+                        <span class="zip-city-text">Airway heights</span>
+                        <button class="copy-btn" title="Copy ZIP code">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                        </button>
+                    </div>
+                    
+                    </div>
+                </div>
+                
+                <div class="city-section" data-city="chattaroy" data-city-slug="chattaroy">
+                    <h4 class="city-group-title">Chattaroy (1 ZIPs)</h4>
+                    <div class="zip-grid">
+                        
+                    <div class="zip-card" onclick="copyZipCode('99003')">
+                        <span class="zip-code-text">99003</span>
+                        <span class="zip-city-text">Chattaroy</span>
+                        <button class="copy-btn" title="Copy ZIP code">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                        </button>
+                    </div>
+                    
+                    </div>
+                </div>
+                
+                <div class="city-section" data-city="cheney" data-city-slug="cheney">
+                    <h4 class="city-group-title">Cheney (1 ZIPs)</h4>
+                    <div class="zip-grid">
+                        
+                    <div class="zip-card" onclick="copyZipCode('99004')">
+                        <span class="zip-code-text">99004</span>
+                        <span class="zip-city-text">Cheney</span>
+                        <button class="copy-btn" title="Copy ZIP code">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                        </button>
+                    </div>
+                    
+                    </div>
+                </div>
+                
+                <div class="city-section" data-city="colbert" data-city-slug="colbert">
+                    <h4 class="city-group-title">Colbert (1 ZIPs)</h4>
+                    <div class="zip-grid">
+                        
+                    <div class="zip-card" onclick="copyZipCode('99005')">
+                        <span class="zip-code-text">99005</span>
+                        <span class="zip-city-text">Colbert</span>
+                        <button class="copy-btn" title="Copy ZIP code">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                        </button>
+                    </div>
+                    
+                    </div>
+                </div>
+                
+                <div class="city-section" data-city="deer park" data-city-slug="deer-park">
+                    <h4 class="city-group-title">Deer park (1 ZIPs)</h4>
+                    <div class="zip-grid">
+                        
+                    <div class="zip-card" onclick="copyZipCode('99006')">
+                        <span class="zip-code-text">99006</span>
+                        <span class="zip-city-text">Deer park</span>
+                        <button class="copy-btn" title="Copy ZIP code">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                        </button>
+                    </div>
+                    
+                    </div>
+                </div>
+                
+                <div class="city-section" data-city="elk" data-city-slug="elk">
+                    <h4 class="city-group-title">Elk (1 ZIPs)</h4>
+                    <div class="zip-grid">
+                        
+                    <div class="zip-card" onclick="copyZipCode('99009')">
+                        <span class="zip-code-text">99009</span>
+                        <span class="zip-city-text">Elk</span>
+                        <button class="copy-btn" title="Copy ZIP code">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                        </button>
+                    </div>
+                    
+                    </div>
+                </div>
+                
+                <div class="city-section" data-city="espanola" data-city-slug="espanola">
+                    <h4 class="city-group-title">Espanola (1 ZIPs)</h4>
+                    <div class="zip-grid">
+                        
+                    <div class="zip-card" onclick="copyZipCode('99022')">
+                        <span class="zip-code-text">99022</span>
+                        <span class="zip-city-text">Espanola</span>
+                        <button class="copy-btn" title="Copy ZIP code">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                        </button>
+                    </div>
+                    
+                    </div>
+                </div>
+                
+                <div class="city-section" data-city="fairchild air fo" data-city-slug="fairchild-air-fo">
+                    <h4 class="city-group-title">Fairchild air fo (1 ZIPs)</h4>
+                    <div class="zip-grid">
+                        
+                    <div class="zip-card" onclick="copyZipCode('99011')">
+                        <span class="zip-code-text">99011</span>
+                        <span class="zip-city-text">Fairchild air fo</span>
+                        <button class="copy-btn" title="Copy ZIP code">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                        </button>
+                    </div>
+                    
+                    </div>
+                </div>
+                
+                <div class="city-section" data-city="fairfield" data-city-slug="fairfield">
+                    <h4 class="city-group-title">Fairfield (1 ZIPs)</h4>
+                    <div class="zip-grid">
+                        
+                    <div class="zip-card" onclick="copyZipCode('99012')">
+                        <span class="zip-code-text">99012</span>
+                        <span class="zip-city-text">Fairfield</span>
+                        <button class="copy-btn" title="Copy ZIP code">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                        </button>
+                    </div>
+                    
+                    </div>
+                </div>
+                
+                <div class="city-section" data-city="greenacres" data-city-slug="greenacres">
+                    <h4 class="city-group-title">Greenacres (1 ZIPs)</h4>
+                    <div class="zip-grid">
+                        
+                    <div class="zip-card" onclick="copyZipCode('99016')">
+                        <span class="zip-code-text">99016</span>
+                        <span class="zip-city-text">Greenacres</span>
+                        <button class="copy-btn" title="Copy ZIP code">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                        </button>
+                    </div>
+                    
+                    </div>
+                </div>
+                
+                <div class="city-section" data-city="latah" data-city-slug="latah">
+                    <h4 class="city-group-title">Latah (1 ZIPs)</h4>
+                    <div class="zip-grid">
+                        
+                    <div class="zip-card" onclick="copyZipCode('99018')">
+                        <span class="zip-code-text">99018</span>
+                        <span class="zip-city-text">Latah</span>
+                        <button class="copy-btn" title="Copy ZIP code">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                        </button>
+                    </div>
+                    
+                    </div>
+                </div>
+                
+                <div class="city-section" data-city="liberty lake" data-city-slug="liberty-lake">
+                    <h4 class="city-group-title">Liberty lake (1 ZIPs)</h4>
+                    <div class="zip-grid">
+                        
+                    <div class="zip-card" onclick="copyZipCode('99019')">
+                        <span class="zip-code-text">99019</span>
+                        <span class="zip-city-text">Liberty lake</span>
+                        <button class="copy-btn" title="Copy ZIP code">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                        </button>
+                    </div>
+                    
+                    </div>
+                </div>
+                
+                <div class="city-section" data-city="marshall" data-city-slug="marshall">
+                    <h4 class="city-group-title">Marshall (1 ZIPs)</h4>
+                    <div class="zip-grid">
+                        
+                    <div class="zip-card" onclick="copyZipCode('99020')">
+                        <span class="zip-code-text">99020</span>
+                        <span class="zip-city-text">Marshall</span>
+                        <button class="copy-btn" title="Copy ZIP code">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                        </button>
+                    </div>
+                    
+                    </div>
+                </div>
+                
+                <div class="city-section" data-city="mead" data-city-slug="mead">
+                    <h4 class="city-group-title">Mead (1 ZIPs)</h4>
+                    <div class="zip-grid">
+                        
+                    <div class="zip-card" onclick="copyZipCode('99021')">
+                        <span class="zip-code-text">99021</span>
+                        <span class="zip-city-text">Mead</span>
+                        <button class="copy-btn" title="Copy ZIP code">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                        </button>
+                    </div>
+                    
+                    </div>
+                </div>
+                
+                <div class="city-section" data-city="mica" data-city-slug="mica">
+                    <h4 class="city-group-title">Mica (1 ZIPs)</h4>
+                    <div class="zip-grid">
+                        
+                    <div class="zip-card" onclick="copyZipCode('99023')">
+                        <span class="zip-code-text">99023</span>
+                        <span class="zip-city-text">Mica</span>
+                        <button class="copy-btn" title="Copy ZIP code">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                        </button>
+                    </div>
+                    
+                    </div>
+                </div>
+                
+                <div class="city-section" data-city="newman lake" data-city-slug="newman-lake">
+                    <h4 class="city-group-title">Newman lake (1 ZIPs)</h4>
+                    <div class="zip-grid">
+                        
+                    <div class="zip-card" onclick="copyZipCode('99025')">
+                        <span class="zip-code-text">99025</span>
+                        <span class="zip-city-text">Newman lake</span>
+                        <button class="copy-btn" title="Copy ZIP code">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                        </button>
+                    </div>
+                    
+                    </div>
+                </div>
+                
+                <div class="city-section" data-city="otis orchards" data-city-slug="otis-orchards">
+                    <h4 class="city-group-title">Otis orchards (1 ZIPs)</h4>
+                    <div class="zip-grid">
+                        
+                    <div class="zip-card" onclick="copyZipCode('99027')">
+                        <span class="zip-code-text">99027</span>
+                        <span class="zip-city-text">Otis orchards</span>
+                        <button class="copy-btn" title="Copy ZIP code">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                        </button>
+                    </div>
+                    
+                    </div>
+                </div>
+                
+                <div class="city-section" data-city="rockford" data-city-slug="rockford">
+                    <h4 class="city-group-title">Rockford (1 ZIPs)</h4>
+                    <div class="zip-grid">
+                        
+                    <div class="zip-card" onclick="copyZipCode('99030')">
+                        <span class="zip-code-text">99030</span>
+                        <span class="zip-city-text">Rockford</span>
+                        <button class="copy-btn" title="Copy ZIP code">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                        </button>
+                    </div>
+                    
+                    </div>
+                </div>
+                
+                <div class="city-section" data-city="spangle" data-city-slug="spangle">
+                    <h4 class="city-group-title">Spangle (1 ZIPs)</h4>
+                    <div class="zip-grid">
+                        
+                    <div class="zip-card" onclick="copyZipCode('99031')">
+                        <span class="zip-code-text">99031</span>
+                        <span class="zip-city-text">Spangle</span>
+                        <button class="copy-btn" title="Copy ZIP code">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                        </button>
+                    </div>
+                    
+                    </div>
+                </div>
+                
+                <div class="city-section" data-city="spokane" data-city-slug="spokane">
+                    <h4 class="city-group-title">Spokane (14 ZIPs)</h4>
+                    <div class="zip-grid">
+                        
+                    <div class="zip-card" onclick="copyZipCode('99201')">
+                        <span class="zip-code-text">99201</span>
+                        <span class="zip-city-text">Spokane</span>
+                        <button class="copy-btn" title="Copy ZIP code">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                        </button>
+                    </div>
+                    
+                    <div class="zip-card" onclick="copyZipCode('99202')">
+                        <span class="zip-code-text">99202</span>
+                        <span class="zip-city-text">Spokane</span>
+                        <button class="copy-btn" title="Copy ZIP code">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                        </button>
+                    </div>
+                    
+                    <div class="zip-card" onclick="copyZipCode('99203')">
+                        <span class="zip-code-text">99203</span>
+                        <span class="zip-city-text">Spokane</span>
+                        <button class="copy-btn" title="Copy ZIP code">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                        </button>
+                    </div>
+                    
+                    <div class="zip-card" onclick="copyZipCode('99204')">
+                        <span class="zip-code-text">99204</span>
+                        <span class="zip-city-text">Spokane</span>
+                        <button class="copy-btn" title="Copy ZIP code">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                        </button>
+                    </div>
+                    
+                    <div class="zip-card" onclick="copyZipCode('99205')">
+                        <span class="zip-code-text">99205</span>
+                        <span class="zip-city-text">Spokane</span>
+                        <button class="copy-btn" title="Copy ZIP code">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                        </button>
+                    </div>
+                    
+                    <div class="zip-card" onclick="copyZipCode('99206')">
+                        <span class="zip-code-text">99206</span>
+                        <span class="zip-city-text">Spokane</span>
+                        <button class="copy-btn" title="Copy ZIP code">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                        </button>
+                    </div>
+                    
+                    <div class="zip-card" onclick="copyZipCode('99207')">
+                        <span class="zip-code-text">99207</span>
+                        <span class="zip-city-text">Spokane</span>
+                        <button class="copy-btn" title="Copy ZIP code">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                        </button>
+                    </div>
+                    
+                    <div class="zip-card" onclick="copyZipCode('99208')">
+                        <span class="zip-code-text">99208</span>
+                        <span class="zip-city-text">Spokane</span>
+                        <button class="copy-btn" title="Copy ZIP code">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                        </button>
+                    </div>
+                    
+                    <div class="zip-card" onclick="copyZipCode('99212')">
+                        <span class="zip-code-text">99212</span>
+                        <span class="zip-city-text">Spokane</span>
+                        <button class="copy-btn" title="Copy ZIP code">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                        </button>
+                    </div>
+                    
+                    <div class="zip-card" onclick="copyZipCode('99216')">
+                        <span class="zip-code-text">99216</span>
+                        <span class="zip-city-text">Spokane</span>
+                        <button class="copy-btn" title="Copy ZIP code">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                        </button>
+                    </div>
+                    
+                    <div class="zip-card" onclick="copyZipCode('99217')">
+                        <span class="zip-code-text">99217</span>
+                        <span class="zip-city-text">Spokane</span>
+                        <button class="copy-btn" title="Copy ZIP code">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                        </button>
+                    </div>
+                    
+                    <div class="zip-card" onclick="copyZipCode('99218')">
+                        <span class="zip-code-text">99218</span>
+                        <span class="zip-city-text">Spokane</span>
+                        <button class="copy-btn" title="Copy ZIP code">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                        </button>
+                    </div>
+                    
+                    <div class="zip-card" onclick="copyZipCode('99223')">
+                        <span class="zip-code-text">99223</span>
+                        <span class="zip-city-text">Spokane</span>
+                        <button class="copy-btn" title="Copy ZIP code">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                        </button>
+                    </div>
+                    
+                    <div class="zip-card" onclick="copyZipCode('99224')">
+                        <span class="zip-code-text">99224</span>
+                        <span class="zip-city-text">Spokane</span>
+                        <button class="copy-btn" title="Copy ZIP code">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                        </button>
+                    </div>
+                    
+                    </div>
+                </div>
+                
+                <div class="city-section" data-city="valleyford" data-city-slug="valleyford">
+                    <h4 class="city-group-title">Valleyford (1 ZIPs)</h4>
+                    <div class="zip-grid">
+                        
+                    <div class="zip-card" onclick="copyZipCode('99036')">
+                        <span class="zip-code-text">99036</span>
+                        <span class="zip-city-text">Valleyford</span>
+                        <button class="copy-btn" title="Copy ZIP code">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                        </button>
+                    </div>
+                    
+                    </div>
+                </div>
+                
+                <div class="city-section" data-city="veradale" data-city-slug="veradale">
+                    <h4 class="city-group-title">Veradale (1 ZIPs)</h4>
+                    <div class="zip-grid">
+                        
+                    <div class="zip-card" onclick="copyZipCode('99037')">
+                        <span class="zip-code-text">99037</span>
+                        <span class="zip-city-text">Veradale</span>
+                        <button class="copy-btn" title="Copy ZIP code">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                        </button>
+                    </div>
+                    
+                    </div>
+                </div>
+                
+                <div class="city-section" data-city="zcta 992hh" data-city-slug="zcta-992hh">
+                    <h4 class="city-group-title">Zcta 992hh (1 ZIPs)</h4>
+                    <div class="zip-grid">
+                        
+                    <div class="zip-card" onclick="copyZipCode('992HH')">
+                        <span class="zip-code-text">992HH</span>
+                        <span class="zip-city-text">Zcta 992hh</span>
+                        <button class="copy-btn" title="Copy ZIP code">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                        </button>
+                    </div>
+                    
+                    </div>
+                </div>
+                
+                        </div>
+                    </div>
+                    
+            <div class="sidebar">
+                <!-- AdSense Top Sidebar Placement -->
+                <div class="ad-card">
+                    <div class="ad-label">Advertisement</div>
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="2"/><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                    <div class="ad-placeholder-text">Support this website by enabling ads</div>
+                </div>
+
+                <!-- Premium Affiliate Lead Gen Card -->
+                <div class="widget-card">
+                    <h3 class="widget-title">Need to Move?</h3>
+                    <p class="widget-text">Compare free moving quotes from certified local movers in your region. Save up to 40% on your next move!</p>
+                    <a href="https://www.movingcompanyreviews.com" target="_blank" rel="noopener noreferrer" class="widget-btn">Get Free Moving Quotes</a>
+                </div>
+
+                <!-- Database Export Call to Action -->
+                <div class="widget-card" style="background-image: linear-gradient(180deg, transparent, rgba(245, 158, 11, 0.04));">
+                    <h3 class="widget-title" style="color: var(--accent-color);">USA ZIP Codes Database</h3>
+                    <p class="widget-text">Get a clean, fully offline CSV/JSON version of the complete USA State-County-City-ZIP database.</p>
+                    <a href="https://gumroad.com" target="_blank" rel="noopener noreferrer" class="widget-btn" style="background: var(--accent-gradient);">Download Dataset</a>
+                </div>
+
+                <!-- AdSense Bottom Sidebar Placement -->
+                <div class="ad-card">
+                    <div class="ad-label">Advertisement</div>
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="2"/><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                    <div class="ad-placeholder-text">Sponsored Link</div>
+                </div>
+            </div>
+
+                </div>
+            </div>
+            
+    <footer id="site-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h3 style="color: #ffffff; display: inline-block;">USA Address Finder</h3>
+                    <p style="font-size: 13px; margin-top: 10px; color: #a3b8cc;">
+                        A comprehensive, lightning-fast static directory of all 50 states, counties, and postal codes in the United States of America. Built for optimal speed, search indexing, and simple navigability.
+                    </p>
+                </div>
+                <div class="footer-col">
+                    <h3>Popular States</h3>
+                    <ul>
+                        <li><a href="../state/california.html">California</a></li>
+                        <li><a href="../state/texas.html">Texas</a></li>
+                        <li><a href="../state/new-york.html">New York</a></li>
+                        <li><a href="../state/florida.html">Florida</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h3>Legal & Info</h3>
+                    <ul>
+                        <li><a href="../about.html">About Us</a></li>
+                        <li><a href="../contact.html">Contact Me</a></li>
+                        <li><a href="../privacy.html">Privacy Policy</a></li>
+                        <li><a href="../disclaimer.html">Disclaimer</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h3>Resources</h3>
+                    <ul>
+                        <li><a href="../index.html">Home Search</a></li>
+                        <li><a href="../sitemap.xml">XML Sitemap</a></li>
+                        <li><a href="https://github.com/scpike/us-state-county-zip" target="_blank" rel="noopener">Data Source</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div>&copy; 2026 USA Address Finder. All rights reserved. Built with SEO best practices.</div>
+                <div>Data Source: US Census ZCTA Database</div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Copy to Clipboard Toast Alert -->
+    <div id="copy-toast" class="toast">
+        <svg class="toast-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        <span id="toast-message">ZIP Code Copied!</span>
+    </div>
+
+    <script src="../js/search.js"></script>
+</body>
+</html>

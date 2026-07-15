@@ -173,6 +173,7 @@ HEADER = """<!DOCTYPE html>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{title}</title>
     <meta name="description" content="{description}">
+    <meta name="google-site-verification" content="p-8wt0DNXh9djTp1qFiyK1ZKc3vqq8Z_zhahqzWFLJ8" />
     <link rel="stylesheet" href="{root_path}css/style.css?v=2">
     <!-- Google Schema Markup -->
     {schema_markup}

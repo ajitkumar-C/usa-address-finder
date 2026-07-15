@@ -49,6 +49,14 @@ urls.append({
     "priority": "0.8"
 })
 
+# 1d. ZIP Code Radius Finder Page
+urls.append({
+    "loc": f"{SITE_URL}radius-finder.html",
+    "lastmod": current_date,
+    "changefreq": "weekly",
+    "priority": "0.8"
+})
+
 # 1c. Info Pages
 for info in ["about.html", "contact.html", "privacy.html", "disclaimer.html"]:
     urls.append({

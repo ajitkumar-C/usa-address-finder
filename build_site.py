@@ -211,6 +211,7 @@ HEADER = """<!DOCTYPE html>
                     </li>
                     <li><a href="{root_path}index.html">Home</a></li>
                     <li><a href="{root_path}distance.html">Distance Calculator</a></li>
+                    <li><a href="{root_path}radius-finder.html">Radius Finder</a></li>
                     <li><a href="{root_path}address-generator.html">Address Generator</a></li>
                     <li><a href="{root_path}about.html">About</a></li>
                     <li><a href="{root_path}contact.html">Contact</a></li>
@@ -307,6 +308,7 @@ FOOTER = """
                     <ul>
                         <li><a href="{root_path}index.html">Home Search</a></li>
                         <li><a href="{root_path}distance.html">Distance Calculator</a></li>
+                        <li><a href="{root_path}radius-finder.html">Radius Finder</a></li>
                         <li><a href="{root_path}address-generator.html">Address Generator</a></li>
                         <li><a href="{root_path}sitemap.xml">XML Sitemap</a></li>
                         <li><a href="https://github.com/scpike/us-state-county-zip" target="_blank" rel="noopener">Data Source</a></li>
@@ -488,9 +490,15 @@ def generate_state_pages():
                         </div>
                     </div>
 
-                    <div class="filter-box">
-                        <h3 style="font-size: 16px; margin-bottom: 8px;">Filter Counties</h3>
-                        <input type="text" id="county-filter" class="filter-input" placeholder="Type county name to filter...">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 20px; flex-wrap: wrap; gap: 16px;">
+                        <div class="filter-box" style="margin-bottom: 0; flex: 1; min-width: 250px;">
+                            <h3 style="font-size: 16px; margin-bottom: 8px;">Filter Counties</h3>
+                            <input type="text" id="county-filter" class="filter-input" placeholder="Type county name to filter...">
+                        </div>
+                        <button class="pill-btn active state-csv-btn" data-state-abbr="{data['abbr']}" data-state-name="{state_name}" style="padding: 10px 18px; display: inline-flex; align-items: center; gap: 8px; font-weight: 600; font-size: 13px; height: 42px; cursor: pointer;">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                            <span>Download State ZIPs (CSV)</span>
+                        </button>
                     </div>
 
                     <div class="list-group" id="county-list">
@@ -597,10 +605,16 @@ def generate_county_pages():
                             </div>
                         </div>
 
-                        <div class="filter-box">
-                            <h3 style="font-size: 16px; margin-bottom: 8px;">Filter by City</h3>
-                            <input type="text" id="city-filter" class="filter-input" placeholder="Type city name to filter ZIP codes...">
-                            {city_pills_html}
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; flex-wrap: wrap; gap: 16px;">
+                            <div class="filter-box" style="margin-bottom: 0; flex: 1; min-width: 250px;">
+                                <h3 style="font-size: 16px; margin-bottom: 8px;">Filter by City</h3>
+                                <input type="text" id="city-filter" class="filter-input" placeholder="Type city name to filter ZIP codes...">
+                                {city_pills_html}
+                            </div>
+                            <button class="pill-btn active county-csv-btn" data-state-abbr="{state_data['abbr']}" data-county-name="{county_name}" style="padding: 10px 18px; display: inline-flex; align-items: center; gap: 8px; font-weight: 600; font-size: 13px; height: 42px; cursor: pointer; margin-top: 24px;">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                                <span>Download County ZIPs (CSV)</span>
+                            </button>
                         </div>
 
                         <div id="zip-sections-container">
@@ -1005,6 +1019,124 @@ def generate_address_generator_page():
         f.write(html)
     print("Generated address-generator.html")
 
+def generate_radius_page():
+    print("Generating ZIP Code Radius Finder page (radius-finder.html)...")
+    title = "ZIP Code Radius Finder - Search Postal Codes by Distance"
+    description = "Find all U.S. ZIP codes within a 5, 10, 25, 50, or 100 mile radius of any postal code or city. Sort results by distance and export lists to CSV."
+    
+    breadcrumbs_list = '<li><a href="index.html">Home</a></li><li class="active">Radius Finder</li>'
+    breadcrumbs_html = BREADCRUMBS_HTML.format(breadcrumbs=breadcrumbs_list)
+    
+    # Body content of the radius finder page
+    body_content = """
+    <div class="container animate-fade-in" style="margin-top: 30px;">
+        <div class="detail-layout">
+            <div class="main-content">
+                <h2 class="section-title" style="margin-bottom: 24px;">ZIP Code Radius Finder</h2>
+                <p style="margin-bottom: 24px; font-size: 15px; color: var(--text-secondary);">
+                    Find all U.S. postal codes within a specific mileage radius of any starting ZIP code or city. Sort results by proximity and download the listing as a CSV spreadsheet.
+                </p>
+                
+                <div class="calculator-card" style="background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: var(--card-radius); padding: 24px; margin-bottom: 24px;">
+                    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px; margin-bottom: 20px;" class="calc-results-grid">
+                        <div style="position: relative;">
+                            <label for="radius-origin" style="display: block; font-weight: 600; font-size: 14px; margin-bottom: 8px; color: var(--text-primary);">Starting ZIP Code or City</label>
+                            <div class="search-bar-container" style="padding: 2px 2px 2px 12px; border: 1px solid var(--border-color); background: var(--bg-secondary);">
+                                <div class="search-icon" style="color: var(--text-muted); margin-right: 8px;">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                                </div>
+                                <input type="text" id="radius-origin" class="search-input" placeholder="Type 5-digit ZIP or City..." autocomplete="off" style="font-size: 14px; height: 38px;">
+                                <button id="clear-radius" class="clear-search-btn" style="padding: 4px; margin-right: 2px;">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+                                </button>
+                            </div>
+                            <div id="suggestions-radius" class="suggestions-box" style="top: 100%; max-height: 220px;"></div>
+                        </div>
+                        
+                        <div>
+                            <label for="radius-range" style="display: block; font-weight: 600; font-size: 14px; margin-bottom: 8px; color: var(--text-primary);">Radius Distance</label>
+                            <select id="radius-range" style="width: 100%; height: 44px; border: 1px solid var(--border-color); border-radius: 4px; padding: 0 12px; background: var(--bg-secondary); color: var(--text-primary); font-size: 14px; outline: none; cursor: pointer;">
+                                <option value="5">5 Miles</option>
+                                <option value="10" selected>10 Miles</option>
+                                <option value="15">15 Miles</option>
+                                <option value="25">25 Miles</option>
+                                <option value="50">50 Miles</option>
+                                <option value="100">100 Miles</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; justify-content: flex-end;">
+                        <button id="find-zips-btn" class="search-btn" style="padding: 10px 24px; font-size: 14px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                            <span>Search Radius</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="radius-error-message" style="display: none; background: #fee2e2; border: 1px solid #fca5a5; color: #b91c1c; border-radius: 6px; padding: 14px 20px; font-size: 14px; font-weight: 500; margin-bottom: 24px; align-items: center; gap: 8px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                    <span id="radius-error-text">Failed to perform radius search.</span>
+                </div>
+                
+                <div id="radius-results-wrapper" style="display: none; margin-bottom: 30px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 12px;">
+                        <h3 id="radius-results-title" style="font-size: 16px; margin: 0; color: var(--text-primary);">ZIP Codes Found</h3>
+                        <button id="radius-export-btn" class="pill-btn active" style="padding: 8px 16px; display: inline-flex; align-items: center; gap: 6px; font-weight: 600; font-size: 12px; cursor: pointer;">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                            <span>Export to CSV</span>
+                        </button>
+                    </div>
+                    
+                    <div style="overflow-x: auto; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--card-radius); box-shadow: var(--shadow-sm);">
+                        <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 14px;">
+                            <thead>
+                                <tr style="border-bottom: 2px solid var(--border-color); background: var(--bg-tertiary);">
+                                    <th style="padding: 12px 16px; font-weight: 600; color: var(--text-primary); width: 100px;">Distance</th>
+                                    <th style="padding: 12px 16px; font-weight: 600; color: var(--text-primary); width: 110px;">ZIP Code</th>
+                                    <th style="padding: 12px 16px; font-weight: 600; color: var(--text-primary);">City</th>
+                                    <th style="padding: 12px 16px; font-weight: 600; color: var(--text-primary); width: 90px;">State</th>
+                                    <th style="padding: 12px 16px; font-weight: 600; color: var(--text-primary);">County</th>
+                                    <th style="padding: 12px 16px; font-weight: 600; color: var(--text-primary); font-family: monospace; font-size: 12px;">Coordinates</th>
+                                </tr>
+                            </thead>
+                            <tbody id="radius-table-body">
+                                <!-- Dynamically generated rows -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="faq-section" style="margin-top: 40px; border-top: 1px solid var(--border-color); padding-top: 30px;">
+                    <h3 style="font-size: 18px; margin-bottom: 16px;">Frequently Asked Questions</h3>
+                    <div style="margin-bottom: 16px;">
+                        <h4 style="font-size: 14px; margin-bottom: 4px; color: var(--text-primary);">How is the radius distance calculated?</h4>
+                        <p style="font-size: 13.5px; color: var(--text-secondary);">
+                            We compute straight-line distance (as the crow flies) between the coordinate centroids of the starting location and target ZIP codes. This calculation uses the **Haversine formula** (spherical law of cosines) based on exact latitude and longitude values, giving accurate geodetic results.
+                        </p>
+                    </div>
+                    <div style="margin-bottom: 16px;">
+                        <h4 style="font-size: 14px; margin-bottom: 4px; color: var(--text-primary);">Can I filter by city names?</h4>
+                        <p style="font-size: 13.5px; color: var(--text-secondary);">
+                            Yes! You can type a city name (like "Houston" or "Miami") into the starting box, select it from the suggestions list, and the tool will calculate distances from that city's primary centroid to all surrounding ZIP codes.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            {SIDEBAR_HTML}
+        </div>
+    </div>
+    """
+    
+    html = HEADER.format(title=title, description=description, root_path="", schema_markup="")
+    html += breadcrumbs_html
+    html += body_content.format(SIDEBAR_HTML=SIDEBAR_HTML)
+    html += FOOTER.format(root_path="")
+    
+    with open(os.path.join(DIST_DIR, "radius-finder.html"), "w", encoding="utf-8") as f:
+        f.write(html)
+    print("Generated radius-finder.html")
+
 # Main build execution
 if __name__ == "__main__":
     generate_homepage()
@@ -1013,4 +1145,5 @@ if __name__ == "__main__":
     generate_info_pages()
     generate_distance_page()
     generate_address_generator_page()
+    generate_radius_page()
     print("All pages successfully built!")

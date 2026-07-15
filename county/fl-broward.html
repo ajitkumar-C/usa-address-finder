@@ -43,6 +43,7 @@
                     </li>
                     <li><a href="../index.html">Home</a></li>
                     <li><a href="../distance.html">Distance Calculator</a></li>
+                    <li><a href="../radius-finder.html">Radius Finder</a></li>
                     <li><a href="../address-generator.html">Address Generator</a></li>
                     <li><a href="../about.html">About</a></li>
                     <li><a href="../contact.html">Contact</a></li>
@@ -97,10 +98,16 @@
                             </div>
                         </div>
 
-                        <div class="filter-box">
-                            <h3 style="font-size: 16px; margin-bottom: 8px;">Filter by City</h3>
-                            <input type="text" id="city-filter" class="filter-input" placeholder="Type city name to filter ZIP codes...">
-                            <div class="pill-filters" style="margin-top: 12px; display: flex; flex-wrap: wrap; gap: 8px;"><button class="pill-btn active" onclick="filterByPill('all', this)">All Cities</button><button class="pill-btn" onclick="filterByPill('city-of-sunrise', this)">City of sunrise</button><button class="pill-btn" onclick="filterByPill('coral-springs', this)">Coral springs</button><button class="pill-btn" onclick="filterByPill('dania', this)">Dania</button><button class="pill-btn" onclick="filterByPill('davie', this)">Davie</button><button class="pill-btn" onclick="filterByPill('deerfield-beach', this)">Deerfield beach</button><button class="pill-btn" onclick="filterByPill('fort-lauderdale', this)">Fort lauderdale</button><button class="pill-btn" onclick="filterByPill('hallandale', this)">Hallandale</button><button class="pill-btn" onclick="filterByPill('hollywood', this)">Hollywood</button><button class="pill-btn" onclick="filterByPill('lighthouse-point', this)">Lighthouse point</button><button class="pill-btn" onclick="filterByPill('margate', this)">Margate</button><button class="pill-btn" onclick="filterByPill('miramar', this)">Miramar</button><button class="pill-btn" onclick="filterByPill('north-coral-spri', this)">North coral spri</button><button class="pill-btn" onclick="filterByPill('oakland-park', this)">Oakland park</button><button class="pill-btn" onclick="filterByPill('pembroke-pines', this)">Pembroke pines</button><button class="pill-btn" onclick="filterByPill('plantation', this)">Plantation</button><button class="pill-btn" onclick="filterByPill('pompano-beach', this)">Pompano beach</button><button class="pill-btn" onclick="filterByPill('sunrise', this)">Sunrise</button><button class="pill-btn" onclick="filterByPill('tamarac', this)">Tamarac</button><button class="pill-btn" onclick="filterByPill('zcta-330hh', this)">Zcta 330hh</button><button class="pill-btn" onclick="filterByPill('zcta-330xx', this)">Zcta 330xx</button><button class="pill-btn" onclick="filterByPill('zcta-333hh', this)">Zcta 333hh</button><button class="pill-btn" onclick="filterByPill('zcta-334hh', this)">Zcta 334hh</button></div>
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; flex-wrap: wrap; gap: 16px;">
+                            <div class="filter-box" style="margin-bottom: 0; flex: 1; min-width: 250px;">
+                                <h3 style="font-size: 16px; margin-bottom: 8px;">Filter by City</h3>
+                                <input type="text" id="city-filter" class="filter-input" placeholder="Type city name to filter ZIP codes...">
+                                <div class="pill-filters" style="margin-top: 12px; display: flex; flex-wrap: wrap; gap: 8px;"><button class="pill-btn active" onclick="filterByPill('all', this)">All Cities</button><button class="pill-btn" onclick="filterByPill('city-of-sunrise', this)">City of sunrise</button><button class="pill-btn" onclick="filterByPill('coral-springs', this)">Coral springs</button><button class="pill-btn" onclick="filterByPill('dania', this)">Dania</button><button class="pill-btn" onclick="filterByPill('davie', this)">Davie</button><button class="pill-btn" onclick="filterByPill('deerfield-beach', this)">Deerfield beach</button><button class="pill-btn" onclick="filterByPill('fort-lauderdale', this)">Fort lauderdale</button><button class="pill-btn" onclick="filterByPill('hallandale', this)">Hallandale</button><button class="pill-btn" onclick="filterByPill('hollywood', this)">Hollywood</button><button class="pill-btn" onclick="filterByPill('lighthouse-point', this)">Lighthouse point</button><button class="pill-btn" onclick="filterByPill('margate', this)">Margate</button><button class="pill-btn" onclick="filterByPill('miramar', this)">Miramar</button><button class="pill-btn" onclick="filterByPill('north-coral-spri', this)">North coral spri</button><button class="pill-btn" onclick="filterByPill('oakland-park', this)">Oakland park</button><button class="pill-btn" onclick="filterByPill('pembroke-pines', this)">Pembroke pines</button><button class="pill-btn" onclick="filterByPill('plantation', this)">Plantation</button><button class="pill-btn" onclick="filterByPill('pompano-beach', this)">Pompano beach</button><button class="pill-btn" onclick="filterByPill('sunrise', this)">Sunrise</button><button class="pill-btn" onclick="filterByPill('tamarac', this)">Tamarac</button><button class="pill-btn" onclick="filterByPill('zcta-330hh', this)">Zcta 330hh</button><button class="pill-btn" onclick="filterByPill('zcta-330xx', this)">Zcta 330xx</button><button class="pill-btn" onclick="filterByPill('zcta-333hh', this)">Zcta 333hh</button><button class="pill-btn" onclick="filterByPill('zcta-334hh', this)">Zcta 334hh</button></div>
+                            </div>
+                            <button class="pill-btn active county-csv-btn" data-state-abbr="FL" data-county-name="Broward" style="padding: 10px 18px; display: inline-flex; align-items: center; gap: 8px; font-weight: 600; font-size: 13px; height: 42px; cursor: pointer; margin-top: 24px;">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                                <span>Download County ZIPs (CSV)</span>
+                            </button>
                         </div>
 
                         <div id="zip-sections-container">
@@ -799,6 +806,7 @@
                     <ul>
                         <li><a href="../index.html">Home Search</a></li>
                         <li><a href="../distance.html">Distance Calculator</a></li>
+                        <li><a href="../radius-finder.html">Radius Finder</a></li>
                         <li><a href="../address-generator.html">Address Generator</a></li>
                         <li><a href="../sitemap.xml">XML Sitemap</a></li>
                         <li><a href="https://github.com/scpike/us-state-county-zip" target="_blank" rel="noopener">Data Source</a></li>

@@ -447,6 +447,108 @@ document.addEventListener("DOMContentLoaded", () => {
             triggerAddressGeneration();
         });
     }
+
+    // 8. Setup Radius Finder (if elements exist)
+    const radiusInput = document.getElementById("radius-origin");
+    if (radiusInput) {
+        setupRadiusAutocomplete("radius-origin", "suggestions-radius");
+        
+        const findZipsBtn = document.getElementById("find-zips-btn");
+        if (findZipsBtn) {
+            findZipsBtn.addEventListener("click", () => {
+                triggerRadiusSearch();
+            });
+        }
+        
+        radiusInput.addEventListener("keypress", (e) => {
+            if (e.key === "Enter") {
+                triggerRadiusSearch();
+            }
+        });
+        
+        const clearRadiusBtn = document.getElementById("clear-radius");
+        if (clearRadiusBtn) {
+            clearRadiusBtn.addEventListener("click", () => {
+                radiusInput.value = "";
+                clearRadiusBtn.style.display = "none";
+                document.getElementById("suggestions-radius").style.display = "none";
+                radiusInput.focus();
+                window.radiusOriginScope = null;
+                document.getElementById("radius-results-wrapper").style.display = "none";
+            });
+        }
+        
+        const radiusExportBtn = document.getElementById("radius-export-btn");
+        if (radiusExportBtn) {
+            radiusExportBtn.addEventListener("click", () => {
+                if (window.lastRadiusResults && window.lastRadiusResults.length > 0) {
+                    const headers = ["Distance (Miles)", "ZIP Code", "City", "State", "County", "Latitude", "Longitude"];
+                    const rows = window.lastRadiusResults.map(item => [
+                        item.distance.toFixed(2),
+                        item.zip,
+                        item.city,
+                        item.state,
+                        item.county,
+                        item.lat || "",
+                        item.lon || ""
+                    ]);
+                    const originName = window.radiusOriginScope ? window.radiusOriginScope.code || window.radiusOriginScope.name : radiusInput.value.replace(/ /g, "_");
+                    const filename = `ZIP_Codes_Within_${document.getElementById("radius-range").value}_Miles_of_${originName}.csv`;
+                    downloadListAsCSV(filename, headers, rows);
+                }
+            });
+        }
+    }
+    
+    // 9. Setup GPS Geolocation ("Find ZIP Codes Near Me") Button
+    const findNearMeBtn = document.getElementById("find-near-me");
+    if (findNearMeBtn) {
+        findNearMeBtn.addEventListener("click", (e) => {
+            e.preventDefault();
+            findNearMe();
+        });
+    }
+    
+    // 10. Setup State and County CSV Download Buttons
+    document.addEventListener("click", (e) => {
+        const stateBtn = e.target.closest(".state-csv-btn");
+        if (stateBtn) {
+            e.preventDefault();
+            const stateAbbr = stateBtn.getAttribute("data-state-abbr");
+            const stateName = stateBtn.getAttribute("data-state-name");
+            loadSearchIndex().then(() => {
+                const rows = [];
+                for (let [zip, details] of Object.entries(searchIndex.zips)) {
+                    const [abbr, county, city, lat, lon] = details;
+                    if (abbr.toLowerCase() === stateAbbr.toLowerCase()) {
+                        rows.push([zip, city, county, abbr, lat || "", lon || ""]);
+                    }
+                }
+                rows.sort((a, b) => a[0].localeCompare(b[0]));
+                downloadListAsCSV(`ZIP_Codes_${stateName.replace(/ /g, "_")}.csv`, ["ZIP Code", "City", "County", "State", "Latitude", "Longitude"], rows);
+            });
+            return;
+        }
+        
+        const countyBtn = e.target.closest(".county-csv-btn");
+        if (countyBtn) {
+            e.preventDefault();
+            const stateAbbr = countyBtn.getAttribute("data-state-abbr");
+            const countyName = countyBtn.getAttribute("data-county-name");
+            loadSearchIndex().then(() => {
+                const rows = [];
+                for (let [zip, details] of Object.entries(searchIndex.zips)) {
+                    const [abbr, county, city, lat, lon] = details;
+                    if (abbr.toLowerCase() === stateAbbr.toLowerCase() && county.toLowerCase() === countyName.toLowerCase()) {
+                        rows.push([zip, city, county, abbr, lat || "", lon || ""]);
+                    }
+                }
+                rows.sort((a, b) => a[0].localeCompare(b[0]));
+                downloadListAsCSV(`ZIP_Codes_${countyName.replace(/ /g, "_")}_County_${stateAbbr}.csv`, ["ZIP Code", "City", "County", "State", "Latitude", "Longitude"], rows);
+            });
+            return;
+        }
+    });
 });
 
 // Perform Autocomplete Match
@@ -1244,5 +1346,354 @@ function showGenError(text) {
     errorMsg.style.display = "flex";
     errorMsg.classList.add("animate-fade-in");
 }
+
+// --- ZIP Code Radius Finder & Geolocation Logic ---
+
+// Setup Autocomplete for Radius Finder Input
+function setupRadiusAutocomplete(inputId, suggestionsId) {
+    const input = document.getElementById(inputId);
+    const suggestionsBox = document.getElementById(suggestionsId);
+    const clearBtn = document.getElementById("clear-radius");
+    
+    if (!input || !suggestionsBox) return;
+    
+    input.addEventListener("focus", loadSearchIndex);
+    input.addEventListener("mouseenter", loadSearchIndex);
+    
+    input.addEventListener("input", () => {
+        const query = input.value.trim().toLowerCase();
+        
+        if (query.length > 0) {
+            if (clearBtn) clearBtn.style.display = "flex";
+        } else {
+            if (clearBtn) clearBtn.style.display = "none";
+            suggestionsBox.style.display = "none";
+            return;
+        }
+        
+        if (!searchIndex) return;
+        
+        const matches = [];
+        const maxSuggestions = 10;
+        const isNumeric = /^\d+$/.test(query);
+        
+        // 1. Match Cities and ZIPs (exclude States and Counties for Radius)
+        const addedCities = new Set();
+        let zipMatchCount = 0;
+        
+        for (let [zip, details] of Object.entries(searchIndex.zips)) {
+            if (matches.length >= maxSuggestions) break;
+            if (zipMatchCount >= 8) break;
+            
+            const [stateAbbr, county, city, lat, lon] = details;
+            
+            // Check ZIP match
+            if (zip.startsWith(query)) {
+                matches.push({
+                    type: 'zip',
+                    title: `${zip} - ${city}`,
+                    subtitle: `${county} County, ${stateAbbr}`,
+                    badge: 'ZIP Code',
+                    code: zip,
+                    city: city,
+                    state: stateAbbr,
+                    lat: lat,
+                    lon: lon
+                });
+                zipMatchCount++;
+                continue;
+            }
+            
+            // Check City match
+            if (!isNumeric && city.toLowerCase().includes(query)) {
+                const cityKey = `${city.toLowerCase()}-${stateAbbr.toLowerCase()}`;
+                if (!addedCities.has(cityKey)) {
+                    addedCities.add(cityKey);
+                    matches.push({
+                        type: 'city',
+                        title: `${city}, ${stateAbbr}`,
+                        subtitle: `${county} County`,
+                        badge: 'City',
+                        name: city,
+                        state: stateAbbr,
+                        lat: lat,
+                        lon: lon
+                    });
+                    zipMatchCount++;
+                }
+            }
+        }
+        
+        if (matches.length === 0) {
+            suggestionsBox.innerHTML = `
+                <div style="padding: 12px 16px; font-size: 13px; color: var(--text-muted); text-align: center;">
+                    No matches found for "<strong>${escapeHtml(query)}</strong>"
+                </div>
+            `;
+        } else {
+            let html = "";
+            matches.forEach((item, idx) => {
+                const icon = item.type === 'zip' ? "✉️" : "🏙️";
+                html += `
+                <div class="suggestion-item" style="padding: 10px 16px; cursor: pointer; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between;" data-idx="${idx}">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <div class="suggestion-icon">${icon}</div>
+                        <div>
+                            <div style="font-weight: 600; color: var(--text-primary); font-size: 13px;">${item.title}</div>
+                            <div style="font-size: 11px; color: var(--text-muted);">${item.subtitle}</div>
+                        </div>
+                    </div>
+                    <span class="suggestion-badge">${item.badge}</span>
+                </div>
+                `;
+            });
+            suggestionsBox.innerHTML = html;
+            
+            const items = suggestionsBox.getElementsByClassName("suggestion-item");
+            for (let item of items) {
+                item.addEventListener("click", () => {
+                    const idx = parseInt(item.getAttribute("data-idx"));
+                    const selected = matches[idx];
+                    
+                    input.value = selected.title;
+                    suggestionsBox.style.display = "none";
+                    if (clearBtn) clearBtn.style.display = "flex";
+                    
+                    window.radiusOriginScope = selected;
+                    triggerRadiusSearch();
+                });
+            }
+        }
+        suggestionsBox.style.display = "block";
+    });
+    
+    document.addEventListener("click", (e) => {
+        if (!input.contains(e.target) && !suggestionsBox.contains(e.target)) {
+            suggestionsBox.style.display = "none";
+        }
+    });
+}
+
+// Calculate and render all U.S. ZIP codes within the target radius
+async function triggerRadiusSearch() {
+    const originInput = document.getElementById("radius-origin");
+    const radiusRange = document.getElementById("radius-range");
+    const errorMsg = document.getElementById("radius-error-message");
+    const resultsWrapper = document.getElementById("radius-results-wrapper");
+    const tableBody = document.getElementById("radius-table-body");
+    
+    if (!originInput || !radiusRange || !tableBody) return;
+    
+    if (errorMsg) errorMsg.style.display = "none";
+    resultsWrapper.style.display = "none";
+    
+    const query = originInput.value.trim();
+    if (!query) {
+        showRadiusError("Please enter a starting ZIP code or City.");
+        return;
+    }
+    
+    await loadSearchIndex();
+    
+    let originLat = null;
+    let originLon = null;
+    let originLabel = "";
+    
+    // Resolve starting coordinate
+    if (window.radiusOriginScope && window.radiusOriginScope.lat !== null) {
+        originLat = window.radiusOriginScope.lat;
+        originLon = window.radiusOriginScope.lon;
+        originLabel = window.radiusOriginScope.title;
+    } else {
+        // Attempt fallback lookup
+        const isNumeric = /^\d+$/.test(query);
+        if (isNumeric && query.length === 5) {
+            const details = searchIndex.zips[query];
+            if (details && details[3] !== null) {
+                originLat = details[3];
+                originLon = details[4];
+                originLabel = `${query} - ${details[2]}, ${details[0]}`;
+                window.radiusOriginScope = { type: 'zip', code: query, lat: originLat, lon: originLon, title: originLabel };
+            }
+        } else {
+            // Find first matching city
+            for (let [zip, details] of Object.entries(searchIndex.zips)) {
+                if (details[2].toLowerCase() === query.toLowerCase() && details[3] !== null) {
+                    originLat = details[3];
+                    originLon = details[4];
+                    originLabel = `${details[2]}, ${details[0]}`;
+                    window.radiusOriginScope = { type: 'city', name: details[2], lat: originLat, lon: originLon, title: originLabel };
+                    break;
+                }
+            }
+        }
+    }
+    
+    if (originLat === null || originLon === null) {
+        showRadiusError(`Could not find coordinates for "${query}". Please select a location from the autocomplete list.`);
+        return;
+    }
+    
+    const radiusMiles = parseFloat(radiusRange.value);
+    const results = [];
+    
+    // Scan all U.S. ZIP codes
+    for (let [zip, details] of Object.entries(searchIndex.zips)) {
+        const [stateAbbr, county, city, lat, lon] = details;
+        if (lat === null || lon === null) continue;
+        
+        const distance = calculateHaversineDistance(originLat, originLon, lat, lon);
+        if (distance <= radiusMiles) {
+            results.push({
+                zip: zip,
+                city: city,
+                state: stateAbbr,
+                county: county,
+                distance: distance,
+                lat: lat,
+                lon: lon
+            });
+        }
+    }
+    
+    if (results.length === 0) {
+        showRadiusError("No ZIP codes found within the selected radius.");
+        return;
+    }
+    
+    // Sort closest first
+    results.sort((a, b) => a.distance - b.distance);
+    window.lastRadiusResults = results;
+    
+    // Render results
+    let html = "";
+    results.forEach(item => {
+        html += `
+        <tr style="border-bottom: 1px solid var(--border-color);">
+            <td style="padding: 12px 16px; font-weight: 700; color: var(--primary-color);">${item.distance.toFixed(2)} mi</td>
+            <td style="padding: 12px 16px;"><a href="county/${item.state.toLowerCase()}-${makeSlug(item.county)}.html#${item.zip}" style="font-weight: 600; text-decoration: underline;">${item.zip}</a></td>
+            <td style="padding: 12px 16px;">${item.city}</td>
+            <td style="padding: 12px 16px; font-weight: 600; color: var(--text-secondary);">${item.state}</td>
+            <td style="padding: 12px 16px; color: var(--text-muted);">${item.county} County</td>
+            <td style="padding: 12px 16px; font-family: monospace; font-size: 12px; color: var(--text-muted);">${item.lat.toFixed(4)}, ${item.lon.toFixed(4)}</td>
+        </tr>
+        `;
+    });
+    tableBody.innerHTML = html;
+    
+    document.getElementById("radius-results-title").innerHTML = `Found <strong>${results.length}</strong> ZIP codes within <strong>${radiusMiles} miles</strong> of <em>${originLabel}</em>`;
+    resultsWrapper.style.display = "block";
+    resultsWrapper.classList.add("animate-fade-in");
+}
+
+// Show radius error helper
+function showRadiusError(text) {
+    const errorMsg = document.getElementById("radius-error-message");
+    const errorText = document.getElementById("radius-error-text");
+    if (!errorMsg || !errorText) return;
+    
+    errorText.textContent = text;
+    errorMsg.style.display = "flex";
+    errorMsg.classList.add("animate-fade-in");
+}
+
+// Perform client-side browser GPS geolocation to match the nearest U.S. ZIP
+async function findNearMe() {
+    if (!navigator.geolocation) {
+        showToast("Error: Geolocation is not supported by your browser.");
+        return;
+    }
+    
+    showToast("Requesting GPS coordinates...");
+    
+    navigator.geolocation.getCurrentPosition(async (position) => {
+        const userLat = position.coords.latitude;
+        const userLon = position.coords.longitude;
+        
+        showToast("Matching coordinates to database...");
+        await loadSearchIndex();
+        
+        if (!searchIndex || !searchIndex.zips) {
+            showToast("Failed to load geographic database.");
+            return;
+        }
+        
+        let closestZip = null;
+        let minDistance = Infinity;
+        let closestDetails = null;
+        
+        for (let [zip, details] of Object.entries(searchIndex.zips)) {
+            const [stateAbbr, county, city, lat, lon] = details;
+            if (lat === null || lon === null) continue;
+            
+            const dist = calculateHaversineDistance(userLat, userLon, lat, lon);
+            if (dist < minDistance) {
+                minDistance = dist;
+                closestZip = zip;
+                closestDetails = details;
+            }
+        }
+        
+        if (closestZip) {
+            const [stateAbbr, county, city] = closestDetails;
+            showToast(`Found nearest ZIP: ${closestZip} (${city}, ${stateAbbr}). Redirecting...`);
+            
+            // Generate path prefix based on directory context
+            const pathPrefix = (window.location.pathname.includes('/state/') || window.location.pathname.includes('/county/')) ? '../county/' : 'county/';
+            const countySlug = `${stateAbbr.toLowerCase()}-${makeSlug(county)}`;
+            
+            setTimeout(() => {
+                window.location.href = `${pathPrefix}${countySlug}.html#${closestZip}`;
+            }, 1200);
+        } else {
+            showToast("Could not find any nearby ZIP codes.");
+        }
+    }, (error) => {
+        console.error(error);
+        switch (error.code) {
+            case error.PERMISSION_DENIED:
+                showToast("GPS Permission Denied. Please enable location services.");
+                break;
+            case error.POSITION_UNAVAILABLE:
+                showToast("Location details unavailable.");
+                break;
+            case error.TIMEOUT:
+                showToast("GPS request timed out.");
+                break;
+            default:
+                showToast("An unknown error occurred locating coordinates.");
+        }
+    });
+}
+
+// Client-Side CSV Generator and Downloader
+function downloadListAsCSV(filename, headers, rows) {
+    // Escape and wrap fields in quotes
+    const escapeCsvField = (field) => {
+        const text = String(field);
+        if (text.includes('"') || text.includes(',') || text.includes('\n')) {
+            return `"${text.replace(/"/g, '""')}"`;
+        }
+        return text;
+    };
+    
+    let csvContent = headers.map(escapeCsvField).join(",") + "\n";
+    rows.forEach(row => {
+        csvContent += row.map(escapeCsvField).join(",") + "\n";
+    });
+    
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement("a");
+    if (link.download !== undefined) {
+        const url = URL.createObjectURL(blob);
+        link.setAttribute("href", url);
+        link.setAttribute("download", filename);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+}
+
 
 

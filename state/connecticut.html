@@ -43,6 +43,7 @@
                     </li>
                     <li><a href="../index.html">Home</a></li>
                     <li><a href="../distance.html">Distance Calculator</a></li>
+                    <li><a href="../radius-finder.html">Radius Finder</a></li>
                     <li><a href="../address-generator.html">Address Generator</a></li>
                     <li><a href="../about.html">About</a></li>
                     <li><a href="../contact.html">Contact</a></li>
@@ -97,9 +98,15 @@
                         </div>
                     </div>
 
-                    <div class="filter-box">
-                        <h3 style="font-size: 16px; margin-bottom: 8px;">Filter Counties</h3>
-                        <input type="text" id="county-filter" class="filter-input" placeholder="Type county name to filter...">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 20px; flex-wrap: wrap; gap: 16px;">
+                        <div class="filter-box" style="margin-bottom: 0; flex: 1; min-width: 250px;">
+                            <h3 style="font-size: 16px; margin-bottom: 8px;">Filter Counties</h3>
+                            <input type="text" id="county-filter" class="filter-input" placeholder="Type county name to filter...">
+                        </div>
+                        <button class="pill-btn active state-csv-btn" data-state-abbr="CT" data-state-name="Connecticut" style="padding: 10px 18px; display: inline-flex; align-items: center; gap: 8px; font-weight: 600; font-size: 13px; height: 42px; cursor: pointer;">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                            <span>Download State ZIPs (CSV)</span>
+                        </button>
                     </div>
 
                     <div class="list-group" id="county-list">
@@ -212,6 +219,7 @@
                     <ul>
                         <li><a href="../index.html">Home Search</a></li>
                         <li><a href="../distance.html">Distance Calculator</a></li>
+                        <li><a href="../radius-finder.html">Radius Finder</a></li>
                         <li><a href="../address-generator.html">Address Generator</a></li>
                         <li><a href="../sitemap.xml">XML Sitemap</a></li>
                         <li><a href="https://github.com/scpike/us-state-county-zip" target="_blank" rel="noopener">Data Source</a></li>

@@ -328,7 +328,7 @@ FOOTER = """
         <span id="toast-message">ZIP Code Copied!</span>
     </div>
 
-    <script src="{root_path}js/search.js?v=2"></script>
+    <script src="{root_path}js/search.js?v=3"></script>
 </body>
 </html>
 """

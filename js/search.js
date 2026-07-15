@@ -1516,9 +1516,14 @@ async function triggerRadiusSearch() {
                 window.radiusOriginScope = { type: 'zip', code: query, lat: originLat, lon: originLon, title: originLabel };
             }
         } else {
-            // Find first matching city
+            // Find first matching city, supporting comma-separated inputs like "Los Angeles, CA"
+            let cleanCityQuery = query.toLowerCase();
+            if (cleanCityQuery.includes(",")) {
+                cleanCityQuery = cleanCityQuery.split(",")[0].trim();
+            }
+            
             for (let [zip, details] of Object.entries(searchIndex.zips)) {
-                if (details[2].toLowerCase() === query.toLowerCase() && details[3] !== null) {
+                if (details[2].toLowerCase() === cleanCityQuery && details[3] !== null) {
                     originLat = details[3];
                     originLon = details[4];
                     originLabel = `${details[2]}, ${details[0]}`;
@@ -1542,7 +1547,8 @@ async function triggerRadiusSearch() {
         const [stateAbbr, county, city, lat, lon] = details;
         if (lat === null || lon === null) continue;
         
-        const distance = calculateHaversineDistance(originLat, originLon, lat, lon);
+        const distObj = calculateHaversineDistance(originLat, originLon, lat, lon);
+        const distance = distObj.miles;
         if (distance <= radiusMiles) {
             results.push({
                 zip: zip,
@@ -1626,7 +1632,8 @@ async function findNearMe() {
             const [stateAbbr, county, city, lat, lon] = details;
             if (lat === null || lon === null) continue;
             
-            const dist = calculateHaversineDistance(userLat, userLon, lat, lon);
+            const distObj = calculateHaversineDistance(userLat, userLon, lat, lon);
+            const dist = distObj.miles;
             if (dist < minDistance) {
                 minDistance = dist;
                 closestZip = zip;

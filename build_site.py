@@ -352,8 +352,8 @@ FOOTER = """
 # 1. GENERATE HOMEPAGE (index.html)
 # -----------------
 def generate_homepage():
-    title = "USA Address Finder - Search ZIP Codes, Counties, & States"
-    description = "Search all US postal codes, states, and counties. Quickly find zip codes in any state or sub-area with our instant visual autocomplete search engine."
+    title = "USA Address Finder - Free U.S. ZIP Code Lookup, Cities & States"
+    description = "Free U.S. ZIP code finder & address lookup tool. Search 33,000+ postal codes by city, county, or state. Features distance calculators, radius search, and address generators."
     
     schema_data = {
         "@context": "https://schema.org",
@@ -406,8 +406,8 @@ def generate_homepage():
     body_content = f"""
     <main class="hero animate-fade-in">
         <div class="container">
-            <h1>Search <span>USA Address Finder</span></h1>
-            <p>Instant visual lookup of all ZIP codes, counties, cities, and states. Enter a ZIP code, city, county, or state below to begin.</p>
+            <h1>Free <span>USA Address Finder</span> & U.S. ZIP Code Directory</h1>
+            <p>Instant U.S. ZIP code lookup by address, city, county, or state. Calculate distance between postal codes, search radius maps, and format addresses to USPS standards.</p>
             
             <div class="search-wrapper">
                 <div class="search-bar-container">
@@ -476,8 +476,8 @@ def generate_homepage():
 # -----------------
 def generate_state_pages():
     for state_name, data in states_data.items():
-        title = f"ZIP Codes in {state_name} - List of Counties & Areas ({data['abbr']})"
-        description = f"Browse the full list of ZIP codes, counties, and cities in {state_name} ({data['abbr']}). Select a county to see specific postal codes."
+        title = f"{state_name} ZIP Code List - Counties, Cities & Maps ({data['abbr']})"
+        description = f"Complete list of U.S. ZIP codes, counties, and cities in {state_name} ({data['abbr']}). Download {state_name} ZIP code list CSV, filter counties, and explore postal maps."
         
         breadcrumbs_list = f'<li><a href="../index.html">Home</a></li><li class="active">{state_name}</li>'
         breadcrumbs_html = BREADCRUMBS_HTML.format(breadcrumbs=breadcrumbs_list)
@@ -568,8 +568,8 @@ def generate_county_pages():
     total_counties_built = 0
     for state_name, state_data in states_data.items():
         for county_name, county_data in state_data['counties'].items():
-            title = f"{county_name} County ZIP Codes, Cities, & Zones - {state_data['abbr']}"
-            description = f"Detailed list of all ZIP codes and cities in {county_name} County, {state_name} ({state_data['abbr']}). Click to copy zip codes instantly."
+            title = f"{county_name} County ZIP Codes, {state_name} ({state_data['abbr']})"
+            description = f"Browse all ZIP codes in {county_name} County, {state_name} ({state_data['abbr']}). Filter postal codes by city, view coordinates, and download county ZIP code list CSV."
             
             breadcrumbs_list = f'<li><a href="../index.html">Home</a></li><li><a href="../state/{state_data["slug"]}.html">{state_name}</a></li><li class="active">{county_name} County</li>'
             breadcrumbs_html = BREADCRUMBS_HTML.format(breadcrumbs=breadcrumbs_list)
@@ -816,8 +816,8 @@ def generate_info_pages():
 
 def generate_distance_page():
     print("Generating ZIP code distance page (distance.html)...")
-    title = "ZIP Code Distance Calculator - Calculate Distance Between ZIP Codes"
-    description = "Calculate the distance between two U.S. ZIP codes based on latitude and longitude. Instant great-circle distance calculation in miles and kilometers."
+    title = "ZIP Code Distance Calculator - Distance Between Two ZIP Codes"
+    description = "Calculate exact straight-line distance between two U.S. ZIP codes in miles and kilometers. Free ZIP code mileage calculator with coordinates and Haversine formula."
     
     breadcrumbs_list = '<li><a href="index.html">Home</a></li><li class="active">Distance Calculator</li>'
     breadcrumbs_html = BREADCRUMBS_HTML.format(breadcrumbs=breadcrumbs_list)
@@ -829,7 +829,7 @@ def generate_distance_page():
             <div class="main-content">
                 <h2 class="section-title" style="margin-bottom: 24px;">ZIP Code Distance Calculator</h2>
                 <p style="margin-bottom: 24px; font-size: 15px; color: var(--text-secondary);">
-                    Enter two U.S. ZIP codes below to calculate the distance between them. The calculation is based on the geographic coordinates (latitude and longitude) of each ZIP code centroid using the Haversine formula.
+                    Calculate distance between two ZIP codes in miles and kilometers. Our free ZIP code mileage calculator uses coordinate centroids and the Haversine formula.
                 </p>
                 
                 <div class="calculator-card" style="background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: var(--card-radius); padding: 24px; margin-bottom: 30px;">
@@ -939,15 +939,15 @@ def generate_distance_page():
                 <div class="faq-section" style="margin-top: 40px; border-top: 1px solid var(--border-color); padding-top: 30px;">
                     <h3 style="font-size: 18px; margin-bottom: 16px;">Frequently Asked Questions</h3>
                     <div style="margin-bottom: 16px;">
-                        <h4 style="font-size: 14px; margin-bottom: 4px; color: var(--text-primary);">How is the distance calculated?</h4>
+                        <h4 style="font-size: 14px; margin-bottom: 4px; color: var(--text-primary);">How is the distance calculated between two ZIP codes?</h4>
                         <p style="font-size: 13.5px; color: var(--text-secondary);">
-                            We calculate the great-circle distance (straight-line distance "as the crow flies") using the Haversine formula. This mathematical equation accounts for the Earth's spherical shape based on the exact coordinates of the geographic centroids (center points) of each ZIP code area.
+                            We calculate the great-circle distance (straight-line distance "as the crow flies") using the Haversine formula based on geographic centroids of each ZIP code area.
                         </p>
                     </div>
                     <div style="margin-bottom: 16px;">
                         <h4 style="font-size: 14px; margin-bottom: 4px; color: var(--text-primary);">Is this the driving distance?</h4>
                         <p style="font-size: 13.5px; color: var(--text-secondary);">
-                            No, this calculator measures the straight-line distance, not road or driving distance. Real-world driving distances will usually be 10% to 30% longer depending on road layout, highway paths, and local terrain obstacles.
+                            No, this calculator measures straight-line distance. Driving distances will usually be 10% to 30% longer depending on road paths and terrain.
                         </p>
                     </div>
                 </div>
@@ -968,8 +968,8 @@ def generate_distance_page():
 
 def generate_address_generator_page():
     print("Generating ZIP/State/City/County random address generator page (address-generator.html)...")
-    title = "Random Address Generator - Generate U.S. Street Addresses"
-    description = "Generate random, realistic U.S. street addresses based on ZIP code, state, city, or county. Perfect for testing, form validation, and dummy data generation."
+    title = "Random US Address Generator - Generate Valid Street Addresses"
+    description = "Free random U.S. address generator with valid ZIP codes, cities, counties, and street names. Generate realistic dummy U.S. contact details for software testing."
     
     breadcrumbs_list = '<li><a href="index.html">Home</a></li><li class="active">Address Generator</li>'
     breadcrumbs_html = BREADCRUMBS_HTML.format(breadcrumbs=breadcrumbs_list)
@@ -979,9 +979,9 @@ def generate_address_generator_page():
     <div class="container animate-fade-in" style="margin-top: 30px;">
         <div class="detail-layout">
             <div class="main-content">
-                <h2 class="section-title" style="margin-bottom: 24px;">Random Address Generator</h2>
+                <h2 class="section-title" style="margin-bottom: 24px;">Random US Address Generator</h2>
                 <p style="margin-bottom: 24px; font-size: 15px; color: var(--text-secondary);">
-                    Need test data or a random U.S. address? Select a scope below (State, County, City, or ZIP code) or generate completely random addresses across the entire United States.
+                    Generate random US addresses with ZIP code, state, city, and street name. Perfect for software testing, form validation, and dummy data generation.
                 </p>
                 
                 <div class="calculator-card" style="background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: var(--card-radius); padding: 24px; margin-bottom: 24px;">
@@ -1034,13 +1034,13 @@ def generate_address_generator_page():
                     <div style="margin-bottom: 16px;">
                         <h4 style="font-size: 14px; margin-bottom: 4px; color: var(--text-primary);">Are these actual physical U.S. addresses?</h4>
                         <p style="font-size: 13.5px; color: var(--text-secondary);">
-                            No. The geographic details (City, State, County, and ZIP code) are real data structures sourced from the U.S. Census Bureau. However, the street numbers and names are generated randomly using statistical naming patterns. They do not represent real physical houses, ensuring complete privacy compliance.
+                            No. The geographic details (City, State, County, and ZIP code) are real data structures sourced from the U.S. Census Bureau. However, the street numbers and names are generated randomly using statistical naming patterns to preserve privacy.
                         </p>
                     </div>
                     <div style="margin-bottom: 16px;">
                         <h4 style="font-size: 14px; margin-bottom: 4px; color: var(--text-primary);">What are these addresses useful for?</h4>
                         <p style="font-size: 13.5px; color: var(--text-secondary);">
-                            They are highly valuable for web developers, software testers, and database administrators who require realistic dummy U.S. contact details to test forms, validation libraries, address lookup systems, or data structures without handling real personally identifiable information (PII).
+                            They are valuable for developers, software testers, and database administrators who require realistic dummy U.S. contact details to test forms, validation libraries, or lookup systems.
                         </p>
                     </div>
                 </div>
@@ -1061,8 +1061,115 @@ def generate_address_generator_page():
 
 def generate_radius_page():
     print("Generating ZIP Code Radius Finder page (radius-finder.html)...")
-    title = "ZIP Code Radius Finder - Search Postal Codes by Distance"
-    description = "Find all U.S. ZIP codes within a 5, 10, 25, 50, or 100 mile radius of any postal code or city. Sort results by distance and export lists to CSV."
+    title = "ZIP Code Radius Finder - Search Postal Codes by Radius (CSV Download)"
+    description = "Find all U.S. ZIP codes within a 5, 10, 25, 50, or 100 mile radius of any city or postal code. Sort results by distance and export zip code lists to CSV."
+    
+    breadcrumbs_list = '<li><a href="index.html">Home</a></li><li class="active">Radius Finder</li>'
+    breadcrumbs_html = BREADCRUMBS_HTML.format(breadcrumbs=breadcrumbs_list)
+    
+    # Body content of the radius finder page
+    body_content = """
+    <div class="container animate-fade-in" style="margin-top: 30px;">
+        <div class="detail-layout">
+            <div class="main-content">
+                <h2 class="section-title" style="margin-bottom: 24px;">ZIP Code Radius Finder</h2>
+                <p style="margin-bottom: 24px; font-size: 15px; color: var(--text-secondary);">
+                    Find all U.S. postal codes within a specific mileage radius of any starting ZIP code or city. Sort results by proximity and download the listing as a CSV spreadsheet.
+                </p>
+                
+                <div class="calculator-card" style="background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: var(--card-radius); padding: 24px; margin-bottom: 24px;">
+                    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px; margin-bottom: 20px;" class="calc-results-grid">
+                        <div style="position: relative;">
+                            <label for="radius-origin" style="display: block; font-weight: 600; font-size: 14px; margin-bottom: 8px; color: var(--text-primary);">Starting ZIP Code or City</label>
+                            <div class="search-bar-container" style="padding: 2px 2px 2px 12px; border: 1px solid var(--border-color); background: var(--bg-secondary);">
+                                <div class="search-icon" style="color: var(--text-muted); margin-right: 8px;">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                                </div>
+                                <input type="text" id="radius-origin" class="search-input" placeholder="Type 5-digit ZIP or City..." autocomplete="off" style="font-size: 14px; height: 38px;">
+                                <button id="clear-radius" class="clear-search-btn" style="padding: 4px; margin-right: 2px;">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+                                </button>
+                            </div>
+                            <div id="suggestions-radius" class="suggestions-box" style="top: 100%; max-height: 220px;"></div>
+                        </div>
+                        
+                        <div>
+                            <label for="radius-range" style="display: block; font-weight: 600; font-size: 14px; margin-bottom: 8px; color: var(--text-primary);">Radius Distance</label>
+                            <select id="radius-range" style="width: 100%; height: 44px; border: 1px solid var(--border-color); border-radius: 4px; padding: 0 12px; background: var(--bg-secondary); color: var(--text-primary); font-size: 14px; outline: none; cursor: pointer;">
+                                <option value="5">5 Miles</option>
+                                <option value="10" selected>10 Miles</option>
+                                <option value="15">15 Miles</option>
+                                <option value="25">25 Miles</option>
+                                <option value="50">50 Miles</option>
+                                <option value="100">100 Miles</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; justify-content: flex-end;">
+                        <button id="find-zips-btn" class="search-btn" style="padding: 10px 24px; font-size: 14px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                            <span>Search Radius</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="radius-error-message" style="display: none; background: #fee2e2; border: 1px solid #fca5a5; color: #b91c1c; border-radius: 6px; padding: 14px 20px; font-size: 14px; font-weight: 500; margin-bottom: 24px; align-items: center; gap: 8px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                    <span id="radius-error-text">Failed to perform radius search.</span>
+                </div>
+                
+                <div id="radius-results-wrapper" style="display: none; margin-bottom: 30px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 12px;">
+                        <h3 id="radius-results-title" style="font-size: 16px; margin: 0; color: var(--text-primary);">ZIP Codes Found</h3>
+                        <button id="radius-export-btn" class="pill-btn active" style="padding: 8px 16px; display: inline-flex; align-items: center; gap: 6px; font-weight: 600; font-size: 12px; cursor: pointer;">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                            <span>Export to CSV</span>
+                        </button>
+                    </div>
+                    
+                    <div style="overflow-x: auto; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--card-radius); box-shadow: var(--shadow-sm);">
+                        <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 14px;">
+                            <thead>
+                                <tr style="border-bottom: 2px solid var(--border-color); background: var(--bg-tertiary);">
+                                    <th style="padding: 12px 16px; font-weight: 600; color: var(--text-primary); width: 100px;">Distance</th>
+                                    <th style="padding: 12px 16px; font-weight: 600; color: var(--text-primary); width: 110px;">ZIP Code</th>
+                                    <th style="padding: 12px 16px; font-weight: 600; color: var(--text-primary);">City</th>
+                                    <th style="padding: 12px 16px; font-weight: 600; color: var(--text-primary); width: 90px;">State</th>
+                                    <th style="padding: 12px 16px; font-weight: 600; color: var(--text-primary);">County</th>
+                                    <th style="padding: 12px 16px; font-weight: 600; color: var(--text-primary); font-family: monospace; font-size: 12px;">Coordinates</th>
+                                </tr>
+                            </thead>
+                            <tbody id="radius-table-body">
+                                <!-- Dynamically generated rows -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="faq-section" style="margin-top: 40px; border-top: 1px solid var(--border-color); padding-top: 30px;">
+                    <h3 style="font-size: 18px; margin-bottom: 16px;">Frequently Asked Questions</h3>
+                    <div style="margin-bottom: 16px;">
+                        <h4 style="font-size: 14px; margin-bottom: 4px; color: var(--text-primary);">How is the radius distance calculated?</h4>
+                        <p style="font-size: 13.5px; color: var(--text-secondary);">
+                            We compute straight-line distance (as the crow flies) between the coordinate centroids of the starting location and target ZIP codes using the **Haversine formula**.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            {SIDEBAR_HTML}
+        </div>
+    </div>
+    """
+    
+    html = HEADER.format(title=title, description=description, root_path="", schema_markup="")
+    html += breadcrumbs_html
+    html += body_content.format(SIDEBAR_HTML=SIDEBAR_HTML)
+    html += FOOTER.format(root_path="")
+    
+    with open(os.path.join(DIST_DIR, "radius-finder.html"), "w", encoding="utf-8") as f:
+        f.write(html)
+    print("Generated radius-finder.html")
     
     breadcrumbs_list = '<li><a href="index.html">Home</a></li><li class="active">Radius Finder</li>'
     breadcrumbs_html = BREADCRUMBS_HTML.format(breadcrumbs=breadcrumbs_list)
@@ -1179,8 +1286,8 @@ def generate_radius_page():
 
 def generate_standardizer_page():
     print("Generating USPS Address Standardizer page (address-standardizer.html)...")
-    title = "USPS Address Standardizer & Formatter - Free Online Mailing Tool"
-    description = "Standardize and format raw U.S. street addresses to official USPS Publication 28 standards. Normalize suffixes, unit designators, directionals, and uppercase text."
+    title = "USPS Address Standardizer - Format Address by USPS Publication 28"
+    description = "Free online USPS address standardizer tool. Format unformatted U.S. street addresses to official USPS Publication 28 mailing standards and street abbreviations."
     
     breadcrumbs_list = '<li><a href="index.html">Home</a></li><li class="active">Address Standardizer</li>'
     breadcrumbs_html = BREADCRUMBS_HTML.format(breadcrumbs=breadcrumbs_list)
@@ -1250,8 +1357,8 @@ def generate_standardizer_page():
 
 def generate_compare_page():
     print("Generating ZIP Code Compare page (compare.html)...")
-    title = "ZIP Code Side-by-Side Comparison Tool - Compare U.S. Postal Codes"
-    description = "Compare two or three U.S. ZIP codes side-by-side. Inspect primary cities, state, county details, centroid coordinates, straight-line distance, and time zones."
+    title = "ZIP Code Comparison Tool - Compare U.S. Postal Codes Side by Side"
+    description = "Compare U.S. ZIP codes side-by-side. Inspect primary cities, state, county details, centroid coordinates, straight-line distance, and time zones."
     
     breadcrumbs_list = '<li><a href="index.html">Home</a></li><li class="active">ZIP Compare</li>'
     breadcrumbs_html = BREADCRUMBS_HTML.format(breadcrumbs=breadcrumbs_list)
@@ -1317,8 +1424,8 @@ def generate_compare_page():
 
 def generate_timezone_page():
     print("Generating Time Zone Finder page (timezone.html)...")
-    title = "ZIP Code Time Zone & Local Clock Finder - U.S. Time Zones"
-    description = "Lookup official U.S. time zones (Eastern, Central, Mountain, Pacific, Alaska, Hawaii) by ZIP code or city. Features live digital local clocks."
+    title = "Time Zone by ZIP Code Finder - U.S. Local Time Clocks"
+    description = "Lookup U.S. time zones by ZIP code or city. Features live digital local clocks, UTC offsets, and state time zone boundaries."
     
     breadcrumbs_list = '<li><a href="index.html">Home</a></li><li class="active">Time Zone Finder</li>'
     breadcrumbs_html = BREADCRUMBS_HTML.format(breadcrumbs=breadcrumbs_list)
@@ -1365,8 +1472,8 @@ def generate_timezone_page():
 
 def generate_areacode_page():
     print("Generating Area Code Lookup page (area-codes.html)...")
-    title = "U.S. Phone Area Code to ZIP Code Lookup - Directory Tool"
-    description = "Look up any 3-digit U.S. telephone area code. Find matching states, primary cities, counties, and associated postal codes."
+    title = "Area Code to ZIP Code Lookup - U.S. Telephone Area Code Directory"
+    description = "Look up any 3-digit U.S. phone area code. Find matching state, primary cities, counties, and associated postal codes."
     
     breadcrumbs_list = '<li><a href="index.html">Home</a></li><li class="active">Area Code Lookup</li>'
     breadcrumbs_html = BREADCRUMBS_HTML.format(breadcrumbs=breadcrumbs_list)

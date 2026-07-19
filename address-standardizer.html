@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>USPS Address Standardizer & Formatter - Free Online Mailing Tool</title>
+    <meta name="description" content="Standardize and format raw U.S. street addresses to official USPS Publication 28 standards. Normalize suffixes, unit designators, directionals, and uppercase text.">
+    <meta name="google-site-verification" content="p-8wt0DNXh9djTp1qFiyK1ZKc3vqq8Z_zhahqzWFLJ8" />
+    <link rel="stylesheet" href="css/style.css?v=3">
+    <!-- Google Schema Markup -->
+    
+</head>
+<body>
+    <header>
+        <div class="container nav-container">
+            <a href="index.html" class="logo">
+                <svg class="flag-icon" width="34" height="22" viewBox="0 0 74 39" style="border-radius: 2px; box-shadow: var(--shadow-sm); border: 1px solid #112e51; display: inline-block; vertical-align: middle;">
+                    <rect width="74" height="39" fill="#B22234"/>
+                    <path d="M0,3h74M0,9h74M0,15h74M0,21h74M0,27h74M0,33h74" stroke="#FFFFFF" stroke-width="3"/>
+                    <rect width="30" height="21" fill="#3C3B6E"/>
+                    <g fill="#FFFFFF">
+                        <circle cx="6" cy="5" r="1"/>
+                        <circle cx="15" cy="5" r="1"/>
+                        <circle cx="24" cy="5" r="1"/>
+                        <circle cx="10" cy="10.5" r="1"/>
+                        <circle cx="20" cy="10.5" r="1"/>
+                        <circle cx="6" cy="16" r="1"/>
+                        <circle cx="15" cy="16" r="1"/>
+                        <circle cx="24" cy="16" r="1"/>
+                    </g>
+                </svg>
+                <span>USA Address Finder</span>
+            </a>
+            <nav style="display: flex; align-items: center; gap: 12px;">
+                <ul class="nav-links">
+                    <li class="nav-close-wrapper">
+                        <button id="menu-close" class="menu-close-btn" aria-label="Close Navigation Menu">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="18" y1="6" x2="6" y2="18"></line>
+                                <line x1="6" y1="6" x2="18" y2="18"></line>
+                            </svg>
+                        </button>
+                    </li>
+                    <li><a href="index.html">Home</a></li>
+                    <li class="nav-dropdown">
+                        <a href="#" class="dropdown-trigger" style="display: flex; align-items: center; gap: 4px;">
+                            <span>Tools</span>
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="distance.html">📏 Distance Calculator</a></li>
+                            <li><a href="radius-finder.html">⭕ Radius Finder</a></li>
+                            <li><a href="address-generator.html">🎲 Address Generator</a></li>
+                            <li><a href="address-standardizer.html">📝 USPS Standardizer</a></li>
+                            <li><a href="compare.html">📊 ZIP Code Compare</a></li>
+                            <li><a href="timezone.html">🕒 Time Zone Finder</a></li>
+                            <li><a href="area-codes.html">📞 Area Code Lookup</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+                <button id="theme-toggle" class="theme-toggle-btn" title="Toggle Light/Dark Mode">
+                    <!-- Sun Icon -->
+                    <svg class="sun-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+                    <!-- Moon Icon -->
+                    <svg class="moon-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display: none;"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+                </button>
+                <button id="menu-toggle" class="menu-toggle-btn" aria-label="Toggle Navigation Menu" title="Toggle Navigation Menu">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
+            </nav>
+            <div id="nav-overlay" class="nav-overlay"></div>
+        </div>
+    </header>
+
+    <div class="container">
+        <ul class="breadcrumbs">
+            <li><a href="index.html">Home</a></li><li class="active">Address Standardizer</li>
+        </ul>
+    </div>
+
+    <div class="container animate-fade-in" style="margin-top: 30px;">
+        <div class="detail-layout">
+            <div class="main-content">
+                <h2 class="section-title" style="margin-bottom: 24px;">USPS Address Standardizer & Formatter</h2>
+                <p style="margin-bottom: 24px; font-size: 15px; color: var(--text-secondary);">
+                    Format messy or informal U.S. addresses to official USPS Publication 28 mailing standards. Convert text to uppercase, abbreviate street suffixes, directionals, and apartment/suite numbers automatically.
+                </p>
+                
+                <div class="calculator-card" style="background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: var(--card-radius); padding: 24px; margin-bottom: 24px;">
+                    <label for="raw-address-input" style="display: block; font-weight: 600; font-size: 14px; margin-bottom: 8px; color: var(--text-primary);">Paste Raw or Unformatted U.S. Address</label>
+                    <textarea id="raw-address-input" style="width: 100%; height: 110px; border: 1px solid var(--border-color); border-radius: 6px; padding: 12px; font-size: 14px; background: var(--bg-secondary); color: var(--text-primary); outline: none; margin-bottom: 16px; font-family: inherit; resize: vertical;" placeholder="e.g. 123 west main street apartment 4b, beverly hills, california 90210"></textarea>
+                    
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+                        <button id="standardize-btn" class="search-btn" style="padding: 10px 24px; font-size: 14px; display: inline-flex; align-items: center; gap: 8px; cursor: pointer;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                            <span>Standardize Address</span>
+                        </button>
+                        <button id="sample-address-btn" class="pill-btn" style="padding: 8px 16px; font-size: 12px; cursor: pointer;">Insert Sample Address</button>
+                    </div>
+                </div>
+                
+                <div id="standardizer-result-wrapper" style="display: none; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--card-radius); padding: 24px; margin-bottom: 30px; box-shadow: var(--shadow-sm);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 12px;">
+                        <h3 style="font-size: 16px; margin: 0; color: var(--text-primary);">Standardized USPS Output</h3>
+                        <button id="copy-standardized-btn" class="pill-btn active" style="padding: 8px 16px; display: inline-flex; align-items: center; gap: 6px; font-weight: 600; font-size: 12px; cursor: pointer;">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>
+                            <span>Copy Formatted Address</span>
+                        </button>
+                    </div>
+                    
+                    <div id="standardized-address-output" style="background: var(--bg-tertiary); border: 1px border-color; border-radius: 6px; padding: 16px; font-family: monospace; font-size: 15px; font-weight: 700; color: var(--primary-color); white-space: pre-line; line-height: 1.6;"></div>
+                    
+                    <div style="margin-top: 20px; border-top: 1px solid var(--border-color); padding-top: 16px;">
+                        <h4 style="font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); margin-bottom: 10px;">Applied Standardizations</h4>
+                        <div id="applied-rules-list" style="display: flex; flex-wrap: wrap; gap: 8px;"></div>
+                    </div>
+                </div>
+
+                <div class="faq-section" style="margin-top: 40px; border-top: 1px solid var(--border-color); padding-top: 30px;">
+                    <h3 style="font-size: 18px; margin-bottom: 16px;">USPS Mailing Standards FAQ</h3>
+                    <div style="margin-bottom: 16px;">
+                        <h4 style="font-size: 14px; margin-bottom: 4px; color: var(--text-primary);">What is USPS Publication 28?</h4>
+                        <p style="font-size: 13.5px; color: var(--text-secondary);">
+                            USPS Publication 28 provides official guidelines for formatting addresses to optimize automated mail processing, sorting, and delivery speeds across the United States Postal Service network.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="sidebar">
+                <!-- AdSense Top Sidebar Placement -->
+                <div class="ad-card">
+                    <div class="ad-label">Advertisement</div>
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="2"/><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                    <div class="ad-placeholder-text">Support this website by enabling ads</div>
+                </div>
+
+                <!-- Premium Affiliate Lead Gen Card -->
+                <div class="widget-card">
+                    <h3 class="widget-title">Need to Move?</h3>
+                    <p class="widget-text">Compare free moving quotes from certified local movers in your region. Save up to 40% on your next move!</p>
+                    <a href="https://www.movingcompanyreviews.com" target="_blank" rel="noopener noreferrer" class="widget-btn">Get Free Moving Quotes</a>
+                </div>
+
+                <!-- Database Export Call to Action -->
+                <div class="widget-card" style="background-image: linear-gradient(180deg, transparent, rgba(245, 158, 11, 0.04));">
+                    <h3 class="widget-title" style="color: var(--accent-color);">USA ZIP Codes Database</h3>
+                    <p class="widget-text">Get a clean, fully offline CSV/JSON version of the complete USA State-County-City-ZIP database.</p>
+                    <a href="https://gumroad.com" target="_blank" rel="noopener noreferrer" class="widget-btn" style="background: var(--accent-gradient);">Download Dataset</a>
+                </div>
+
+                <!-- AdSense Bottom Sidebar Placement -->
+                <div class="ad-card">
+                    <div class="ad-label">Advertisement</div>
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="2"/><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                    <div class="ad-placeholder-text">Sponsored Link</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    
+    <footer id="site-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h3 style="color: #ffffff; display: inline-block;">USA Address Finder</h3>
+                    <p style="font-size: 13px; margin-top: 10px; color: #a3b8cc;">
+                        A comprehensive, lightning-fast static directory of all 50 states, counties, and postal codes in the United States of America. Built for optimal speed, search indexing, and simple navigability.
+                    </p>
+                </div>
+                <div class="footer-col">
+                    <h3>Popular States</h3>
+                    <ul>
+                        <li><a href="state/california.html">California</a></li>
+                        <li><a href="state/texas.html">Texas</a></li>
+                        <li><a href="state/new-york.html">New York</a></li>
+                        <li><a href="state/florida.html">Florida</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h3>Legal & Info</h3>
+                    <ul>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="contact.html">Contact Me</a></li>
+                        <li><a href="privacy.html">Privacy Policy</a></li>
+                        <li><a href="disclaimer.html">Disclaimer</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h3>Resources</h3>
+                    <ul>
+                        <li><a href="index.html">Home Search</a></li>
+                        <li><a href="distance.html">Distance Calculator</a></li>
+                        <li><a href="radius-finder.html">Radius Finder</a></li>
+                        <li><a href="address-generator.html">Address Generator</a></li>
+                        <li><a href="address-standardizer.html">USPS Standardizer</a></li>
+                        <li><a href="compare.html">ZIP Compare</a></li>
+                        <li><a href="timezone.html">Time Zone Finder</a></li>
+                        <li><a href="area-codes.html">Area Code Lookup</a></li>
+                        <li><a href="sitemap.xml">XML Sitemap</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div>&copy; 2026 USA Address Finder. All rights reserved. Built with SEO best practices.</div>
+                <div>Data Source: US Census ZCTA Database</div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Copy to Clipboard Toast Alert -->
+    <div id="copy-toast" class="toast">
+        <svg class="toast-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        <span id="toast-message">ZIP Code Copied!</span>
+    </div>
+
+    <script src="js/search.js?v=3"></script>
+</body>
+</html>

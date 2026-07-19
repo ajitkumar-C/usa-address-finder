@@ -6,7 +6,7 @@
     <title>USA Address Finder - Search ZIP Codes, Counties, & States</title>
     <meta name="description" content="Search all US postal codes, states, and counties. Quickly find zip codes in any state or sub-area with our instant visual autocomplete search engine.">
     <meta name="google-site-verification" content="p-8wt0DNXh9djTp1qFiyK1ZKc3vqq8Z_zhahqzWFLJ8" />
-    <link rel="stylesheet" href="css/style.css?v=2">
+    <link rel="stylesheet" href="css/style.css?v=3">
     <!-- Google Schema Markup -->
     <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebSite", "name": "USA Address Finder", "url": "https://usa-address-zip.vercel.app/", "potentialAction": {"@type": "SearchAction", "target": {"@type": "EntryPoint", "urlTemplate": "https://usa-address-zip.vercel.app/index.html?q={search_term_string}"}, "query-input": "required name=search_term_string"}}</script>
 </head>
@@ -42,9 +42,21 @@
                         </button>
                     </li>
                     <li><a href="index.html">Home</a></li>
-                    <li><a href="distance.html">Distance Calculator</a></li>
-                    <li><a href="radius-finder.html">Radius Finder</a></li>
-                    <li><a href="address-generator.html">Address Generator</a></li>
+                    <li class="nav-dropdown">
+                        <a href="#" class="dropdown-trigger" style="display: flex; align-items: center; gap: 4px;">
+                            <span>Tools</span>
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="distance.html">📏 Distance Calculator</a></li>
+                            <li><a href="radius-finder.html">⭕ Radius Finder</a></li>
+                            <li><a href="address-generator.html">🎲 Address Generator</a></li>
+                            <li><a href="address-standardizer.html">📝 USPS Standardizer</a></li>
+                            <li><a href="compare.html">📊 ZIP Code Compare</a></li>
+                            <li><a href="timezone.html">🕒 Time Zone Finder</a></li>
+                            <li><a href="area-codes.html">📞 Area Code Lookup</a></li>
+                        </ul>
+                    </li>
                     <li><a href="about.html">About</a></li>
                     <li><a href="contact.html">Contact</a></li>
                 </ul>
@@ -101,7 +113,279 @@
             <div class="ad-placeholder-text">Ad Slot - Banner (Responsive)</div>
         </div>
 
-        <h2 class="section-title">Explore by State</h2>
+        <!-- Interactive US State Explorer Map Widget -->
+        <div style="background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: var(--card-radius); padding: 24px; margin-bottom: 30px; box-shadow: var(--shadow-sm);">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 16px;">
+                <div>
+                    <h3 style="font-size: 18px; color: var(--text-primary); margin: 0 0 4px 0;">Interactive US State Explorer Map</h3>
+                    <p style="font-size: 13.5px; color: var(--text-secondary); margin: 0;">Hover or select any US state tile below to inspect county counts and ZIP code coverage.</p>
+                </div>
+                <div id="map-state-badge" style="background: var(--accent-gradient); color: #fff; padding: 6px 16px; border-radius: 20px; font-weight: 700; font-size: 13px; display: inline-flex; align-items: center; gap: 6px;">
+                    <span>Hover a State</span>
+                </div>
+            </div>
+            
+            <div id="us-map-tiles-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(58px, 1fr)); gap: 8px; margin-top: 16px;">
+                
+        <a href="state/alabama.html" class="map-tile-btn" data-name="Alabama" data-abbr="AL" data-counties="67" data-zips="657" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px 4px; text-align: center; text-decoration: none; color: var(--text-primary); transition: all 0.2s ease; cursor: pointer; display: block;">
+            <div style="font-weight: 700; font-size: 13px; color: var(--primary-color);">AL</div>
+            <div style="font-size: 10px; color: var(--text-muted); margin-top: 2px;">67 Cty</div>
+        </a>
+        
+        <a href="state/alaska.html" class="map-tile-btn" data-name="Alaska" data-abbr="AK" data-counties="27" data-zips="251" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px 4px; text-align: center; text-decoration: none; color: var(--text-primary); transition: all 0.2s ease; cursor: pointer; display: block;">
+            <div style="font-weight: 700; font-size: 13px; color: var(--primary-color);">AK</div>
+            <div style="font-size: 10px; color: var(--text-muted); margin-top: 2px;">27 Cty</div>
+        </a>
+        
+        <a href="state/arizona.html" class="map-tile-btn" data-name="Arizona" data-abbr="AZ" data-counties="15" data-zips="376" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px 4px; text-align: center; text-decoration: none; color: var(--text-primary); transition: all 0.2s ease; cursor: pointer; display: block;">
+            <div style="font-weight: 700; font-size: 13px; color: var(--primary-color);">AZ</div>
+            <div style="font-size: 10px; color: var(--text-muted); margin-top: 2px;">15 Cty</div>
+        </a>
+        
+        <a href="state/arkansas.html" class="map-tile-btn" data-name="Arkansas" data-abbr="AR" data-counties="75" data-zips="618" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px 4px; text-align: center; text-decoration: none; color: var(--text-primary); transition: all 0.2s ease; cursor: pointer; display: block;">
+            <div style="font-weight: 700; font-size: 13px; color: var(--primary-color);">AR</div>
+            <div style="font-size: 10px; color: var(--text-muted); margin-top: 2px;">75 Cty</div>
+        </a>
+        
+        <a href="state/california.html" class="map-tile-btn" data-name="California" data-abbr="CA" data-counties="58" data-zips="1,757" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px 4px; text-align: center; text-decoration: none; color: var(--text-primary); transition: all 0.2s ease; cursor: pointer; display: block;">
+            <div style="font-weight: 700; font-size: 13px; color: var(--primary-color);">CA</div>
+            <div style="font-size: 10px; color: var(--text-muted); margin-top: 2px;">58 Cty</div>
+        </a>
+        
+        <a href="state/colorado.html" class="map-tile-btn" data-name="Colorado" data-abbr="CO" data-counties="63" data-zips="501" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px 4px; text-align: center; text-decoration: none; color: var(--text-primary); transition: all 0.2s ease; cursor: pointer; display: block;">
+            <div style="font-weight: 700; font-size: 13px; color: var(--primary-color);">CO</div>
+            <div style="font-size: 10px; color: var(--text-muted); margin-top: 2px;">63 Cty</div>
+        </a>
+        
+        <a href="state/connecticut.html" class="map-tile-btn" data-name="Connecticut" data-abbr="CT" data-counties="8" data-zips="276" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px 4px; text-align: center; text-decoration: none; color: var(--text-primary); transition: all 0.2s ease; cursor: pointer; display: block;">
+            <div style="font-weight: 700; font-size: 13px; color: var(--primary-color);">CT</div>
+            <div style="font-size: 10px; color: var(--text-muted); margin-top: 2px;">8 Cty</div>
+        </a>
+        
+        <a href="state/delaware.html" class="map-tile-btn" data-name="Delaware" data-abbr="DE" data-counties="3" data-zips="68" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px 4px; text-align: center; text-decoration: none; color: var(--text-primary); transition: all 0.2s ease; cursor: pointer; display: block;">
+            <div style="font-weight: 700; font-size: 13px; color: var(--primary-color);">DE</div>
+            <div style="font-size: 10px; color: var(--text-muted); margin-top: 2px;">3 Cty</div>
+        </a>
+        
+        <a href="state/district-of-columbia.html" class="map-tile-btn" data-name="District of columbia" data-abbr="DC" data-counties="1" data-zips="28" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px 4px; text-align: center; text-decoration: none; color: var(--text-primary); transition: all 0.2s ease; cursor: pointer; display: block;">
+            <div style="font-weight: 700; font-size: 13px; color: var(--primary-color);">DC</div>
+            <div style="font-size: 10px; color: var(--text-muted); margin-top: 2px;">1 Cty</div>
+        </a>
+        
+        <a href="state/florida.html" class="map-tile-btn" data-name="Florida" data-abbr="FL" data-counties="67" data-zips="972" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px 4px; text-align: center; text-decoration: none; color: var(--text-primary); transition: all 0.2s ease; cursor: pointer; display: block;">
+            <div style="font-weight: 700; font-size: 13px; color: var(--primary-color);">FL</div>
+            <div style="font-size: 10px; color: var(--text-muted); margin-top: 2px;">67 Cty</div>
+        </a>
+        
+        <a href="state/georgia.html" class="map-tile-btn" data-name="Georgia" data-abbr="GA" data-counties="159" data-zips="736" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px 4px; text-align: center; text-decoration: none; color: var(--text-primary); transition: all 0.2s ease; cursor: pointer; display: block;">
+            <div style="font-weight: 700; font-size: 13px; color: var(--primary-color);">GA</div>
+            <div style="font-size: 10px; color: var(--text-muted); margin-top: 2px;">159 Cty</div>
+        </a>
+        
+        <a href="state/hawaii.html" class="map-tile-btn" data-name="Hawaii" data-abbr="HI" data-counties="5" data-zips="92" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px 4px; text-align: center; text-decoration: none; color: var(--text-primary); transition: all 0.2s ease; cursor: pointer; display: block;">
+            <div style="font-weight: 700; font-size: 13px; color: var(--primary-color);">HI</div>
+            <div style="font-size: 10px; color: var(--text-muted); margin-top: 2px;">5 Cty</div>
+        </a>
+        
+        <a href="state/idaho.html" class="map-tile-btn" data-name="Idaho" data-abbr="ID" data-counties="44" data-zips="292" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px 4px; text-align: center; text-decoration: none; color: var(--text-primary); transition: all 0.2s ease; cursor: pointer; display: block;">
+            <div style="font-weight: 700; font-size: 13px; color: var(--primary-color);">ID</div>
+            <div style="font-size: 10px; color: var(--text-muted); margin-top: 2px;">44 Cty</div>
+        </a>
+        
+        <a href="state/illinois.html" class="map-tile-btn" data-name="Illinois" data-abbr="IL" data-counties="102" data-zips="1,375" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px 4px; text-align: center; text-decoration: none; color: var(--text-primary); transition: all 0.2s ease; cursor: pointer; display: block;">
+            <div style="font-weight: 700; font-size: 13px; color: var(--primary-color);">IL</div>
+            <div style="font-size: 10px; color: var(--text-muted); margin-top: 2px;">102 Cty</div>
+        </a>
+        
+        <a href="state/indiana.html" class="map-tile-btn" data-name="Indiana" data-abbr="IN" data-counties="92" data-zips="780" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px 4px; text-align: center; text-decoration: none; color: var(--text-primary); transition: all 0.2s ease; cursor: pointer; display: block;">
+            <div style="font-weight: 700; font-size: 13px; color: var(--primary-color);">IN</div>
+            <div style="font-size: 10px; color: var(--text-muted); margin-top: 2px;">92 Cty</div>
+        </a>
+        
+        <a href="state/iowa.html" class="map-tile-btn" data-name="Iowa" data-abbr="IA" data-counties="99" data-zips="972" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px 4px; text-align: center; text-decoration: none; color: var(--text-primary); transition: all 0.2s ease; cursor: pointer; display: block;">
+            <div style="font-weight: 700; font-size: 13px; color: var(--primary-color);">IA</div>
+            <div style="font-size: 10px; color: var(--text-muted); margin-top: 2px;">99 Cty</div>
+        </a>
+        
+        <a href="state/kansas.html" class="map-tile-btn" data-name="Kansas" data-abbr="KS" data-counties="105" data-zips="721" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px 4px; text-align: center; text-decoration: none; color: var(--text-primary); transition: all 0.2s ease; cursor: pointer; display: block;">
+            <div style="font-weight: 700; font-size: 13px; color: var(--primary-color);">KS</div>
+            <div style="font-size: 10px; color: var(--text-muted); margin-top: 2px;">105 Cty</div>
+        </a>
+        
+        <a href="state/kentucky.html" class="map-tile-btn" data-name="Kentucky" data-abbr="KY" data-counties="120" data-zips="799" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px 4px; text-align: center; text-decoration: none; color: var(--text-primary); transition: all 0.2s ease; cursor: pointer; display: block;">
+            <div style="font-weight: 700; font-size: 13px; color: var(--primary-color);">KY</div>
+            <div style="font-size: 10px; color: var(--text-muted); margin-top: 2px;">120 Cty</div>
+        </a>
+        
+        <a href="state/louisiana.html" class="map-tile-btn" data-name="Louisiana" data-abbr="LA" data-counties="64" data-zips="542" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px 4px; text-align: center; text-decoration: none; color: var(--text-primary); transition: all 0.2s ease; cursor: pointer; display: block;">
+            <div style="font-weight: 700; font-size: 13px; color: var(--primary-color);">LA</div>
+            <div style="font-size: 10px; color: var(--text-muted); margin-top: 2px;">64 Cty</div>
+        </a>
+        
+        <a href="state/maine.html" class="map-tile-btn" data-name="Maine" data-abbr="ME" data-counties="16" data-zips="415" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px 4px; text-align: center; text-decoration: none; color: var(--text-primary); transition: all 0.2s ease; cursor: pointer; display: block;">
+            <div style="font-weight: 700; font-size: 13px; color: var(--primary-color);">ME</div>
+            <div style="font-size: 10px; color: var(--text-muted); margin-top: 2px;">16 Cty</div>
+        </a>
+        
+        <a href="state/maryland.html" class="map-tile-btn" data-name="Maryland" data-abbr="MD" data-counties="24" data-zips="466" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px 4px; text-align: center; text-decoration: none; color: var(--text-primary); transition: all 0.2s ease; cursor: pointer; display: block;">
+            <div style="font-weight: 700; font-size: 13px; color: var(--primary-color);">MD</div>
+            <div style="font-size: 10px; color: var(--text-muted); margin-top: 2px;">24 Cty</div>
+        </a>
+        
+        <a href="state/massachusetts.html" class="map-tile-btn" data-name="Massachusetts" data-abbr="MA" data-counties="14" data-zips="519" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px 4px; text-align: center; text-decoration: none; color: var(--text-primary); transition: all 0.2s ease; cursor: pointer; display: block;">
+            <div style="font-weight: 700; font-size: 13px; color: var(--primary-color);">MA</div>
+            <div style="font-size: 10px; color: var(--text-muted); margin-top: 2px;">14 Cty</div>
+        </a>
+        
+        <a href="state/michigan.html" class="map-tile-btn" data-name="Michigan" data-abbr="MI" data-counties="83" data-zips="987" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px 4px; text-align: center; text-decoration: none; color: var(--text-primary); transition: all 0.2s ease; cursor: pointer; display: block;">
+            <div style="font-weight: 700; font-size: 13px; color: var(--primary-color);">MI</div>
+            <div style="font-size: 10px; color: var(--text-muted); margin-top: 2px;">83 Cty</div>
+        </a>
+        
+        <a href="state/minnesota.html" class="map-tile-btn" data-name="Minnesota" data-abbr="MN" data-counties="87" data-zips="892" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px 4px; text-align: center; text-decoration: none; color: var(--text-primary); transition: all 0.2s ease; cursor: pointer; display: block;">
+            <div style="font-weight: 700; font-size: 13px; color: var(--primary-color);">MN</div>
+            <div style="font-size: 10px; color: var(--text-muted); margin-top: 2px;">87 Cty</div>
+        </a>
+        
+        <a href="state/mississippi.html" class="map-tile-btn" data-name="Mississippi" data-abbr="MS" data-counties="82" data-zips="447" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px 4px; text-align: center; text-decoration: none; color: var(--text-primary); transition: all 0.2s ease; cursor: pointer; display: block;">
+            <div style="font-weight: 700; font-size: 13px; color: var(--primary-color);">MS</div>
+            <div style="font-size: 10px; color: var(--text-muted); margin-top: 2px;">82 Cty</div>
+        </a>
+        
+        <a href="state/missouri.html" class="map-tile-btn" data-name="Missouri" data-abbr="MO" data-counties="115" data-zips="1,040" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px 4px; text-align: center; text-decoration: none; color: var(--text-primary); transition: all 0.2s ease; cursor: pointer; display: block;">
+            <div style="font-weight: 700; font-size: 13px; color: var(--primary-color);">MO</div>
+            <div style="font-size: 10px; color: var(--text-muted); margin-top: 2px;">115 Cty</div>
+        </a>
+        
+        <a href="state/montana.html" class="map-tile-btn" data-name="Montana" data-abbr="MT" data-counties="56" data-zips="364" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px 4px; text-align: center; text-decoration: none; color: var(--text-primary); transition: all 0.2s ease; cursor: pointer; display: block;">
+            <div style="font-weight: 700; font-size: 13px; color: var(--primary-color);">MT</div>
+            <div style="font-size: 10px; color: var(--text-muted); margin-top: 2px;">56 Cty</div>
+        </a>
+        
+        <a href="state/nebraska.html" class="map-tile-btn" data-name="Nebraska" data-abbr="NE" data-counties="93" data-zips="590" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px 4px; text-align: center; text-decoration: none; color: var(--text-primary); transition: all 0.2s ease; cursor: pointer; display: block;">
+            <div style="font-weight: 700; font-size: 13px; color: var(--primary-color);">NE</div>
+            <div style="font-size: 10px; color: var(--text-muted); margin-top: 2px;">93 Cty</div>
+        </a>
+        
+        <a href="state/nevada.html" class="map-tile-btn" data-name="Nevada" data-abbr="NV" data-counties="17" data-zips="158" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px 4px; text-align: center; text-decoration: none; color: var(--text-primary); transition: all 0.2s ease; cursor: pointer; display: block;">
+            <div style="font-weight: 700; font-size: 13px; color: var(--primary-color);">NV</div>
+            <div style="font-size: 10px; color: var(--text-muted); margin-top: 2px;">17 Cty</div>
+        </a>
+        
+        <a href="state/new-hampshire.html" class="map-tile-btn" data-name="New hampshire" data-abbr="NH" data-counties="10" data-zips="238" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px 4px; text-align: center; text-decoration: none; color: var(--text-primary); transition: all 0.2s ease; cursor: pointer; display: block;">
+            <div style="font-weight: 700; font-size: 13px; color: var(--primary-color);">NH</div>
+            <div style="font-size: 10px; color: var(--text-muted); margin-top: 2px;">10 Cty</div>
+        </a>
+        
+        <a href="state/new-jersey.html" class="map-tile-btn" data-name="New jersey" data-abbr="NJ" data-counties="21" data-zips="604" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px 4px; text-align: center; text-decoration: none; color: var(--text-primary); transition: all 0.2s ease; cursor: pointer; display: block;">
+            <div style="font-weight: 700; font-size: 13px; color: var(--primary-color);">NJ</div>
+            <div style="font-size: 10px; color: var(--text-muted); margin-top: 2px;">21 Cty</div>
+        </a>
+        
+        <a href="state/new-mexico.html" class="map-tile-btn" data-name="New mexico" data-abbr="NM" data-counties="33" data-zips="366" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px 4px; text-align: center; text-decoration: none; color: var(--text-primary); transition: all 0.2s ease; cursor: pointer; display: block;">
+            <div style="font-weight: 700; font-size: 13px; color: var(--primary-color);">NM</div>
+            <div style="font-size: 10px; color: var(--text-muted); margin-top: 2px;">33 Cty</div>
+        </a>
+        
+        <a href="state/new-york.html" class="map-tile-btn" data-name="New york" data-abbr="NY" data-counties="62" data-zips="1,677" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px 4px; text-align: center; text-decoration: none; color: var(--text-primary); transition: all 0.2s ease; cursor: pointer; display: block;">
+            <div style="font-weight: 700; font-size: 13px; color: var(--primary-color);">NY</div>
+            <div style="font-size: 10px; color: var(--text-muted); margin-top: 2px;">62 Cty</div>
+        </a>
+        
+        <a href="state/north-carolina.html" class="map-tile-btn" data-name="North carolina" data-abbr="NC" data-counties="100" data-zips="809" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px 4px; text-align: center; text-decoration: none; color: var(--text-primary); transition: all 0.2s ease; cursor: pointer; display: block;">
+            <div style="font-weight: 700; font-size: 13px; color: var(--primary-color);">NC</div>
+            <div style="font-size: 10px; color: var(--text-muted); margin-top: 2px;">100 Cty</div>
+        </a>
+        
+        <a href="state/north-dakota.html" class="map-tile-btn" data-name="North dakota" data-abbr="ND" data-counties="53" data-zips="392" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px 4px; text-align: center; text-decoration: none; color: var(--text-primary); transition: all 0.2s ease; cursor: pointer; display: block;">
+            <div style="font-weight: 700; font-size: 13px; color: var(--primary-color);">ND</div>
+            <div style="font-size: 10px; color: var(--text-muted); margin-top: 2px;">53 Cty</div>
+        </a>
+        
+        <a href="state/ohio.html" class="map-tile-btn" data-name="Ohio" data-abbr="OH" data-counties="88" data-zips="1,189" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px 4px; text-align: center; text-decoration: none; color: var(--text-primary); transition: all 0.2s ease; cursor: pointer; display: block;">
+            <div style="font-weight: 700; font-size: 13px; color: var(--primary-color);">OH</div>
+            <div style="font-size: 10px; color: var(--text-muted); margin-top: 2px;">88 Cty</div>
+        </a>
+        
+        <a href="state/oklahoma.html" class="map-tile-btn" data-name="Oklahoma" data-abbr="OK" data-counties="77" data-zips="680" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px 4px; text-align: center; text-decoration: none; color: var(--text-primary); transition: all 0.2s ease; cursor: pointer; display: block;">
+            <div style="font-weight: 700; font-size: 13px; color: var(--primary-color);">OK</div>
+            <div style="font-size: 10px; color: var(--text-muted); margin-top: 2px;">77 Cty</div>
+        </a>
+        
+        <a href="state/oregon.html" class="map-tile-btn" data-name="Oregon" data-abbr="OR" data-counties="36" data-zips="428" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px 4px; text-align: center; text-decoration: none; color: var(--text-primary); transition: all 0.2s ease; cursor: pointer; display: block;">
+            <div style="font-weight: 700; font-size: 13px; color: var(--primary-color);">OR</div>
+            <div style="font-size: 10px; color: var(--text-muted); margin-top: 2px;">36 Cty</div>
+        </a>
+        
+        <a href="state/pennsylvania.html" class="map-tile-btn" data-name="Pennsylvania" data-abbr="PA" data-counties="67" data-zips="1,776" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px 4px; text-align: center; text-decoration: none; color: var(--text-primary); transition: all 0.2s ease; cursor: pointer; display: block;">
+            <div style="font-weight: 700; font-size: 13px; color: var(--primary-color);">PA</div>
+            <div style="font-size: 10px; color: var(--text-muted); margin-top: 2px;">67 Cty</div>
+        </a>
+        
+        <a href="state/rhode-island.html" class="map-tile-btn" data-name="Rhode island" data-abbr="RI" data-counties="5" data-zips="72" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px 4px; text-align: center; text-decoration: none; color: var(--text-primary); transition: all 0.2s ease; cursor: pointer; display: block;">
+            <div style="font-weight: 700; font-size: 13px; color: var(--primary-color);">RI</div>
+            <div style="font-size: 10px; color: var(--text-muted); margin-top: 2px;">5 Cty</div>
+        </a>
+        
+        <a href="state/south-carolina.html" class="map-tile-btn" data-name="South carolina" data-abbr="SC" data-counties="46" data-zips="424" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px 4px; text-align: center; text-decoration: none; color: var(--text-primary); transition: all 0.2s ease; cursor: pointer; display: block;">
+            <div style="font-weight: 700; font-size: 13px; color: var(--primary-color);">SC</div>
+            <div style="font-size: 10px; color: var(--text-muted); margin-top: 2px;">46 Cty</div>
+        </a>
+        
+        <a href="state/south-dakota.html" class="map-tile-btn" data-name="South dakota" data-abbr="SD" data-counties="66" data-zips="390" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px 4px; text-align: center; text-decoration: none; color: var(--text-primary); transition: all 0.2s ease; cursor: pointer; display: block;">
+            <div style="font-weight: 700; font-size: 13px; color: var(--primary-color);">SD</div>
+            <div style="font-size: 10px; color: var(--text-muted); margin-top: 2px;">66 Cty</div>
+        </a>
+        
+        <a href="state/tennessee.html" class="map-tile-btn" data-name="Tennessee" data-abbr="TN" data-counties="95" data-zips="634" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px 4px; text-align: center; text-decoration: none; color: var(--text-primary); transition: all 0.2s ease; cursor: pointer; display: block;">
+            <div style="font-weight: 700; font-size: 13px; color: var(--primary-color);">TN</div>
+            <div style="font-size: 10px; color: var(--text-muted); margin-top: 2px;">95 Cty</div>
+        </a>
+        
+        <a href="state/texas.html" class="map-tile-btn" data-name="Texas" data-abbr="TX" data-counties="254" data-zips="1,938" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px 4px; text-align: center; text-decoration: none; color: var(--text-primary); transition: all 0.2s ease; cursor: pointer; display: block;">
+            <div style="font-weight: 700; font-size: 13px; color: var(--primary-color);">TX</div>
+            <div style="font-size: 10px; color: var(--text-muted); margin-top: 2px;">254 Cty</div>
+        </a>
+        
+        <a href="state/utah.html" class="map-tile-btn" data-name="Utah" data-abbr="UT" data-counties="29" data-zips="291" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px 4px; text-align: center; text-decoration: none; color: var(--text-primary); transition: all 0.2s ease; cursor: pointer; display: block;">
+            <div style="font-weight: 700; font-size: 13px; color: var(--primary-color);">UT</div>
+            <div style="font-size: 10px; color: var(--text-muted); margin-top: 2px;">29 Cty</div>
+        </a>
+        
+        <a href="state/vermont.html" class="map-tile-btn" data-name="Vermont" data-abbr="VT" data-counties="14" data-zips="261" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px 4px; text-align: center; text-decoration: none; color: var(--text-primary); transition: all 0.2s ease; cursor: pointer; display: block;">
+            <div style="font-weight: 700; font-size: 13px; color: var(--primary-color);">VT</div>
+            <div style="font-size: 10px; color: var(--text-muted); margin-top: 2px;">14 Cty</div>
+        </a>
+        
+        <a href="state/virginia.html" class="map-tile-btn" data-name="Virginia" data-abbr="VA" data-counties="128" data-zips="918" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px 4px; text-align: center; text-decoration: none; color: var(--text-primary); transition: all 0.2s ease; cursor: pointer; display: block;">
+            <div style="font-weight: 700; font-size: 13px; color: var(--primary-color);">VA</div>
+            <div style="font-size: 10px; color: var(--text-muted); margin-top: 2px;">128 Cty</div>
+        </a>
+        
+        <a href="state/washington.html" class="map-tile-btn" data-name="Washington" data-abbr="WA" data-counties="39" data-zips="587" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px 4px; text-align: center; text-decoration: none; color: var(--text-primary); transition: all 0.2s ease; cursor: pointer; display: block;">
+            <div style="font-weight: 700; font-size: 13px; color: var(--primary-color);">WA</div>
+            <div style="font-size: 10px; color: var(--text-muted); margin-top: 2px;">39 Cty</div>
+        </a>
+        
+        <a href="state/west-virginia.html" class="map-tile-btn" data-name="West virginia" data-abbr="WV" data-counties="55" data-zips="764" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px 4px; text-align: center; text-decoration: none; color: var(--text-primary); transition: all 0.2s ease; cursor: pointer; display: block;">
+            <div style="font-weight: 700; font-size: 13px; color: var(--primary-color);">WV</div>
+            <div style="font-size: 10px; color: var(--text-muted); margin-top: 2px;">55 Cty</div>
+        </a>
+        
+        <a href="state/wisconsin.html" class="map-tile-btn" data-name="Wisconsin" data-abbr="WI" data-counties="72" data-zips="792" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px 4px; text-align: center; text-decoration: none; color: var(--text-primary); transition: all 0.2s ease; cursor: pointer; display: block;">
+            <div style="font-weight: 700; font-size: 13px; color: var(--primary-color);">WI</div>
+            <div style="font-size: 10px; color: var(--text-muted); margin-top: 2px;">72 Cty</div>
+        </a>
+        
+        <a href="state/wyoming.html" class="map-tile-btn" data-name="Wyoming" data-abbr="WY" data-counties="23" data-zips="182" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px 4px; text-align: center; text-decoration: none; color: var(--text-primary); transition: all 0.2s ease; cursor: pointer; display: block;">
+            <div style="font-weight: 700; font-size: 13px; color: var(--primary-color);">WY</div>
+            <div style="font-size: 10px; color: var(--text-muted); margin-top: 2px;">23 Cty</div>
+        </a>
+        
+            </div>
+        </div>
+
+        <h2 class="section-title">Explore by State Directory</h2>
         <div class="states-grid">
             
         <a href="state/alabama.html" class="state-card">
@@ -1008,8 +1292,11 @@
                         <li><a href="distance.html">Distance Calculator</a></li>
                         <li><a href="radius-finder.html">Radius Finder</a></li>
                         <li><a href="address-generator.html">Address Generator</a></li>
+                        <li><a href="address-standardizer.html">USPS Standardizer</a></li>
+                        <li><a href="compare.html">ZIP Compare</a></li>
+                        <li><a href="timezone.html">Time Zone Finder</a></li>
+                        <li><a href="area-codes.html">Area Code Lookup</a></li>
                         <li><a href="sitemap.xml">XML Sitemap</a></li>
-                        <li><a href="https://github.com/scpike/us-state-county-zip" target="_blank" rel="noopener">Data Source</a></li>
                     </ul>
                 </div>
             </div>

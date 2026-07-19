@@ -174,7 +174,7 @@ HEADER = """<!DOCTYPE html>
     <title>{title}</title>
     <meta name="description" content="{description}">
     <meta name="google-site-verification" content="p-8wt0DNXh9djTp1qFiyK1ZKc3vqq8Z_zhahqzWFLJ8" />
-    <link rel="stylesheet" href="{root_path}css/style.css?v=2">
+    <link rel="stylesheet" href="{root_path}css/style.css?v=3">
     <!-- Google Schema Markup -->
     {schema_markup}
 </head>
@@ -210,9 +210,21 @@ HEADER = """<!DOCTYPE html>
                         </button>
                     </li>
                     <li><a href="{root_path}index.html">Home</a></li>
-                    <li><a href="{root_path}distance.html">Distance Calculator</a></li>
-                    <li><a href="{root_path}radius-finder.html">Radius Finder</a></li>
-                    <li><a href="{root_path}address-generator.html">Address Generator</a></li>
+                    <li class="nav-dropdown">
+                        <a href="#" class="dropdown-trigger" style="display: flex; align-items: center; gap: 4px;">
+                            <span>Tools</span>
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{root_path}distance.html">📏 Distance Calculator</a></li>
+                            <li><a href="{root_path}radius-finder.html">⭕ Radius Finder</a></li>
+                            <li><a href="{root_path}address-generator.html">🎲 Address Generator</a></li>
+                            <li><a href="{root_path}address-standardizer.html">📝 USPS Standardizer</a></li>
+                            <li><a href="{root_path}compare.html">📊 ZIP Code Compare</a></li>
+                            <li><a href="{root_path}timezone.html">🕒 Time Zone Finder</a></li>
+                            <li><a href="{root_path}area-codes.html">📞 Area Code Lookup</a></li>
+                        </ul>
+                    </li>
                     <li><a href="{root_path}about.html">About</a></li>
                     <li><a href="{root_path}contact.html">Contact</a></li>
                 </ul>
@@ -310,8 +322,11 @@ FOOTER = """
                         <li><a href="{root_path}distance.html">Distance Calculator</a></li>
                         <li><a href="{root_path}radius-finder.html">Radius Finder</a></li>
                         <li><a href="{root_path}address-generator.html">Address Generator</a></li>
+                        <li><a href="{root_path}address-standardizer.html">USPS Standardizer</a></li>
+                        <li><a href="{root_path}compare.html">ZIP Compare</a></li>
+                        <li><a href="{root_path}timezone.html">Time Zone Finder</a></li>
+                        <li><a href="{root_path}area-codes.html">Area Code Lookup</a></li>
                         <li><a href="{root_path}sitemap.xml">XML Sitemap</a></li>
-                        <li><a href="https://github.com/scpike/us-state-county-zip" target="_blank" rel="noopener">Data Source</a></li>
                     </ul>
                 </div>
             </div>
@@ -356,8 +371,9 @@ def generate_homepage():
     }
     schema_markup = f'<script type="application/ld+json">{json.dumps(schema_data)}</script>'
     
-    # State Grid Items HTML
+    # State Grid Items & Map Tiles HTML
     state_items_html = ""
+    map_tiles_html = ""
     for state_name, data in sorted(states_data.items()):
         total_counties = len(data['counties'])
         state_items_html += f"""
@@ -376,6 +392,13 @@ def generate_homepage():
                     <span class="stat-lbl">ZIP Codes</span>
                 </div>
             </div>
+        </a>
+        """
+        
+        map_tiles_html += f"""
+        <a href="state/{data['slug']}.html" class="map-tile-btn" data-name="{state_name}" data-abbr="{data['abbr']}" data-counties="{total_counties}" data-zips="{data['total_zips']:,}" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px 4px; text-align: center; text-decoration: none; color: var(--text-primary); transition: all 0.2s ease; cursor: pointer; display: block;">
+            <div style="font-weight: 700; font-size: 13px; color: var(--primary-color);">{data['abbr']}</div>
+            <div style="font-size: 10px; color: var(--text-muted); margin-top: 2px;">{total_counties} Cty</div>
         </a>
         """
 
@@ -416,7 +439,24 @@ def generate_homepage():
             <div class="ad-placeholder-text">Ad Slot - Banner (Responsive)</div>
         </div>
 
-        <h2 class="section-title">Explore by State</h2>
+        <!-- Interactive US State Explorer Map Widget -->
+        <div style="background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: var(--card-radius); padding: 24px; margin-bottom: 30px; box-shadow: var(--shadow-sm);">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 16px;">
+                <div>
+                    <h3 style="font-size: 18px; color: var(--text-primary); margin: 0 0 4px 0;">Interactive US State Explorer Map</h3>
+                    <p style="font-size: 13.5px; color: var(--text-secondary); margin: 0;">Hover or select any US state tile below to inspect county counts and ZIP code coverage.</p>
+                </div>
+                <div id="map-state-badge" style="background: var(--accent-gradient); color: #fff; padding: 6px 16px; border-radius: 20px; font-weight: 700; font-size: 13px; display: inline-flex; align-items: center; gap: 6px;">
+                    <span>Hover a State</span>
+                </div>
+            </div>
+            
+            <div id="us-map-tiles-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(58px, 1fr)); gap: 8px; margin-top: 16px;">
+                {map_tiles_html}
+            </div>
+        </div>
+
+        <h2 class="section-title">Explore by State Directory</h2>
         <div class="states-grid">
             {state_items_html}
         </div>
@@ -1137,6 +1177,235 @@ def generate_radius_page():
         f.write(html)
     print("Generated radius-finder.html")
 
+def generate_standardizer_page():
+    print("Generating USPS Address Standardizer page (address-standardizer.html)...")
+    title = "USPS Address Standardizer & Formatter - Free Online Mailing Tool"
+    description = "Standardize and format raw U.S. street addresses to official USPS Publication 28 standards. Normalize suffixes, unit designators, directionals, and uppercase text."
+    
+    breadcrumbs_list = '<li><a href="index.html">Home</a></li><li class="active">Address Standardizer</li>'
+    breadcrumbs_html = BREADCRUMBS_HTML.format(breadcrumbs=breadcrumbs_list)
+    
+    body_content = """
+    <div class="container animate-fade-in" style="margin-top: 30px;">
+        <div class="detail-layout">
+            <div class="main-content">
+                <h2 class="section-title" style="margin-bottom: 24px;">USPS Address Standardizer & Formatter</h2>
+                <p style="margin-bottom: 24px; font-size: 15px; color: var(--text-secondary);">
+                    Format messy or informal U.S. addresses to official USPS Publication 28 mailing standards. Convert text to uppercase, abbreviate street suffixes, directionals, and apartment/suite numbers automatically.
+                </p>
+                
+                <div class="calculator-card" style="background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: var(--card-radius); padding: 24px; margin-bottom: 24px;">
+                    <label for="raw-address-input" style="display: block; font-weight: 600; font-size: 14px; margin-bottom: 8px; color: var(--text-primary);">Paste Raw or Unformatted U.S. Address</label>
+                    <textarea id="raw-address-input" style="width: 100%; height: 110px; border: 1px solid var(--border-color); border-radius: 6px; padding: 12px; font-size: 14px; background: var(--bg-secondary); color: var(--text-primary); outline: none; margin-bottom: 16px; font-family: inherit; resize: vertical;" placeholder="e.g. 123 west main street apartment 4b, beverly hills, california 90210"></textarea>
+                    
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+                        <button id="standardize-btn" class="search-btn" style="padding: 10px 24px; font-size: 14px; display: inline-flex; align-items: center; gap: 8px; cursor: pointer;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                            <span>Standardize Address</span>
+                        </button>
+                        <button id="sample-address-btn" class="pill-btn" style="padding: 8px 16px; font-size: 12px; cursor: pointer;">Insert Sample Address</button>
+                    </div>
+                </div>
+                
+                <div id="standardizer-result-wrapper" style="display: none; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--card-radius); padding: 24px; margin-bottom: 30px; box-shadow: var(--shadow-sm);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 12px;">
+                        <h3 style="font-size: 16px; margin: 0; color: var(--text-primary);">Standardized USPS Output</h3>
+                        <button id="copy-standardized-btn" class="pill-btn active" style="padding: 8px 16px; display: inline-flex; align-items: center; gap: 6px; font-weight: 600; font-size: 12px; cursor: pointer;">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>
+                            <span>Copy Formatted Address</span>
+                        </button>
+                    </div>
+                    
+                    <div id="standardized-address-output" style="background: var(--bg-tertiary); border: 1px border-color; border-radius: 6px; padding: 16px; font-family: monospace; font-size: 15px; font-weight: 700; color: var(--primary-color); white-space: pre-line; line-height: 1.6;"></div>
+                    
+                    <div style="margin-top: 20px; border-top: 1px solid var(--border-color); padding-top: 16px;">
+                        <h4 style="font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); margin-bottom: 10px;">Applied Standardizations</h4>
+                        <div id="applied-rules-list" style="display: flex; flex-wrap: wrap; gap: 8px;"></div>
+                    </div>
+                </div>
+
+                <div class="faq-section" style="margin-top: 40px; border-top: 1px solid var(--border-color); padding-top: 30px;">
+                    <h3 style="font-size: 18px; margin-bottom: 16px;">USPS Mailing Standards FAQ</h3>
+                    <div style="margin-bottom: 16px;">
+                        <h4 style="font-size: 14px; margin-bottom: 4px; color: var(--text-primary);">What is USPS Publication 28?</h4>
+                        <p style="font-size: 13.5px; color: var(--text-secondary);">
+                            USPS Publication 28 provides official guidelines for formatting addresses to optimize automated mail processing, sorting, and delivery speeds across the United States Postal Service network.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            {SIDEBAR_HTML}
+        </div>
+    </div>
+    """
+    
+    html = HEADER.format(title=title, description=description, root_path="", schema_markup="")
+    html += breadcrumbs_html
+    html += body_content.format(SIDEBAR_HTML=SIDEBAR_HTML)
+    html += FOOTER.format(root_path="")
+    
+    with open(os.path.join(DIST_DIR, "address-standardizer.html"), "w", encoding="utf-8") as f:
+        f.write(html)
+    print("Generated address-standardizer.html")
+
+def generate_compare_page():
+    print("Generating ZIP Code Compare page (compare.html)...")
+    title = "ZIP Code Side-by-Side Comparison Tool - Compare U.S. Postal Codes"
+    description = "Compare two or three U.S. ZIP codes side-by-side. Inspect primary cities, state, county details, centroid coordinates, straight-line distance, and time zones."
+    
+    breadcrumbs_list = '<li><a href="index.html">Home</a></li><li class="active">ZIP Compare</li>'
+    breadcrumbs_html = BREADCRUMBS_HTML.format(breadcrumbs=breadcrumbs_list)
+    
+    body_content = """
+    <div class="container animate-fade-in" style="margin-top: 30px;">
+        <div class="detail-layout">
+            <div class="main-content">
+                <h2 class="section-title" style="margin-bottom: 24px;">ZIP Code Side-by-Side Comparison</h2>
+                <p style="margin-bottom: 24px; font-size: 15px; color: var(--text-secondary);">
+                    Select up to 3 U.S. postal codes to compare geographic locations, counties, coordinate centroids, distances, and estimated time zones in a side-by-side matrix.
+                </p>
+                
+                <div class="calculator-card" style="background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: var(--card-radius); padding: 24px; margin-bottom: 24px;">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 20px;">
+                        <div style="position: relative;">
+                            <label style="display: block; font-weight: 600; font-size: 13px; margin-bottom: 6px;">ZIP Code #1</label>
+                            <input type="text" id="cmp-zip1" class="search-input" placeholder="Type 5-digit ZIP or City..." style="font-size: 14px; height: 40px;" autocomplete="off">
+                            <div id="suggestions-cmp1" class="suggestions-box" style="top: 100%; max-height: 200px;"></div>
+                        </div>
+                        <div style="position: relative;">
+                            <label style="display: block; font-weight: 600; font-size: 13px; margin-bottom: 6px;">ZIP Code #2</label>
+                            <input type="text" id="cmp-zip2" class="search-input" placeholder="Type 5-digit ZIP or City..." style="font-size: 14px; height: 40px;" autocomplete="off">
+                            <div id="suggestions-cmp2" class="suggestions-box" style="top: 100%; max-height: 200px;"></div>
+                        </div>
+                        <div style="position: relative;">
+                            <label style="display: block; font-weight: 600; font-size: 13px; margin-bottom: 6px;">ZIP Code #3 (Optional)</label>
+                            <input type="text" id="cmp-zip3" class="search-input" placeholder="Type 5-digit ZIP or City..." style="font-size: 14px; height: 40px;" autocomplete="off">
+                            <div id="suggestions-cmp3" class="suggestions-box" style="top: 100%; max-height: 200px;"></div>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; justify-content: flex-end;">
+                        <button id="compare-btn" class="search-btn" style="padding: 10px 24px; font-size: 14px; display: inline-flex; align-items: center; gap: 8px; cursor: pointer;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+                            <span>Compare ZIPs</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="cmp-results-wrapper" style="display: none; margin-bottom: 30px; overflow-x: auto;">
+                    <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--card-radius); box-shadow: var(--shadow-sm); overflow: hidden;">
+                        <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 14px;">
+                            <thead id="cmp-table-head"></thead>
+                            <tbody id="cmp-table-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            {SIDEBAR_HTML}
+        </div>
+    </div>
+    """
+    
+    html = HEADER.format(title=title, description=description, root_path="", schema_markup="")
+    html += breadcrumbs_html
+    html += body_content.format(SIDEBAR_HTML=SIDEBAR_HTML)
+    html += FOOTER.format(root_path="")
+    
+    with open(os.path.join(DIST_DIR, "compare.html"), "w", encoding="utf-8") as f:
+        f.write(html)
+    print("Generated compare.html")
+
+def generate_timezone_page():
+    print("Generating Time Zone Finder page (timezone.html)...")
+    title = "ZIP Code Time Zone & Local Clock Finder - U.S. Time Zones"
+    description = "Lookup official U.S. time zones (Eastern, Central, Mountain, Pacific, Alaska, Hawaii) by ZIP code or city. Features live digital local clocks."
+    
+    breadcrumbs_list = '<li><a href="index.html">Home</a></li><li class="active">Time Zone Finder</li>'
+    breadcrumbs_html = BREADCRUMBS_HTML.format(breadcrumbs=breadcrumbs_list)
+    
+    body_content = """
+    <div class="container animate-fade-in" style="margin-top: 30px;">
+        <div class="detail-layout">
+            <div class="main-content">
+                <h2 class="section-title" style="margin-bottom: 24px;">U.S. Time Zone & Live Local Clock Finder</h2>
+                <p style="margin-bottom: 24px; font-size: 15px; color: var(--text-secondary);">
+                    Enter any U.S. postal code or city to find its official U.S. Time Zone, current local clock time, UTC offset, and state location.
+                </p>
+                
+                <div class="calculator-card" style="background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: var(--card-radius); padding: 24px; margin-bottom: 24px;">
+                    <div style="position: relative; max-width: 500px; margin: 0 auto;">
+                        <label for="tz-origin" style="display: block; font-weight: 600; font-size: 14px; margin-bottom: 8px;">Enter ZIP Code or City</label>
+                        <div class="search-bar-container" style="padding: 2px 2px 2px 12px; border: 1px solid var(--border-color); background: var(--bg-secondary);">
+                            <input type="text" id="tz-origin" class="search-input" placeholder="e.g. 90210 or Beverly Hills..." autocomplete="off" style="font-size: 14px; height: 40px;">
+                            <button id="tz-search-btn" class="search-btn" style="padding: 0 20px;">Find Time Zone</button>
+                        </div>
+                        <div id="suggestions-tz" class="suggestions-box" style="top: 100%; max-height: 200px;"></div>
+                    </div>
+                </div>
+                
+                <div id="tz-result-wrapper" style="display: none; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--card-radius); padding: 28px; margin-bottom: 30px; text-align: center; box-shadow: var(--shadow-sm);">
+                    <div id="tz-zone-badge" style="display: inline-block; background: var(--accent-gradient); color: #fff; padding: 6px 18px; border-radius: 20px; font-weight: 700; font-size: 14px; margin-bottom: 16px;"></div>
+                    <div id="tz-clock-display" style="font-size: 44px; font-weight: 800; font-family: monospace; color: var(--primary-color); margin-bottom: 8px;"></div>
+                    <div id="tz-details-sub" style="font-size: 15px; color: var(--text-secondary); font-weight: 500;"></div>
+                </div>
+            </div>
+            {SIDEBAR_HTML}
+        </div>
+    </div>
+    """
+    
+    html = HEADER.format(title=title, description=description, root_path="", schema_markup="")
+    html += breadcrumbs_html
+    html += body_content.format(SIDEBAR_HTML=SIDEBAR_HTML)
+    html += FOOTER.format(root_path="")
+    
+    with open(os.path.join(DIST_DIR, "timezone.html"), "w", encoding="utf-8") as f:
+        f.write(html)
+    print("Generated timezone.html")
+
+def generate_areacode_page():
+    print("Generating Area Code Lookup page (area-codes.html)...")
+    title = "U.S. Phone Area Code to ZIP Code Lookup - Directory Tool"
+    description = "Look up any 3-digit U.S. telephone area code. Find matching states, primary cities, counties, and associated postal codes."
+    
+    breadcrumbs_list = '<li><a href="index.html">Home</a></li><li class="active">Area Code Lookup</li>'
+    breadcrumbs_html = BREADCRUMBS_HTML.format(breadcrumbs=breadcrumbs_list)
+    
+    body_content = """
+    <div class="container animate-fade-in" style="margin-top: 30px;">
+        <div class="detail-layout">
+            <div class="main-content">
+                <h2 class="section-title" style="margin-bottom: 24px;">U.S. Phone Area Code Directory</h2>
+                <p style="margin-bottom: 24px; font-size: 15px; color: var(--text-secondary);">
+                    Search any 3-digit U.S. telephone area code to view the primary state, major cities, counties, and associated ZIP codes.
+                </p>
+                
+                <div class="calculator-card" style="background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: var(--card-radius); padding: 24px; margin-bottom: 24px;">
+                    <div style="display: flex; gap: 12px; max-width: 450px; margin: 0 auto;">
+                        <input type="text" id="ac-input" class="search-input" placeholder="Type 3-digit area code (e.g. 212, 310, 415)..." maxlength="3" style="font-size: 15px; height: 42px; text-align: center; font-weight: 700; letter-spacing: 2px;">
+                        <button id="ac-search-btn" class="search-btn" style="padding: 0 24px;">Lookup Area Code</button>
+                    </div>
+                </div>
+                
+                <div id="ac-result-wrapper" style="display: none; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--card-radius); padding: 24px; margin-bottom: 30px; box-shadow: var(--shadow-sm);">
+                    <div id="ac-header-title" style="font-size: 20px; font-weight: 700; color: var(--primary-color); margin-bottom: 12px;"></div>
+                    <div id="ac-details-body" style="font-size: 14px; color: var(--text-primary); line-height: 1.8;"></div>
+                </div>
+            </div>
+            {SIDEBAR_HTML}
+        </div>
+    </div>
+    """
+    
+    html = HEADER.format(title=title, description=description, root_path="", schema_markup="")
+    html += breadcrumbs_html
+    html += body_content.format(SIDEBAR_HTML=SIDEBAR_HTML)
+    html += FOOTER.format(root_path="")
+    
+    with open(os.path.join(DIST_DIR, "area-codes.html"), "w", encoding="utf-8") as f:
+        f.write(html)
+    print("Generated area-codes.html")
+
 # Main build execution
 if __name__ == "__main__":
     generate_homepage()
@@ -1146,4 +1415,8 @@ if __name__ == "__main__":
     generate_distance_page()
     generate_address_generator_page()
     generate_radius_page()
+    generate_standardizer_page()
+    generate_compare_page()
+    generate_timezone_page()
+    generate_areacode_page()
     print("All pages successfully built!")

@@ -57,6 +57,38 @@ urls.append({
     "priority": "0.8"
 })
 
+# 1e. USPS Address Standardizer Page
+urls.append({
+    "loc": f"{SITE_URL}address-standardizer.html",
+    "lastmod": current_date,
+    "changefreq": "weekly",
+    "priority": "0.8"
+})
+
+# 1f. ZIP Compare Page
+urls.append({
+    "loc": f"{SITE_URL}compare.html",
+    "lastmod": current_date,
+    "changefreq": "weekly",
+    "priority": "0.8"
+})
+
+# 1g. Time Zone Finder Page
+urls.append({
+    "loc": f"{SITE_URL}timezone.html",
+    "lastmod": current_date,
+    "changefreq": "weekly",
+    "priority": "0.8"
+})
+
+# 1h. Area Code Directory Page
+urls.append({
+    "loc": f"{SITE_URL}area-codes.html",
+    "lastmod": current_date,
+    "changefreq": "weekly",
+    "priority": "0.8"
+})
+
 # 1c. Info Pages
 for info in ["about.html", "contact.html", "privacy.html", "disclaimer.html"]:
     urls.append({

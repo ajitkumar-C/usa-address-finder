@@ -549,6 +549,21 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
     });
+    
+    // 11. Setup Interactive US State Explorer Map Widget
+    initUSStateMap();
+    
+    // 12. Setup USPS Address Standardizer
+    initAddressStandardizer();
+    
+    // 13. Setup ZIP Code Compare Tool
+    initZipCompare();
+    
+    // 14. Setup Time Zone Finder
+    initTimeZoneFinder();
+    
+    // 15. Setup Area Code Directory Lookup
+    initAreaCodeLookup();
 });
 
 // Perform Autocomplete Match
@@ -1699,6 +1714,400 @@ function downloadListAsCSV(filename, headers, rows) {
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
+    }
+}
+
+// ----------------------------------------------------
+// FEATURE 1: Interactive US State Explorer Map Widget
+// ----------------------------------------------------
+function initUSStateMap() {
+    const tiles = document.querySelectorAll(".map-tile-btn");
+    const badge = document.getElementById("map-state-badge");
+    if (!tiles.length || !badge) return;
+    
+    tiles.forEach(tile => {
+        tile.addEventListener("mouseenter", () => {
+            const name = tile.getAttribute("data-name");
+            const abbr = tile.getAttribute("data-abbr");
+            const counties = tile.getAttribute("data-counties");
+            const zips = tile.getAttribute("data-zips");
+            badge.innerHTML = `<span>${name} (${abbr}) &bull; ${counties} Counties &bull; ${zips} ZIPs</span>`;
+        });
+        tile.addEventListener("mouseleave", () => {
+            badge.innerHTML = `<span>Hover a State</span>`;
+        });
+    });
+}
+
+// ----------------------------------------------------
+// FEATURE 2: USPS Address Standardizer & Formatter
+// ----------------------------------------------------
+function initAddressStandardizer() {
+    const stdBtn = document.getElementById("standardize-btn");
+    const sampleBtn = document.getElementById("sample-address-btn");
+    const copyBtn = document.getElementById("copy-standardized-btn");
+    const rawInput = document.getElementById("raw-address-input");
+    const wrapper = document.getElementById("standardizer-result-wrapper");
+    const output = document.getElementById("standardized-address-output");
+    const rulesList = document.getElementById("applied-rules-list");
+    
+    if (!stdBtn || !rawInput) return;
+    
+    if (sampleBtn) {
+        sampleBtn.addEventListener("click", () => {
+            rawInput.value = "123 west main street apartment 4b, beverly hills, california 90210";
+            triggerStandardization();
+        });
+    }
+    
+    stdBtn.addEventListener("click", triggerStandardization);
+    
+    if (copyBtn) {
+        copyBtn.addEventListener("click", () => {
+            if (output && output.textContent) {
+                navigator.clipboard.writeText(output.textContent).then(() => {
+                    showToast("Standardized address copied to clipboard!");
+                });
+            }
+        });
+    }
+    
+    function triggerStandardization() {
+        const text = rawInput.value.trim();
+        if (!text) return;
+        
+        let formatted = text.toUpperCase();
+        const appliedRules = [];
+        
+        // 1. Convert State Full Names to Abbr
+        const stateReplacements = {
+            "CALIFORNIA": "CA", "NEW YORK": "NY", "TEXAS": "TX", "FLORIDA": "FL", "ILLINOIS": "IL",
+            "PENNSYLVANIA": "PA", "OHIO": "OH", "GEORGIA": "GA", "NORTH CAROLINA": "NC", "MICHIGAN": "MI",
+            "NEW JERSEY": "NJ", "VIRGINIA": "VA", "WASHINGTON": "WA", "MASSACHUSETTS": "MA", "ARIZONA": "AZ",
+            "INDIANA": "IN", "TENNESSEE": "TN", "MISSOURI": "MO", "MARYLAND": "MD", "WISCONSIN": "WI",
+            "COLORADO": "CO", "MINNESOTA": "MN", "SOUTH CAROLINA": "SC", "ALABAMA": "AL", "LOUISIANA": "LA",
+            "KENTUCKY": "KY", "OREGON": "OR", "OKLAHOMA": "OK", "CONNECTICUT": "CT", "UTAH": "UT"
+        };
+        
+        for (let [fullName, abbr] of Object.entries(stateReplacements)) {
+            const reg = new RegExp(`\\b${fullName}\\b`, "g");
+            if (reg.test(formatted)) {
+                formatted = formatted.replace(reg, abbr);
+                appliedRules.push(`State Name $\\rightarrow$ ${abbr}`);
+            }
+        }
+        
+        // 2. Street Suffixes
+        const suffixRules = [
+            [/\bSTREET\b/g, "ST", "STREET $\\rightarrow$ ST"],
+            [/\bAVENUE\b/g, "AVE", "AVENUE $\\rightarrow$ AVE"],
+            [/\bBOULEVARD\b/g, "BLVD", "BOULEVARD $\\rightarrow$ BLVD"],
+            [/\bDRIVE\b/g, "DR", "DRIVE $\\rightarrow$ DR"],
+            [/\bROAD\b/g, "RD", "ROAD $\\rightarrow$ RD"],
+            [/\bLANE\b/g, "LN", "LANE $\\rightarrow$ LN"],
+            [/\bCOURT\b/g, "CT", "COURT $\\rightarrow$ CT"],
+            [/\bPLACE\b/g, "PL", "PLACE $\\rightarrow$ PL"],
+            [/\bCIRCLE\b/g, "CIR", "CIRCLE $\\rightarrow$ CIR"],
+            [/\bHIGHWAY\b/g, "HWY", "HIGHWAY $\\rightarrow$ HWY"],
+            [/\bPARKWAY\b/g, "PKWY", "PARKWAY $\\rightarrow$ PKWY"]
+        ];
+        
+        suffixRules.forEach(([reg, rep, desc]) => {
+            if (reg.test(formatted)) {
+                formatted = formatted.replace(reg, rep);
+                appliedRules.push(desc);
+            }
+        });
+        
+        // 3. Directionals
+        const dirRules = [
+            [/\bNORTHWEST\b/g, "NW", "NORTHWEST $\\rightarrow$ NW"],
+            [/\bNORTHEAST\b/g, "NE", "NORTHEAST $\\rightarrow$ NE"],
+            [/\bSOUTHWEST\b/g, "SW", "SOUTHWEST $\\rightarrow$ SW"],
+            [/\bSOUTHEAST\b/g, "SE", "SOUTHEAST $\\rightarrow$ SE"],
+            [/\bNORTH\b/g, "N", "NORTH $\\rightarrow$ N"],
+            [/\bSOUTH\b/g, "S", "SOUTH $\\rightarrow$ S"],
+            [/\bEAST\b/g, "E", "EAST $\\rightarrow$ E"],
+            [/\bWEST\b/g, "W", "WEST $\\rightarrow$ W"]
+        ];
+        
+        dirRules.forEach(([reg, rep, desc]) => {
+            if (reg.test(formatted)) {
+                formatted = formatted.replace(reg, rep);
+                appliedRules.push(desc);
+            }
+        });
+        
+        // 4. Secondary Unit Designators
+        const unitRules = [
+            [/\bAPARTMENT\b/g, "APT", "APARTMENT $\\rightarrow$ APT"],
+            [/\bSUITE\b/g, "STE", "SUITE $\\rightarrow$ STE"],
+            [/\bBUILDING\b/g, "BLDG", "BUILDING $\\rightarrow$ BLDG"],
+            [/\bROOM\b/g, "RM", "ROOM $\\rightarrow$ RM"],
+            [/\bFLOOR\b/g, "FL", "FLOOR $\\rightarrow$ FL"]
+        ];
+        
+        unitRules.forEach(([reg, rep, desc]) => {
+            if (reg.test(formatted)) {
+                formatted = formatted.replace(reg, rep);
+                appliedRules.push(desc);
+            }
+        });
+        
+        // Always upper case rule
+        appliedRules.unshift("Converted to Uppercase");
+        
+        // Clean punctuation & line breaks
+        let cleanLines = formatted.split(",").map(s => s.trim()).filter(Boolean);
+        let finalOutput = cleanLines.join("\n");
+        
+        output.textContent = finalOutput;
+        
+        let badgesHtml = "";
+        appliedRules.forEach(r => {
+            badgesHtml += `<span style="background: var(--bg-tertiary); border: 1px solid var(--border-color); color: var(--text-primary); padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: 500;">✓ ${r}</span>`;
+        });
+        rulesList.innerHTML = badgesHtml;
+        
+        wrapper.style.display = "block";
+        wrapper.classList.add("animate-fade-in");
+    }
+}
+
+// ----------------------------------------------------
+// FEATURE 3: ZIP Code Side-by-Side Comparison Tool
+// ----------------------------------------------------
+function initZipCompare() {
+    const cmpBtn = document.getElementById("compare-btn");
+    const input1 = document.getElementById("cmp-zip1");
+    const input2 = document.getElementById("cmp-zip2");
+    const input3 = document.getElementById("cmp-zip3");
+    const wrapper = document.getElementById("cmp-results-wrapper");
+    const thead = document.getElementById("cmp-table-head");
+    const tbody = document.getElementById("cmp-table-body");
+    
+    if (!cmpBtn || !input1) return;
+    
+    setupRadiusAutocomplete("cmp-zip1", "suggestions-cmp1");
+    setupRadiusAutocomplete("cmp-zip2", "suggestions-cmp2");
+    setupRadiusAutocomplete("cmp-zip3", "suggestions-cmp3");
+    
+    cmpBtn.addEventListener("click", async () => {
+        await loadSearchIndex();
+        
+        const zip1 = input1.value.trim().substring(0, 5);
+        const zip2 = input2.value.trim().substring(0, 5);
+        const zip3 = input3.value.trim().substring(0, 5);
+        
+        const selectedZips = [zip1, zip2, zip3].filter(z => z && searchIndex.zips[z]);
+        
+        if (selectedZips.length < 2) {
+            showToast("Please enter at least 2 valid 5-digit ZIP codes to compare.");
+            return;
+        }
+        
+        let headHtml = `<tr style="background: var(--bg-tertiary); border-bottom: 2px solid var(--border-color);">
+            <th style="padding: 14px 18px; color: var(--text-primary); font-size: 14px;">Feature / Attribute</th>`;
+        
+        selectedZips.forEach(z => {
+            headHtml += `<th style="padding: 14px 18px; color: var(--primary-color); font-size: 16px; font-weight: 700;">ZIP Code ${z}</th>`;
+        });
+        headHtml += `</tr>`;
+        thead.innerHTML = headHtml;
+        
+        const zipDetails = selectedZips.map(z => {
+            const [abbr, county, city, lat, lon] = searchIndex.zips[z];
+            const tz = estimateTimeZone(lon, abbr);
+            return { zip: z, abbr, county, city, lat, lon, tz };
+        });
+        
+        const rows = [
+            ["City / Town", zipDetails.map(d => d.city)],
+            ["State", zipDetails.map(d => `${d.abbr}`)],
+            ["County", zipDetails.map(d => `${d.county} County`)],
+            ["Centroid Coordinates", zipDetails.map(d => `${d.lat.toFixed(4)}°, ${d.lon.toFixed(4)}°`)],
+            ["Time Zone", zipDetails.map(d => d.tz.name)],
+            ["UTC Offset", zipDetails.map(d => d.tz.offset)]
+        ];
+        
+        let bodyHtml = "";
+        rows.forEach(([label, vals]) => {
+            bodyHtml += `<tr style="border-bottom: 1px solid var(--border-color);">
+                <td style="padding: 12px 18px; font-weight: 600; color: var(--text-secondary); width: 220px;">${label}</td>`;
+            vals.forEach(v => {
+                bodyHtml += `<td style="padding: 12px 18px; color: var(--text-primary); font-weight: 500;">${v}</td>`;
+            });
+            bodyHtml += `</tr>`;
+        });
+        
+        // Add distance calculation row
+        if (zipDetails.length >= 2) {
+            const dObj = calculateHaversineDistance(zipDetails[0].lat, zipDetails[0].lon, zipDetails[1].lat, zipDetails[1].lon);
+            bodyHtml += `<tr style="background: var(--bg-tertiary); font-weight: 700;">
+                <td style="padding: 12px 18px; color: var(--primary-color);">Distance to ZIP #1</td>
+                <td style="padding: 12px 18px; color: var(--primary-color);">0.00 mi</td>
+                <td style="padding: 12px 18px; color: var(--primary-color);">${dObj.miles.toFixed(2)} mi (${dObj.km.toFixed(2)} km)</td>`;
+            if (zipDetails.length === 3) {
+                const dObj3 = calculateHaversineDistance(zipDetails[0].lat, zipDetails[0].lon, zipDetails[2].lat, zipDetails[2].lon);
+                bodyHtml += `<td style="padding: 12px 18px; color: var(--primary-color);">${dObj3.miles.toFixed(2)} mi (${dObj3.km.toFixed(2)} km)</td>`;
+            }
+            bodyHtml += `</tr>`;
+        }
+        
+        tbody.innerHTML = bodyHtml;
+        wrapper.style.display = "block";
+        wrapper.classList.add("animate-fade-in");
+    });
+}
+
+// Helper to estimate Time Zone by Longitude & State
+function estimateTimeZone(lon, state) {
+    if (state === 'AK') return { name: 'Alaska Time (AKST/AKDT)', offset: 'UTC-9', zone: 'America/Anchorage' };
+    if (state === 'HI') return { name: 'Hawaii Standard Time (HST)', offset: 'UTC-10', zone: 'Pacific/Honolulu' };
+    if (state === 'PR' || state === 'VI') return { name: 'Atlantic Standard Time (AST)', offset: 'UTC-4', zone: 'America/Puerto_Rico' };
+    
+    if (lon > -82.5) return { name: 'Eastern Time (EST/EDT)', offset: 'UTC-5', zone: 'America/New_York' };
+    if (lon > -103.0) return { name: 'Central Time (CST/CDT)', offset: 'UTC-6', zone: 'America/Chicago' };
+    if (lon > -115.0) return { name: 'Mountain Time (MST/MDT)', offset: 'UTC-7', zone: 'America/Denver' };
+    return { name: 'Pacific Time (PST/PDT)', offset: 'UTC-8', zone: 'America/Los_Angeles' };
+}
+
+// ----------------------------------------------------
+// FEATURE 4: Time Zone & Live Local Clock Finder
+// ----------------------------------------------------
+let clockInterval = null;
+
+function initTimeZoneFinder() {
+    const tzInput = document.getElementById("tz-origin");
+    const tzBtn = document.getElementById("tz-search-btn");
+    const wrapper = document.getElementById("tz-result-wrapper");
+    const badge = document.getElementById("tz-zone-badge");
+    const clock = document.getElementById("tz-clock-display");
+    const sub = document.getElementById("tz-details-sub");
+    
+    if (!tzBtn || !tzInput) return;
+    
+    setupRadiusAutocomplete("tz-origin", "suggestions-tz");
+    
+    tzBtn.addEventListener("click", triggerTzLookup);
+    tzInput.addEventListener("keypress", (e) => {
+        if (e.key === "Enter") triggerTzLookup();
+    });
+    
+    async function triggerTzLookup() {
+        const query = tzInput.value.trim();
+        if (!query) return;
+        
+        await loadSearchIndex();
+        
+        let zipMatch = query.substring(0, 5);
+        let details = searchIndex.zips[zipMatch];
+        
+        if (!details) {
+            // Find first matching city
+            for (let [z, d] of Object.entries(searchIndex.zips)) {
+                if (d[2].toLowerCase().includes(query.toLowerCase())) {
+                    zipMatch = z;
+                    details = d;
+                    break;
+                }
+            }
+        }
+        
+        if (!details || details[3] === null) {
+            showToast("Could not find time zone for the entered location.");
+            return;
+        }
+        
+        const [state, county, city, lat, lon] = details;
+        const tzInfo = estimateTimeZone(lon, state);
+        
+        if (clockInterval) clearInterval(clockInterval);
+        
+        badge.textContent = `${tzInfo.name} (${tzInfo.offset})`;
+        sub.innerHTML = `Location: <strong>${city}, ${state}</strong> (${zipMatch}) &bull; ${county} County`;
+        
+        function updateClock() {
+            try {
+                const now = new Date();
+                const timeStr = now.toLocaleTimeString("en-US", { timeZone: tzInfo.zone, hour12: true, hour: "2-digit", minute: "2-digit", second: "2-digit" });
+                clock.textContent = timeStr;
+            } catch (e) {
+                clock.textContent = new Date().toLocaleTimeString();
+            }
+        }
+        
+        updateClock();
+        clockInterval = setInterval(updateClock, 1000);
+        
+        wrapper.style.display = "block";
+        wrapper.classList.add("animate-fade-in");
+    }
+}
+
+// ----------------------------------------------------
+// FEATURE 5: Phone Area Code Directory & ZIP Lookup
+// ----------------------------------------------------
+function initAreaCodeLookup() {
+    const acInput = document.getElementById("ac-input");
+    const acBtn = document.getElementById("ac-search-btn");
+    const wrapper = document.getElementById("ac-result-wrapper");
+    const title = document.getElementById("ac-header-title");
+    const body = document.getElementById("ac-details-body");
+    
+    if (!acBtn || !acInput) return;
+    
+    const areaCodeDb = {
+        "212": { state: "NY", region: "New York City (Manhattan)", cities: "New York", zips: "10001, 10002, 10003, 10010, 10019" },
+        "310": { state: "CA", region: "West Los Angeles & South Bay", cities: "Beverly Hills, Santa Monica, Torrance, Malibu", zips: "90210, 90401, 90501" },
+        "415": { state: "CA", region: "San Francisco & Marin County", cities: "San Francisco, San Rafael", zips: "94102, 94103, 94901" },
+        "312": { state: "IL", region: "Central Chicago", cities: "Chicago (Downtown)", zips: "60601, 60602, 60603" },
+        "305": { state: "FL", region: "Miami & Florida Keys", cities: "Miami, Miami Beach, Key West", zips: "33101, 33139, 33040" },
+        "214": { state: "TX", region: "Dallas Metropolitan Area", cities: "Dallas, Irving, Plano", zips: "75201, 75038, 75023" },
+        "206": { state: "WA", region: "Seattle & Mercer Island", cities: "Seattle, Bainbridge Island", zips: "98101, 98104, 98115" },
+        "404": { state: "GA", region: "Atlanta Metropolitan Area", cities: "Atlanta, Sandy Springs", zips: "30301, 30303, 30328" },
+        "617": { state: "MA", region: "Boston & Eastern Massachusetts", cities: "Boston, Cambridge, Quincy", zips: "02108, 02138, 02169" },
+        "702": { state: "NV", region: "Las Vegas Valley", cities: "Las Vegas, Henderson, Paradise", zips: "89101, 89014, 89109" },
+        "602": { state: "AZ", region: "Phoenix Central Area", cities: "Phoenix", zips: "85001, 85004, 85016" },
+        "713": { state: "TX", region: "Central Houston Area", cities: "Houston, Pasadena", zips: "77001, 77002, 77502" },
+        "215": { state: "PA", region: "Philadelphia & Southeastern PA", cities: "Philadelphia, Levittown", zips: "19102, 19104, 19054" },
+        "303": { state: "CO", region: "Denver Metro Area", cities: "Denver, Aurora, Lakewood", zips: "80201, 80012, 80226" },
+        "512": { state: "TX", region: "Austin Capital Area", cities: "Austin, Round Rock, San Marcos", zips: "78701, 78664, 78666" },
+        "615": { state: "TN", region: "Nashville & Central Tennessee", cities: "Nashville, Murfreesboro", zips: "37201, 37127" },
+        "504": { state: "LA", region: "New Orleans Area", cities: "New Orleans, Metairie", zips: "70112, 70001" },
+        "412": { state: "PA", region: "Pittsburgh & Allegheny County", cities: "Pittsburgh, Bethel Park", zips: "15201, 15102" },
+        "313": { state: "MI", region: "Detroit & Wayne County", cities: "Detroit, Dearborn", zips: "48201, 48120" },
+        "612": { state: "MN", region: "Minneapolis Area", cities: "Minneapolis, Richfield", zips: "55401, 55423" }
+    };
+    
+    acBtn.addEventListener("click", triggerAcLookup);
+    acInput.addEventListener("keyup", (e) => {
+        if (acInput.value.length === 3 || e.key === "Enter") triggerAcLookup();
+    });
+    
+    function triggerAcLookup() {
+        const code = acInput.value.trim();
+        if (!code || code.length !== 3) {
+            showToast("Please enter a valid 3-digit area code.");
+            return;
+        }
+        
+        const data = areaCodeDb[code];
+        if (data) {
+            title.innerHTML = `Area Code (${code}) &bull; ${data.state} - ${data.region}`;
+            body.innerHTML = `
+                <div><strong>Primary State:</strong> ${data.state}</div>
+                <div><strong>Major Cities Covered:</strong> ${data.cities}</div>
+                <div><strong>Representative ZIP Codes:</strong> ${data.zips}</div>
+                <div style="margin-top: 12px;"><a href="state/${data.state.toLowerCase()}.html" style="font-weight: 600; text-decoration: underline; color: var(--primary-color);">Browse All ${data.state} Counties & ZIP Codes &rarr;</a></div>
+            `;
+        } else {
+            title.innerHTML = `Area Code (${code}) Information`;
+            body.innerHTML = `<div>Area code <strong>${code}</strong> is assigned within North American Numbering Plan. Select a state directory to view specific regional postal mappings.</div>`;
+        }
+        
+        wrapper.style.display = "block";
+        wrapper.classList.add("animate-fade-in");
     }
 }
 

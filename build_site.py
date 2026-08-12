@@ -233,6 +233,11 @@ PAGE_SEO = {
 
 SITE_OG_IMAGE = "https://usa-address-zip.vercel.app/favicon.ico"
 
+# Helper: returns dict of left-nav active class params for HEADER.format()
+_TOOLS = ['distance', 'radius', 'generator', 'standardizer', 'compare', 'timezone', 'area_codes', 'virtual']
+def nav_active(active=''):
+    return {f'active_{t}': ('left-nav-active' if t == active else '') for t in _TOOLS}
+
 # HTML Base Template Components
 HEADER = """<!DOCTYPE html>
 <html lang="en">
@@ -338,7 +343,53 @@ HEADER = """<!DOCTYPE html>
             <div id="nav-overlay" class="nav-overlay"></div>
         </div>
     </header>
+    <!-- Left Navigation Sidebar -->
+    <div class="page-with-leftnav">
+        <aside class="left-nav-sidebar" id="left-nav-sidebar">
+            <div class="left-nav-header">
+                <span class="left-nav-title">🔧 Tools</span>
+                <button class="left-nav-toggle" id="left-nav-toggle" title="Collapse sidebar">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+                </button>
+            </div>
+            <nav class="left-nav-links">
+                <a href="{root_path}distance.html" class="left-nav-item {active_distance}">
+                    <span class="left-nav-icon">📏</span>
+                    <span class="left-nav-label">Distance Calculator</span>
+                </a>
+                <a href="{root_path}radius-finder.html" class="left-nav-item {active_radius}">
+                    <span class="left-nav-icon">⭕</span>
+                    <span class="left-nav-label">Radius Finder</span>
+                </a>
+                <a href="{root_path}address-generator.html" class="left-nav-item {active_generator}">
+                    <span class="left-nav-icon">🎲</span>
+                    <span class="left-nav-label">Address Generator</span>
+                </a>
+                <a href="{root_path}address-standardizer.html" class="left-nav-item {active_standardizer}">
+                    <span class="left-nav-icon">📝</span>
+                    <span class="left-nav-label">USPS Standardizer</span>
+                </a>
+                <a href="{root_path}compare.html" class="left-nav-item {active_compare}">
+                    <span class="left-nav-icon">📊</span>
+                    <span class="left-nav-label">ZIP Code Compare</span>
+                </a>
+                <a href="{root_path}timezone.html" class="left-nav-item {active_timezone}">
+                    <span class="left-nav-icon">🕒</span>
+                    <span class="left-nav-label">Time Zone Finder</span>
+                </a>
+                <a href="{root_path}area-codes.html" class="left-nav-item {active_area_codes}">
+                    <span class="left-nav-icon">📞</span>
+                    <span class="left-nav-label">Area Code Lookup</span>
+                </a>
+                <a href="{root_path}virtual-address.html" class="left-nav-item {active_virtual}">
+                    <span class="left-nav-icon">📧</span>
+                    <span class="left-nav-label">Virtual US Address</span>
+                </a>
+            </nav>
+        </aside>
+        <div class="left-nav-content">
 """
+
 
 BREADCRUMBS_HTML = """
     <div class="container">
@@ -429,6 +480,8 @@ FOOTER = """
             </div>
         </div>
     </footer>
+        </div><!-- /.left-nav-content -->
+    </div><!-- /.page-with-leftnav -->
 
     <!-- Copy to Clipboard Toast Alert -->
     <div id="copy-toast" class="toast">
@@ -583,7 +636,8 @@ def generate_homepage():
     """
     
     html = HEADER.format(title=title, description=description, root_path="", schema_markup=schema_markup,
-                         keywords=seo['keywords'], canonical_url=canonical_url, og_image=seo['og_image'])
+                         keywords=seo['keywords'], canonical_url=canonical_url, og_image=seo['og_image'],
+                         **nav_active())
     html += body_content
     html += FOOTER.format(root_path="")
     
@@ -692,7 +746,8 @@ def generate_state_pages():
         """
         
         html = HEADER.format(title=title, description=description, root_path="../", schema_markup=schema_markup,
-                             keywords=state_keywords, canonical_url=state_canonical, og_image=seo['og_image'])
+                             keywords=state_keywords, canonical_url=state_canonical, og_image=seo['og_image'],
+                             **nav_active())
         html += breadcrumbs_html
         html += body_content
         html += FOOTER.format(root_path="../")
@@ -823,7 +878,8 @@ def generate_county_pages():
             """
             
             html = HEADER.format(title=title, description=description, root_path="../", schema_markup=schema_markup,
-                                 keywords=county_keywords, canonical_url=county_canonical, og_image=seo_county['og_image'])
+                                 keywords=county_keywords, canonical_url=county_canonical, og_image=seo_county['og_image'],
+                                 **nav_active())
             html += breadcrumbs_html
             html += body_content
             html += FOOTER.format(root_path="../")
@@ -865,7 +921,8 @@ def generate_info_pages():
     _seo_about = PAGE_SEO['about']
     _about_schema = {"@context": "https://schema.org", "@type": "AboutPage", "name": about_title, "description": about_desc, "url": "https://usa-address-zip.vercel.app/about.html"}
     html = HEADER.format(title=about_title, description=about_desc, root_path="", schema_markup=f'<script type="application/ld+json">{json.dumps(_about_schema)}</script>',
-                         keywords=_seo_about['keywords'], canonical_url="https://usa-address-zip.vercel.app/about.html", og_image=SITE_OG_IMAGE)
+                         keywords=_seo_about['keywords'], canonical_url="https://usa-address-zip.vercel.app/about.html", og_image=SITE_OG_IMAGE,
+                         **nav_active())
     html += about_content.format(SIDEBAR_HTML=SIDEBAR_HTML)
     html += FOOTER.format(root_path="")
     with open(os.path.join(DIST_DIR, "about.html"), "w", encoding="utf-8") as f:
@@ -896,7 +953,8 @@ def generate_info_pages():
     _seo_contact = PAGE_SEO['contact']
     _contact_schema = {"@context": "https://schema.org", "@type": "ContactPage", "name": contact_title, "description": contact_desc, "url": "https://usa-address-zip.vercel.app/contact.html"}
     html = HEADER.format(title=contact_title, description=contact_desc, root_path="", schema_markup=f'<script type="application/ld+json">{json.dumps(_contact_schema)}</script>',
-                         keywords=_seo_contact['keywords'], canonical_url="https://usa-address-zip.vercel.app/contact.html", og_image=SITE_OG_IMAGE)
+                         keywords=_seo_contact['keywords'], canonical_url="https://usa-address-zip.vercel.app/contact.html", og_image=SITE_OG_IMAGE,
+                         **nav_active())
     html += contact_content.format(SIDEBAR_HTML=SIDEBAR_HTML)
     html += FOOTER.format(root_path="")
     with open(os.path.join(DIST_DIR, "contact.html"), "w", encoding="utf-8") as f:
@@ -937,7 +995,8 @@ def generate_info_pages():
     _seo_privacy = PAGE_SEO['privacy']
     _privacy_schema = {"@context": "https://schema.org", "@type": "WebPage", "name": privacy_title, "description": privacy_desc, "url": "https://usa-address-zip.vercel.app/privacy.html"}
     html = HEADER.format(title=privacy_title, description=privacy_desc, root_path="", schema_markup=f'<script type="application/ld+json">{json.dumps(_privacy_schema)}</script>',
-                         keywords=_seo_privacy['keywords'], canonical_url="https://usa-address-zip.vercel.app/privacy.html", og_image=SITE_OG_IMAGE)
+                         keywords=_seo_privacy['keywords'], canonical_url="https://usa-address-zip.vercel.app/privacy.html", og_image=SITE_OG_IMAGE,
+                         **nav_active())
     html += privacy_content.format(SIDEBAR_HTML=SIDEBAR_HTML)
     html += FOOTER.format(root_path="")
     with open(os.path.join(DIST_DIR, "privacy.html"), "w", encoding="utf-8") as f:
@@ -975,7 +1034,8 @@ def generate_info_pages():
     _seo_disc = PAGE_SEO['disclaimer']
     _disc_schema = {"@context": "https://schema.org", "@type": "WebPage", "name": disc_title, "description": disc_desc, "url": "https://usa-address-zip.vercel.app/disclaimer.html"}
     html = HEADER.format(title=disc_title, description=disc_desc, root_path="", schema_markup=f'<script type="application/ld+json">{json.dumps(_disc_schema)}</script>',
-                         keywords=_seo_disc['keywords'], canonical_url="https://usa-address-zip.vercel.app/disclaimer.html", og_image=SITE_OG_IMAGE)
+                         keywords=_seo_disc['keywords'], canonical_url="https://usa-address-zip.vercel.app/disclaimer.html", og_image=SITE_OG_IMAGE,
+                         **nav_active())
     html += disc_content.format(SIDEBAR_HTML=SIDEBAR_HTML)
     html += FOOTER.format(root_path="")
     with open(os.path.join(DIST_DIR, "disclaimer.html"), "w", encoding="utf-8") as f:
@@ -1137,7 +1197,8 @@ def generate_distance_page():
         "featureList": ["Straight-line distance in miles and kilometers", "Haversine formula calculation", "ZIP code coordinate lookup", "Shareable result URL"]
     }
     html = HEADER.format(title=title, description=description, root_path="", schema_markup=f'<script type="application/ld+json">{json.dumps(_dist_schema)}</script>',
-                         keywords=_seo_dist['keywords'], canonical_url="https://usa-address-zip.vercel.app/distance.html", og_image=SITE_OG_IMAGE)
+                         keywords=_seo_dist['keywords'], canonical_url="https://usa-address-zip.vercel.app/distance.html", og_image=SITE_OG_IMAGE,
+                         **nav_active('distance'))
     html += breadcrumbs_html
     html += body_content.format(SIDEBAR_HTML=SIDEBAR_HTML)
     html += FOOTER.format(root_path="")
@@ -1247,7 +1308,8 @@ def generate_address_generator_page():
         "featureList": ["Generate random US addresses", "Filter by state, county, city, or ZIP", "Realistic street name generation", "Copy address to clipboard"]
     }
     html = HEADER.format(title=title, description=description, root_path="", schema_markup=f'<script type="application/ld+json">{json.dumps(_gen_schema)}</script>',
-                         keywords=_seo_gen['keywords'], canonical_url="https://usa-address-zip.vercel.app/address-generator.html", og_image=SITE_OG_IMAGE)
+                         keywords=_seo_gen['keywords'], canonical_url="https://usa-address-zip.vercel.app/address-generator.html", og_image=SITE_OG_IMAGE,
+                         **nav_active('generator'))
     html += breadcrumbs_html
     html += body_content.format(SIDEBAR_HTML=SIDEBAR_HTML)
     html += FOOTER.format(root_path="")
@@ -1370,8 +1432,8 @@ def generate_radius_page():
         "featureList": ["Find ZIP codes within a radius", "Set custom mile or kilometer radius", "Export results to CSV", "Sort by distance"]
     }
     html = HEADER.format(title=title, description=description, root_path="", schema_markup=f'<script type="application/ld+json">{json.dumps(_radius_schema)}</script>',
-                         keywords=_seo_radius['keywords'], canonical_url="https://usa-address-zip.vercel.app/radius-finder.html", og_image=SITE_OG_IMAGE)
-    breadcrumbs_list = '<li><a href="index.html">Home</a></li><li class="active">Radius Finder</li>'
+                         keywords=_seo_radius['keywords'], canonical_url="https://usa-address-zip.vercel.app/radius-finder.html", og_image=SITE_OG_IMAGE,
+                         **nav_active('radius'))
     breadcrumbs_html = BREADCRUMBS_HTML.format(breadcrumbs=breadcrumbs_list)
     
     # Body content of the radius finder page
@@ -1476,7 +1538,8 @@ def generate_radius_page():
     """
     
     html = HEADER.format(title=title, description=description, root_path="", schema_markup=f'<script type="application/ld+json">{json.dumps(_radius_schema)}</script>',
-                         keywords=_seo_radius['keywords'], canonical_url="https://usa-address-zip.vercel.app/radius-finder.html", og_image=SITE_OG_IMAGE)
+                         keywords=_seo_radius['keywords'], canonical_url="https://usa-address-zip.vercel.app/radius-finder.html", og_image=SITE_OG_IMAGE,
+                         **nav_active('radius'))
     html += breadcrumbs_html
     html += body_content.format(SIDEBAR_HTML=SIDEBAR_HTML)
     html += FOOTER.format(root_path="")
@@ -1558,7 +1621,8 @@ def generate_standardizer_page():
         "featureList": ["Format US addresses to USPS standards", "Uppercase city and state", "Standardize ZIP code format", "Copy formatted address"]
     }
     html = HEADER.format(title=title, description=description, root_path="", schema_markup=f'<script type="application/ld+json">{json.dumps(_std_schema)}</script>',
-                         keywords=_seo_std['keywords'], canonical_url="https://usa-address-zip.vercel.app/address-standardizer.html", og_image=SITE_OG_IMAGE)
+                         keywords=_seo_std['keywords'], canonical_url="https://usa-address-zip.vercel.app/address-standardizer.html", og_image=SITE_OG_IMAGE,
+                         **nav_active('standardizer'))
     html += breadcrumbs_html
     html += body_content.format(SIDEBAR_HTML=SIDEBAR_HTML)
     html += FOOTER.format(root_path="")
@@ -1635,7 +1699,8 @@ def generate_compare_page():
         "featureList": ["Compare two ZIP codes side-by-side", "View county, city, state details", "Calculate distance between compared ZIP codes", "Time zone comparison"]
     }
     html = HEADER.format(title=title, description=description, root_path="", schema_markup=f'<script type="application/ld+json">{json.dumps(_compare_schema)}</script>',
-                         keywords=_seo_compare['keywords'], canonical_url="https://usa-address-zip.vercel.app/compare.html", og_image=SITE_OG_IMAGE)
+                         keywords=_seo_compare['keywords'], canonical_url="https://usa-address-zip.vercel.app/compare.html", og_image=SITE_OG_IMAGE,
+                         **nav_active('compare'))
     html += breadcrumbs_html
     html += body_content.format(SIDEBAR_HTML=SIDEBAR_HTML)
     html += FOOTER.format(root_path="")
@@ -1693,7 +1758,8 @@ def generate_timezone_page():
         "featureList": ["Lookup time zone by ZIP code", "Live digital local clocks", "UTC offset display", "State time zone reference guide"]
     }
     html = HEADER.format(title=title, description=description, root_path="", schema_markup=f'<script type="application/ld+json">{json.dumps(_tz_schema)}</script>',
-                         keywords=_seo_tz['keywords'], canonical_url="https://usa-address-zip.vercel.app/timezone.html", og_image=SITE_OG_IMAGE)
+                         keywords=_seo_tz['keywords'], canonical_url="https://usa-address-zip.vercel.app/timezone.html", og_image=SITE_OG_IMAGE,
+                         **nav_active('timezone'))
     html += breadcrumbs_html
     html += body_content.format(SIDEBAR_HTML=SIDEBAR_HTML)
     html += FOOTER.format(root_path="")
@@ -1747,7 +1813,8 @@ def generate_areacode_page():
         "featureList": ["Lookup US phone area codes", "Find area code by ZIP code", "Complete US area code directory", "Filter by state"]
     }
     html = HEADER.format(title=title, description=description, root_path="", schema_markup=f'<script type="application/ld+json">{json.dumps(_ac_schema)}</script>',
-                         keywords=_seo_ac['keywords'], canonical_url="https://usa-address-zip.vercel.app/area-codes.html", og_image=SITE_OG_IMAGE)
+                         keywords=_seo_ac['keywords'], canonical_url="https://usa-address-zip.vercel.app/area-codes.html", og_image=SITE_OG_IMAGE,
+                         **nav_active('area_codes'))
     html += breadcrumbs_html
     html += body_content.format(SIDEBAR_HTML=SIDEBAR_HTML)
     html += FOOTER.format(root_path="")
@@ -1876,7 +1943,8 @@ def generate_virtual_address_page():
         "featureList": ["Find tax-free US states for package forwarding", "Virtual US address guide", "Compare reshipping services", "No sales tax ZIP code directory"]
     }
     html = HEADER.format(title=title, description=description, root_path="", schema_markup=f'<script type="application/ld+json">{json.dumps(_va_schema)}</script>',
-                         keywords=_seo_va['keywords'], canonical_url="https://usa-address-zip.vercel.app/virtual-address.html", og_image=SITE_OG_IMAGE)
+                         keywords=_seo_va['keywords'], canonical_url="https://usa-address-zip.vercel.app/virtual-address.html", og_image=SITE_OG_IMAGE,
+                         **nav_active('virtual'))
     html += breadcrumbs_html
     html += body_content.format(SIDEBAR_HTML=SIDEBAR_HTML)
     html += FOOTER.format(root_path="")

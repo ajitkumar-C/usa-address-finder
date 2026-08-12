@@ -102,6 +102,23 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    // 0.c Left Nav Sidebar Toggle Setup
+    const leftNavSidebar = document.getElementById("left-nav-sidebar");
+    const leftNavToggleBtn = document.getElementById("left-nav-toggle");
+    
+    if (leftNavSidebar && leftNavToggleBtn) {
+        // Load preference from local storage
+        const isCollapsed = localStorage.getItem("left_nav_collapsed") === "true";
+        if (isCollapsed) {
+            leftNavSidebar.classList.add("collapsed");
+        }
+        
+        leftNavToggleBtn.addEventListener("click", () => {
+            leftNavSidebar.classList.toggle("collapsed");
+            localStorage.setItem("left_nav_collapsed", leftNavSidebar.classList.contains("collapsed"));
+        });
+    }
+
     // 1. Setup Global Autocomplete Search
     const searchInput = document.getElementById("global-search");
     const suggestionsBox = document.getElementById("suggestions");

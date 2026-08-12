@@ -1,4 +1,6 @@
 User-agent: *
 Allow: /
+Disallow: /data/
+Disallow: /csv/
 
 Sitemap: https://usa-address-zip.vercel.app/sitemap.xml

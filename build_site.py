@@ -165,6 +165,74 @@ with open(os.path.join(DATA_DIR, "search-index.json"), "w", encoding="utf-8") as
     json.dump(search_index, f, separators=(',', ':'))
 print("Search index JSON saved.")
 
+# -----------------------------------------------
+# PER-PAGE SEO METADATA (mirrors schema.js in FinanceCalculator)
+# -----------------------------------------------
+PAGE_SEO = {
+    'homepage': {
+        'keywords': 'usa zip code lookup, us address finder, zip code finder, united states postal codes, us zip codes by state, city zip code lookup, county zip codes, free us address search',
+        'og_image': 'https://usa-address-zip.vercel.app/favicon.ico',
+    },
+    'state': {
+        'keywords': 'state zip codes, county zip codes, cities by zip code, usa zip code list, state postal codes, zip codes by state, us postal code directory',
+        'og_image': 'https://usa-address-zip.vercel.app/favicon.ico',
+    },
+    'county': {
+        'keywords': 'county zip codes, zip codes by county, city zip codes, us postal codes, zip code list county, county postal codes usa',
+        'og_image': 'https://usa-address-zip.vercel.app/favicon.ico',
+    },
+    'distance': {
+        'keywords': 'zip code distance calculator, distance between zip codes, miles between zip codes, zip code mileage calculator, us zip code distance, postal code distance tool',
+        'og_image': 'https://usa-address-zip.vercel.app/favicon.ico',
+    },
+    'radius': {
+        'keywords': 'zip codes within radius, zip code radius finder, zip codes near me, zip codes within 25 miles, postal codes by radius, radius zip code search, zip codes in radius csv',
+        'og_image': 'https://usa-address-zip.vercel.app/favicon.ico',
+    },
+    'generator': {
+        'keywords': 'random us address generator, fake us address, fake zip code us, random us address for testing, generate us address, valid us address test, fake american address generator',
+        'og_image': 'https://usa-address-zip.vercel.app/favicon.ico',
+    },
+    'standardizer': {
+        'keywords': 'usps address standardizer, usps address format, us address format, address validation tool, standardize us address, usps address lookup, correct address format usa',
+        'og_image': 'https://usa-address-zip.vercel.app/favicon.ico',
+    },
+    'compare': {
+        'keywords': 'zip code comparison, compare zip codes, zip code info lookup, us zip code compare, postal code details, zip code side by side comparison',
+        'og_image': 'https://usa-address-zip.vercel.app/favicon.ico',
+    },
+    'timezone': {
+        'keywords': 'zip code time zone, us time zone by zip, timezone lookup zip code, what timezone is my zip code, zip code to timezone, find timezone by zip code',
+        'og_image': 'https://usa-address-zip.vercel.app/favicon.ico',
+    },
+    'area_codes': {
+        'keywords': 'area code lookup, us area codes, phone area code finder, area code by zip code, us telephone area codes, area code directory usa',
+        'og_image': 'https://usa-address-zip.vercel.app/favicon.ico',
+    },
+    'virtual_address': {
+        'keywords': 'virtual us address, usa virtual address, us virtual mailbox, package forwarding usa, reship us packages, tax free states usa, no sales tax states shipping',
+        'og_image': 'https://usa-address-zip.vercel.app/favicon.ico',
+    },
+    'about': {
+        'keywords': 'about usa address finder, us zip code database, us postal database, about us address tool, usa geographic data',
+        'og_image': 'https://usa-address-zip.vercel.app/favicon.ico',
+    },
+    'contact': {
+        'keywords': 'contact usa address finder, support us address finder, feedback zip code tool',
+        'og_image': 'https://usa-address-zip.vercel.app/favicon.ico',
+    },
+    'privacy': {
+        'keywords': 'privacy policy usa address finder, data policy zip code tool, cookie policy us address',
+        'og_image': 'https://usa-address-zip.vercel.app/favicon.ico',
+    },
+    'disclaimer': {
+        'keywords': 'disclaimer usa address finder, data accuracy zip codes, usps disclaimer postal data',
+        'og_image': 'https://usa-address-zip.vercel.app/favicon.ico',
+    },
+}
+
+SITE_OG_IMAGE = "https://usa-address-zip.vercel.app/favicon.ico"
+
 # HTML Base Template Components
 HEADER = """<!DOCTYPE html>
 <html lang="en">
@@ -173,7 +241,31 @@ HEADER = """<!DOCTYPE html>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{title}</title>
     <meta name="description" content="{description}">
+    <meta name="keywords" content="{keywords}">
+    <meta name="author" content="USA Address Finder">
     <meta name="google-site-verification" content="p-8wt0DNXh9djTp1qFiyK1ZKc3vqq8Z_zhahqzWFLJ8" />
+    <!-- Canonical Link -->
+    <link rel="canonical" href="{canonical_url}">
+    <!-- Open Graph Tags (Facebook, LinkedIn, WhatsApp sharing) -->
+    <meta property="og:title" content="{title}">
+    <meta property="og:description" content="{description}">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{canonical_url}">
+    <meta property="og:image" content="{og_image}">
+    <meta property="og:site_name" content="USA Address Finder">
+    <!-- Twitter / X Card Tags -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="{title}">
+    <meta name="twitter:description" content="{description}">
+    <meta name="twitter:image" content="{og_image}">
+    <!-- Google Analytics placeholder: replace G-XXXXXXXXXX with your Measurement ID when ready -->
+    <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){{dataLayer.push(arguments);}}
+      gtag('js', new Date());
+      gtag('config', 'G-XXXXXXXXXX');
+    </script> -->
     <link rel="stylesheet" href="{root_path}css/style.css?v=3">
     <!-- Google Schema Markup -->
     {schema_markup}
@@ -355,20 +447,46 @@ FOOTER = """
 def generate_homepage():
     title = "USA Address Finder - Free U.S. ZIP Code Lookup, Cities & States"
     description = "Free U.S. ZIP code finder & address lookup tool. Search 33,000+ postal codes by city, county, or state. Features distance calculators, radius search, and address generators."
-    
+    canonical_url = "https://usa-address-zip.vercel.app/"
+    seo = PAGE_SEO['homepage']
+
+    # Full @graph schema — mirrors RupeeBuddy pattern exactly
     schema_data = {
         "@context": "https://schema.org",
-        "@type": "WebSite",
-        "name": "USA Address Finder",
-        "url": "https://usa-address-zip.vercel.app/",
-        "potentialAction": {
-            "@type": "SearchAction",
-            "target": {
-                "@type": "EntryPoint",
-                "urlTemplate": "https://usa-address-zip.vercel.app/index.html?q={search_term_string}"
+        "@graph": [
+            {
+                "@type": "WebSite",
+                "@id": "https://usa-address-zip.vercel.app/#website",
+                "url": "https://usa-address-zip.vercel.app/",
+                "name": "USA Address Finder",
+                "alternateName": ["USA Address Finder", "US ZIP Code Finder"],
+                "potentialAction": {
+                    "@type": "SearchAction",
+                    "target": {
+                        "@type": "EntryPoint",
+                        "urlTemplate": "https://usa-address-zip.vercel.app/index.html?q={search_term_string}"
+                    },
+                    "query-input": "required name=search_term_string"
+                },
+                "publisher": {
+                    "@id": "https://usa-address-zip.vercel.app/#organization"
+                }
             },
-            "query-input": "required name=search_term_string"
-        }
+            {
+                "@type": "Organization",
+                "@id": "https://usa-address-zip.vercel.app/#organization",
+                "name": "USA Address Finder",
+                "url": "https://usa-address-zip.vercel.app/",
+                "logo": {
+                    "@type": "ImageObject",
+                    "@id": "https://usa-address-zip.vercel.app/#logo",
+                    "url": "https://usa-address-zip.vercel.app/favicon.ico",
+                    "caption": "USA Address Finder Logo"
+                },
+                "image": {"@id": "https://usa-address-zip.vercel.app/#logo"},
+                "description": "USA Address Finder is a free, lightning-fast static directory of all U.S. states, counties, cities, and ZIP codes — with tools for distance calculation, radius search, address generation, and USPS standardization."
+            }
+        ]
     }
     schema_markup = f'<script type="application/ld+json">{json.dumps(schema_data)}</script>'
     
@@ -464,7 +582,8 @@ def generate_homepage():
     </div>
     """
     
-    html = HEADER.format(title=title, description=description, root_path="", schema_markup=schema_markup)
+    html = HEADER.format(title=title, description=description, root_path="", schema_markup=schema_markup,
+                         keywords=seo['keywords'], canonical_url=canonical_url, og_image=seo['og_image'])
     html += body_content
     html += FOOTER.format(root_path="")
     
@@ -483,15 +602,31 @@ def generate_state_pages():
         breadcrumbs_list = f'<li><a href="../index.html">Home</a></li><li class="active">{state_name}</li>'
         breadcrumbs_html = BREADCRUMBS_HTML.format(breadcrumbs=breadcrumbs_list)
         
-        schema_data = {
-            "@context": "https://schema.org",
-            "@type": "AdministrativeArea",
-            "name": state_name,
-            "alternateName": data['abbr'],
-            "description": f"State of {state_name} with {len(data['counties'])} counties and {data['total_zips']} zip codes.",
-            "identifier": data['fips']
-        }
-        schema_markup = f'<script type="application/ld+json">{json.dumps(schema_data)}</script>'
+        state_canonical = f"https://usa-address-zip.vercel.app/state/{data['slug']}.html"
+        seo = PAGE_SEO['state']
+        state_keywords = f"{state_name} zip codes, {data['abbr']} zip code list, {state_name} counties, {state_name} postal codes, {seo['keywords']}"
+
+        # AdministrativeArea + BreadcrumbList schema
+        schema_list = [
+            {
+                "@context": "https://schema.org",
+                "@type": "AdministrativeArea",
+                "name": state_name,
+                "alternateName": data['abbr'],
+                "description": f"State of {state_name} with {len(data['counties'])} counties and {data['total_zips']} ZIP codes.",
+                "identifier": data['fips'],
+                "url": state_canonical
+            },
+            {
+                "@context": "https://schema.org",
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://usa-address-zip.vercel.app/"},
+                    {"@type": "ListItem", "position": 2, "name": f"{state_name} ZIP Codes", "item": state_canonical}
+                ]
+            }
+        ]
+        schema_markup = "".join([f'<script type="application/ld+json">{json.dumps(s)}</script>' for s in schema_list])
 
         # Create counties HTML grid items
         county_items_html = ""
@@ -556,7 +691,8 @@ def generate_state_pages():
         </div>
         """
         
-        html = HEADER.format(title=title, description=description, root_path="../", schema_markup=schema_markup)
+        html = HEADER.format(title=title, description=description, root_path="../", schema_markup=schema_markup,
+                             keywords=state_keywords, canonical_url=state_canonical, og_image=seo['og_image'])
         html += breadcrumbs_html
         html += body_content
         html += FOOTER.format(root_path="../")
@@ -580,17 +716,31 @@ def generate_county_pages():
             breadcrumbs_list = f'<li><a href="../index.html">Home</a></li><li><a href="../state/{state_data["slug"]}.html">{state_name}</a></li><li class="active">{county_name} County</li>'
             breadcrumbs_html = BREADCRUMBS_HTML.format(breadcrumbs=breadcrumbs_list)
             
-            schema_data = {
-                "@context": "https://schema.org",
-                "@type": "AdministrativeArea",
-                "name": f"{county_name} County",
-                "containedInPlace": {
+            county_canonical = f"https://usa-address-zip.vercel.app/county/{county_data['key']}.html"
+            seo_county = PAGE_SEO['county']
+            county_keywords = f"{county_name} County zip codes, {county_name} {state_name} postal codes, {state_data['abbr']} county zip list, {seo_county['keywords']}"
+
+            # AdministrativeArea + BreadcrumbList schema
+            schema_list = [
+                {
+                    "@context": "https://schema.org",
                     "@type": "AdministrativeArea",
-                    "name": state_name
+                    "name": f"{county_name} County",
+                    "containedInPlace": {"@type": "AdministrativeArea", "name": state_name},
+                    "description": f"County of {county_name} located in {state_name} with {county_data['total_zips']} ZIP codes.",
+                    "url": county_canonical
                 },
-                "description": f"County of {county_name} located in {state_name} with {county_data['total_zips']} zip codes."
-            }
-            schema_markup = f'<script type="application/ld+json">{json.dumps(schema_data)}</script>'
+                {
+                    "@context": "https://schema.org",
+                    "@type": "BreadcrumbList",
+                    "itemListElement": [
+                        {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://usa-address-zip.vercel.app/"},
+                        {"@type": "ListItem", "position": 2, "name": f"{state_name} ZIP Codes", "item": f"https://usa-address-zip.vercel.app/state/{state_data['slug']}.html"},
+                        {"@type": "ListItem", "position": 3, "name": f"{county_name} County ZIP Codes", "item": county_canonical}
+                    ]
+                }
+            ]
+            schema_markup = "".join([f'<script type="application/ld+json">{json.dumps(s)}</script>' for s in schema_list])
 
             # Generate ZIP codes grouped by city
             zips_by_city_html = ""
@@ -672,7 +822,8 @@ def generate_county_pages():
             </div>
             """
             
-            html = HEADER.format(title=title, description=description, root_path="../", schema_markup=schema_markup)
+            html = HEADER.format(title=title, description=description, root_path="../", schema_markup=schema_markup,
+                                 keywords=county_keywords, canonical_url=county_canonical, og_image=seo_county['og_image'])
             html += breadcrumbs_html
             html += body_content
             html += FOOTER.format(root_path="../")
@@ -711,7 +862,10 @@ def generate_info_pages():
         </div>
     </div>
     """
-    html = HEADER.format(title=about_title, description=about_desc, root_path="", schema_markup="")
+    _seo_about = PAGE_SEO['about']
+    _about_schema = {"@context": "https://schema.org", "@type": "AboutPage", "name": about_title, "description": about_desc, "url": "https://usa-address-zip.vercel.app/about.html"}
+    html = HEADER.format(title=about_title, description=about_desc, root_path="", schema_markup=f'<script type="application/ld+json">{json.dumps(_about_schema)}</script>',
+                         keywords=_seo_about['keywords'], canonical_url="https://usa-address-zip.vercel.app/about.html", og_image=SITE_OG_IMAGE)
     html += about_content.format(SIDEBAR_HTML=SIDEBAR_HTML)
     html += FOOTER.format(root_path="")
     with open(os.path.join(DIST_DIR, "about.html"), "w", encoding="utf-8") as f:
@@ -739,7 +893,10 @@ def generate_info_pages():
         </div>
     </div>
     """
-    html = HEADER.format(title=contact_title, description=contact_desc, root_path="", schema_markup="")
+    _seo_contact = PAGE_SEO['contact']
+    _contact_schema = {"@context": "https://schema.org", "@type": "ContactPage", "name": contact_title, "description": contact_desc, "url": "https://usa-address-zip.vercel.app/contact.html"}
+    html = HEADER.format(title=contact_title, description=contact_desc, root_path="", schema_markup=f'<script type="application/ld+json">{json.dumps(_contact_schema)}</script>',
+                         keywords=_seo_contact['keywords'], canonical_url="https://usa-address-zip.vercel.app/contact.html", og_image=SITE_OG_IMAGE)
     html += contact_content.format(SIDEBAR_HTML=SIDEBAR_HTML)
     html += FOOTER.format(root_path="")
     with open(os.path.join(DIST_DIR, "contact.html"), "w", encoding="utf-8") as f:
@@ -777,7 +934,10 @@ def generate_info_pages():
         </div>
     </div>
     """
-    html = HEADER.format(title=privacy_title, description=privacy_desc, root_path="", schema_markup="")
+    _seo_privacy = PAGE_SEO['privacy']
+    _privacy_schema = {"@context": "https://schema.org", "@type": "WebPage", "name": privacy_title, "description": privacy_desc, "url": "https://usa-address-zip.vercel.app/privacy.html"}
+    html = HEADER.format(title=privacy_title, description=privacy_desc, root_path="", schema_markup=f'<script type="application/ld+json">{json.dumps(_privacy_schema)}</script>',
+                         keywords=_seo_privacy['keywords'], canonical_url="https://usa-address-zip.vercel.app/privacy.html", og_image=SITE_OG_IMAGE)
     html += privacy_content.format(SIDEBAR_HTML=SIDEBAR_HTML)
     html += FOOTER.format(root_path="")
     with open(os.path.join(DIST_DIR, "privacy.html"), "w", encoding="utf-8") as f:
@@ -812,7 +972,10 @@ def generate_info_pages():
         </div>
     </div>
     """
-    html = HEADER.format(title=disc_title, description=disc_desc, root_path="", schema_markup="")
+    _seo_disc = PAGE_SEO['disclaimer']
+    _disc_schema = {"@context": "https://schema.org", "@type": "WebPage", "name": disc_title, "description": disc_desc, "url": "https://usa-address-zip.vercel.app/disclaimer.html"}
+    html = HEADER.format(title=disc_title, description=disc_desc, root_path="", schema_markup=f'<script type="application/ld+json">{json.dumps(_disc_schema)}</script>',
+                         keywords=_seo_disc['keywords'], canonical_url="https://usa-address-zip.vercel.app/disclaimer.html", og_image=SITE_OG_IMAGE)
     html += disc_content.format(SIDEBAR_HTML=SIDEBAR_HTML)
     html += FOOTER.format(root_path="")
     with open(os.path.join(DIST_DIR, "disclaimer.html"), "w", encoding="utf-8") as f:
@@ -963,7 +1126,18 @@ def generate_distance_page():
     </div>
     """
     
-    html = HEADER.format(title=title, description=description, root_path="", schema_markup="")
+    _seo_dist = PAGE_SEO['distance']
+    _dist_schema = {
+        "@context": "https://schema.org", "@type": "WebApplication",
+        "name": title, "description": description,
+        "url": "https://usa-address-zip.vercel.app/distance.html",
+        "applicationCategory": "UtilitiesApplication", "operatingSystem": "All",
+        "browserRequirements": "Requires JavaScript. Requires HTML5.",
+        "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+        "featureList": ["Straight-line distance in miles and kilometers", "Haversine formula calculation", "ZIP code coordinate lookup", "Shareable result URL"]
+    }
+    html = HEADER.format(title=title, description=description, root_path="", schema_markup=f'<script type="application/ld+json">{json.dumps(_dist_schema)}</script>',
+                         keywords=_seo_dist['keywords'], canonical_url="https://usa-address-zip.vercel.app/distance.html", og_image=SITE_OG_IMAGE)
     html += breadcrumbs_html
     html += body_content.format(SIDEBAR_HTML=SIDEBAR_HTML)
     html += FOOTER.format(root_path="")
@@ -1062,7 +1236,18 @@ def generate_address_generator_page():
     </div>
     """
     
-    html = HEADER.format(title=title, description=description, root_path="", schema_markup="")
+    _seo_gen = PAGE_SEO['generator']
+    _gen_schema = {
+        "@context": "https://schema.org", "@type": "WebApplication",
+        "name": title, "description": description,
+        "url": "https://usa-address-zip.vercel.app/address-generator.html",
+        "applicationCategory": "UtilitiesApplication", "operatingSystem": "All",
+        "browserRequirements": "Requires JavaScript. Requires HTML5.",
+        "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+        "featureList": ["Generate random US addresses", "Filter by state, county, city, or ZIP", "Realistic street name generation", "Copy address to clipboard"]
+    }
+    html = HEADER.format(title=title, description=description, root_path="", schema_markup=f'<script type="application/ld+json">{json.dumps(_gen_schema)}</script>',
+                         keywords=_seo_gen['keywords'], canonical_url="https://usa-address-zip.vercel.app/address-generator.html", og_image=SITE_OG_IMAGE)
     html += breadcrumbs_html
     html += body_content.format(SIDEBAR_HTML=SIDEBAR_HTML)
     html += FOOTER.format(root_path="")
@@ -1174,15 +1359,18 @@ def generate_radius_page():
     </div>
     """
     
-    html = HEADER.format(title=title, description=description, root_path="", schema_markup="")
-    html += breadcrumbs_html
-    html += body_content.format(SIDEBAR_HTML=SIDEBAR_HTML)
-    html += FOOTER.format(root_path="")
-    
-    with open(os.path.join(DIST_DIR, "radius-finder.html"), "w", encoding="utf-8") as f:
-        f.write(html)
-    print("Generated radius-finder.html")
-    
+    _seo_radius = PAGE_SEO['radius']
+    _radius_schema = {
+        "@context": "https://schema.org", "@type": "WebApplication",
+        "name": title, "description": description,
+        "url": "https://usa-address-zip.vercel.app/radius-finder.html",
+        "applicationCategory": "UtilitiesApplication", "operatingSystem": "All",
+        "browserRequirements": "Requires JavaScript. Requires HTML5.",
+        "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+        "featureList": ["Find ZIP codes within a radius", "Set custom mile or kilometer radius", "Export results to CSV", "Sort by distance"]
+    }
+    html = HEADER.format(title=title, description=description, root_path="", schema_markup=f'<script type="application/ld+json">{json.dumps(_radius_schema)}</script>',
+                         keywords=_seo_radius['keywords'], canonical_url="https://usa-address-zip.vercel.app/radius-finder.html", og_image=SITE_OG_IMAGE)
     breadcrumbs_list = '<li><a href="index.html">Home</a></li><li class="active">Radius Finder</li>'
     breadcrumbs_html = BREADCRUMBS_HTML.format(breadcrumbs=breadcrumbs_list)
     
@@ -1287,7 +1475,8 @@ def generate_radius_page():
     </div>
     """
     
-    html = HEADER.format(title=title, description=description, root_path="", schema_markup="")
+    html = HEADER.format(title=title, description=description, root_path="", schema_markup=f'<script type="application/ld+json">{json.dumps(_radius_schema)}</script>',
+                         keywords=_seo_radius['keywords'], canonical_url="https://usa-address-zip.vercel.app/radius-finder.html", og_image=SITE_OG_IMAGE)
     html += breadcrumbs_html
     html += body_content.format(SIDEBAR_HTML=SIDEBAR_HTML)
     html += FOOTER.format(root_path="")
@@ -1358,11 +1547,21 @@ def generate_standardizer_page():
     </div>
     """
     
-    html = HEADER.format(title=title, description=description, root_path="", schema_markup="")
+    _seo_std = PAGE_SEO['standardizer']
+    _std_schema = {
+        "@context": "https://schema.org", "@type": "WebApplication",
+        "name": title, "description": description,
+        "url": "https://usa-address-zip.vercel.app/address-standardizer.html",
+        "applicationCategory": "UtilitiesApplication", "operatingSystem": "All",
+        "browserRequirements": "Requires JavaScript. Requires HTML5.",
+        "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+        "featureList": ["Format US addresses to USPS standards", "Uppercase city and state", "Standardize ZIP code format", "Copy formatted address"]
+    }
+    html = HEADER.format(title=title, description=description, root_path="", schema_markup=f'<script type="application/ld+json">{json.dumps(_std_schema)}</script>',
+                         keywords=_seo_std['keywords'], canonical_url="https://usa-address-zip.vercel.app/address-standardizer.html", og_image=SITE_OG_IMAGE)
     html += breadcrumbs_html
     html += body_content.format(SIDEBAR_HTML=SIDEBAR_HTML)
     html += FOOTER.format(root_path="")
-    
     with open(os.path.join(DIST_DIR, "address-standardizer.html"), "w", encoding="utf-8") as f:
         f.write(html)
     print("Generated address-standardizer.html")
@@ -1425,11 +1624,21 @@ def generate_compare_page():
     </div>
     """
     
-    html = HEADER.format(title=title, description=description, root_path="", schema_markup="")
+    _seo_compare = PAGE_SEO['compare']
+    _compare_schema = {
+        "@context": "https://schema.org", "@type": "WebApplication",
+        "name": title, "description": description,
+        "url": "https://usa-address-zip.vercel.app/compare.html",
+        "applicationCategory": "UtilitiesApplication", "operatingSystem": "All",
+        "browserRequirements": "Requires JavaScript. Requires HTML5.",
+        "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+        "featureList": ["Compare two ZIP codes side-by-side", "View county, city, state details", "Calculate distance between compared ZIP codes", "Time zone comparison"]
+    }
+    html = HEADER.format(title=title, description=description, root_path="", schema_markup=f'<script type="application/ld+json">{json.dumps(_compare_schema)}</script>',
+                         keywords=_seo_compare['keywords'], canonical_url="https://usa-address-zip.vercel.app/compare.html", og_image=SITE_OG_IMAGE)
     html += breadcrumbs_html
     html += body_content.format(SIDEBAR_HTML=SIDEBAR_HTML)
     html += FOOTER.format(root_path="")
-    
     with open(os.path.join(DIST_DIR, "compare.html"), "w", encoding="utf-8") as f:
         f.write(html)
     print("Generated compare.html")
@@ -1473,7 +1682,18 @@ def generate_timezone_page():
     </div>
     """
     
-    html = HEADER.format(title=title, description=description, root_path="", schema_markup="")
+    _seo_tz = PAGE_SEO['timezone']
+    _tz_schema = {
+        "@context": "https://schema.org", "@type": "WebApplication",
+        "name": title, "description": description,
+        "url": "https://usa-address-zip.vercel.app/timezone.html",
+        "applicationCategory": "UtilitiesApplication", "operatingSystem": "All",
+        "browserRequirements": "Requires JavaScript. Requires HTML5.",
+        "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+        "featureList": ["Lookup time zone by ZIP code", "Live digital local clocks", "UTC offset display", "State time zone reference guide"]
+    }
+    html = HEADER.format(title=title, description=description, root_path="", schema_markup=f'<script type="application/ld+json">{json.dumps(_tz_schema)}</script>',
+                         keywords=_seo_tz['keywords'], canonical_url="https://usa-address-zip.vercel.app/timezone.html", og_image=SITE_OG_IMAGE)
     html += breadcrumbs_html
     html += body_content.format(SIDEBAR_HTML=SIDEBAR_HTML)
     html += FOOTER.format(root_path="")
@@ -1516,7 +1736,18 @@ def generate_areacode_page():
     </div>
     """
     
-    html = HEADER.format(title=title, description=description, root_path="", schema_markup="")
+    _seo_ac = PAGE_SEO['area_codes']
+    _ac_schema = {
+        "@context": "https://schema.org", "@type": "WebApplication",
+        "name": title, "description": description,
+        "url": "https://usa-address-zip.vercel.app/area-codes.html",
+        "applicationCategory": "UtilitiesApplication", "operatingSystem": "All",
+        "browserRequirements": "Requires JavaScript. Requires HTML5.",
+        "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+        "featureList": ["Lookup US phone area codes", "Find area code by ZIP code", "Complete US area code directory", "Filter by state"]
+    }
+    html = HEADER.format(title=title, description=description, root_path="", schema_markup=f'<script type="application/ld+json">{json.dumps(_ac_schema)}</script>',
+                         keywords=_seo_ac['keywords'], canonical_url="https://usa-address-zip.vercel.app/area-codes.html", og_image=SITE_OG_IMAGE)
     html += breadcrumbs_html
     html += body_content.format(SIDEBAR_HTML=SIDEBAR_HTML)
     html += FOOTER.format(root_path="")
@@ -1634,7 +1865,18 @@ def generate_virtual_address_page():
     </div>
     """
     
-    html = HEADER.format(title=title, description=description, root_path="", schema_markup="")
+    _seo_va = PAGE_SEO['virtual_address']
+    _va_schema = {
+        "@context": "https://schema.org", "@type": "WebApplication",
+        "name": title, "description": description,
+        "url": "https://usa-address-zip.vercel.app/virtual-address.html",
+        "applicationCategory": "UtilitiesApplication", "operatingSystem": "All",
+        "browserRequirements": "Requires JavaScript. Requires HTML5.",
+        "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+        "featureList": ["Find tax-free US states for package forwarding", "Virtual US address guide", "Compare reshipping services", "No sales tax ZIP code directory"]
+    }
+    html = HEADER.format(title=title, description=description, root_path="", schema_markup=f'<script type="application/ld+json">{json.dumps(_va_schema)}</script>',
+                         keywords=_seo_va['keywords'], canonical_url="https://usa-address-zip.vercel.app/virtual-address.html", og_image=SITE_OG_IMAGE)
     html += breadcrumbs_html
     html += body_content.format(SIDEBAR_HTML=SIDEBAR_HTML)
     html += FOOTER.format(root_path="")

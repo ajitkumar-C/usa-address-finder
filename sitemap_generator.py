@@ -89,6 +89,14 @@ urls.append({
     "priority": "0.8"
 })
 
+# 1i. Virtual US Address Page
+urls.append({
+    "loc": f"{SITE_URL}virtual-address.html",
+    "lastmod": current_date,
+    "changefreq": "weekly",
+    "priority": "0.8"
+})
+
 # 1c. Info Pages
 for info in ["about.html", "contact.html", "privacy.html", "disclaimer.html"]:
     urls.append({

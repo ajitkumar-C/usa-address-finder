@@ -223,6 +223,7 @@ HEADER = """<!DOCTYPE html>
                             <li><a href="{root_path}compare.html">📊 ZIP Code Compare</a></li>
                             <li><a href="{root_path}timezone.html">🕒 Time Zone Finder</a></li>
                             <li><a href="{root_path}area-codes.html">📞 Area Code Lookup</a></li>
+                            <li><a href="{root_path}virtual-address.html">📧 Virtual US Address</a></li>
                         </ul>
                     </li>
                     <li><a href="{root_path}about.html">About</a></li>
@@ -476,8 +477,8 @@ def generate_homepage():
 # -----------------
 def generate_state_pages():
     for state_name, data in states_data.items():
-        title = f"{state_name} ZIP Code List - Counties, Cities & Maps ({data['abbr']})"
-        description = f"Complete list of U.S. ZIP codes, counties, and cities in {state_name} ({data['abbr']}). Download {state_name} ZIP code list CSV, filter counties, and explore postal maps."
+        title = f"{state_name} ZIP Code USA - List of Cities & Counties ({data['abbr']})"
+        description = f"Search the complete {state_name} ZIP code USA list. Find all cities, counties, and postal codes in {state_name} ({data['abbr']}). Download state ZIP codes CSV and view maps."
         
         breadcrumbs_list = f'<li><a href="../index.html">Home</a></li><li class="active">{state_name}</li>'
         breadcrumbs_html = BREADCRUMBS_HTML.format(breadcrumbs=breadcrumbs_list)
@@ -510,10 +511,15 @@ def generate_state_pages():
                     <div class="state-info-header">
                         <div class="state-title-wrap">
                             <span class="state-badge-large">{data['abbr']}</span>
-                            <h2>{state_name}</h2>
+                            <h2>{state_name} ZIP Code USA Directory</h2>
                         </div>
                         <span style="font-size: 14px; color: var(--text-muted); font-weight: 600;">FIPS Code: {data['fips']}</span>
                     </div>
+                    
+                    <p style="margin: 0 0 24px 0; font-size: 15px; color: var(--text-secondary); line-height: 1.6;">
+                        Explore our comprehensive U.S. postal database to search all cities, counties, and ZIP codes in {state_name}. 
+                        Filter the listing by county below, or export the complete {state_name} ZIP code list to a CSV spreadsheet.
+                    </p>
 
                     <div class="state-meta-stats">
                         <div class="meta-stat">
@@ -968,8 +974,8 @@ def generate_distance_page():
 
 def generate_address_generator_page():
     print("Generating ZIP/State/City/County random address generator page (address-generator.html)...")
-    title = "Random US Address Generator - Generate Valid Street Addresses"
-    description = "Free random U.S. address generator with valid ZIP codes, cities, counties, and street names. Generate realistic dummy U.S. contact details for software testing."
+    title = "Random US Address Generator - Generate Valid Street Addresses & Fake ZIP Codes"
+    description = "Generate random U.S. street addresses based on ZIP code, state, city, or county. Ideal for software developers requiring fake U.S. ZIP codes and valid test addresses."
     
     breadcrumbs_list = '<li><a href="index.html">Home</a></li><li class="active">Address Generator</li>'
     breadcrumbs_html = BREADCRUMBS_HTML.format(breadcrumbs=breadcrumbs_list)
@@ -981,7 +987,7 @@ def generate_address_generator_page():
             <div class="main-content">
                 <h2 class="section-title" style="margin-bottom: 24px;">Random US Address Generator</h2>
                 <p style="margin-bottom: 24px; font-size: 15px; color: var(--text-secondary);">
-                    Generate random US addresses with ZIP code, state, city, and street name. Perfect for software testing, form validation, and dummy data generation.
+                    Need test data, a fake zip code, or a random U.S. address for validation tests? Select a geographic scope below (State, County, City, or ZIP code) or generate completely random valid U.S. street address options.
                 </p>
                 
                 <div class="calculator-card" style="background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: var(--card-radius); padding: 24px; margin-bottom: 24px;">
@@ -1035,6 +1041,12 @@ def generate_address_generator_page():
                         <h4 style="font-size: 14px; margin-bottom: 4px; color: var(--text-primary);">Are these actual physical U.S. addresses?</h4>
                         <p style="font-size: 13.5px; color: var(--text-secondary);">
                             No. The geographic details (City, State, County, and ZIP code) are real data structures sourced from the U.S. Census Bureau. However, the street numbers and names are generated randomly using statistical naming patterns to preserve privacy.
+                        </p>
+                    </div>
+                    <div style="margin-bottom: 16px;">
+                        <h4 style="font-size: 14px; margin-bottom: 4px; color: var(--text-primary);">How do I get a list of valid US ZIP codes or fake address data for testing?</h4>
+                        <p style="font-size: 13.5px; color: var(--text-secondary);">
+                            Our generator lets you scope address details down to any specific ZIP code or city. You can generate multiple valid mock addresses with correctly formatted street names, counties, states, and coordinates to verify your databases, checkout fields, and APIs.
                         </p>
                     </div>
                     <div style="margin-bottom: 16px;">
@@ -1513,6 +1525,124 @@ def generate_areacode_page():
         f.write(html)
     print("Generated area-codes.html")
 
+def generate_virtual_address_page():
+    print("Generating Virtual US Address page (virtual-address.html)...")
+    title = "Virtual US Address Directory & Mail Forwarding Guide"
+    description = "Get a free or cheap virtual US address for business or personal package forwarding. Find recommended tax-free state ZIP codes for shopping and reshipping."
+    
+    breadcrumbs_list = '<li><a href="index.html">Home</a></li><li class="active">Virtual Address Guide</li>'
+    breadcrumbs_html = BREADCRUMBS_HTML.format(breadcrumbs=breadcrumbs_list)
+    
+    body_content = """
+    <div class="container animate-fade-in" style="margin-top: 30px;">
+        <div class="detail-layout">
+            <div class="main-content">
+                <h2 class="section-title" style="margin-bottom: 24px;">Virtual U.S. Address & Mail Forwarding Directory</h2>
+                <p style="margin-bottom: 24px; font-size: 15px; color: var(--text-secondary); line-height: 1.6;">
+                    A <strong>Virtual U.S. Address</strong> allows international shoppers, business owners, and software developers to get a real street address in the United States. 
+                    This guide details how U.S. package reshipping/proxy forwarding works and highlights the best states to get a virtual address to save on taxes.
+                </p>
+                
+                <h3 style="font-size: 18px; margin: 28px 0 16px 0; color: var(--text-primary);">How U.S. Package Reshipping Works</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px;">
+                    <div style="background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: 6px; padding: 18px;">
+                        <div style="font-size: 24px; font-weight: 800; color: var(--primary-color); margin-bottom: 8px;">01</div>
+                        <h4 style="font-size: 14px; margin-bottom: 6px;">Sign Up & Get Address</h4>
+                        <p style="font-size: 12.5px; color: var(--text-secondary); margin: 0;">Register with a proxy shipping provider to get a unique U.S. street address with box number.</p>
+                    </div>
+                    <div style="background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: 6px; padding: 18px;">
+                        <div style="font-size: 24px; font-weight: 800; color: var(--primary-color); margin-bottom: 8px;">02</div>
+                        <h4 style="font-size: 14px; margin-bottom: 6px;">Shop U.S. Stores</h4>
+                        <p style="font-size: 12.5px; color: var(--text-secondary); margin: 0;">Use your new U.S. address at checkout on sites like Amazon, eBay, or Walmart that restrict international postage.</p>
+                    </div>
+                    <div style="background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: 6px; padding: 18px;">
+                        <div style="font-size: 24px; font-weight: 800; color: var(--primary-color); margin-bottom: 8px;">03</div>
+                        <h4 style="font-size: 14px; margin-bottom: 6px;">Reship to Your Country</h4>
+                        <p style="font-size: 12.5px; color: var(--text-secondary); margin: 0;">The warehouse receives your packages, consolidates them to save on fees, and ships them to your home address.</p>
+                    </div>
+                </div>
+
+                <h3 style="font-size: 18px; margin: 28px 0 16px 0; color: var(--text-primary);">Best Tax-Free U.S. States for Virtual Addresses</h3>
+                <p style="margin-bottom: 16px; font-size: 14.5px; color: var(--text-secondary); line-height: 1.6;">
+                    When choosing a U.S. reshipper address, selecting a state with <strong>0% Sales Tax</strong> will save you up to 10% on your online purchases. 
+                    Below are the top states used by proxy shipping services:
+                </p>
+
+                <div style="overflow-x: auto; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--card-radius); margin-bottom: 30px; box-shadow: var(--shadow-sm);">
+                    <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 14px;">
+                        <thead>
+                            <tr style="border-bottom: 2px solid var(--border-color); background: var(--bg-tertiary);">
+                                <th style="padding: 12px 16px; font-weight: 600; color: var(--text-primary);">U.S. State</th>
+                                <th style="padding: 12px 16px; font-weight: 600; color: var(--text-primary); width: 100px;">Sales Tax</th>
+                                <th style="padding: 12px 16px; font-weight: 600; color: var(--text-primary); width: 110px;">Sample ZIP</th>
+                                <th style="padding: 12px 16px; font-weight: 600; color: var(--text-primary);">Proximity / Ideal Use</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid var(--border-color);">
+                                <td style="padding: 12px 16px; font-weight: 600; color: var(--text-primary);">Delaware (DE)</td>
+                                <td style="padding: 12px 16px; color: var(--primary-color); font-weight: 700;">0%</td>
+                                <td style="padding: 12px 16px; font-family: monospace;">19711 (Newark)</td>
+                                <td style="padding: 12px 16px; color: var(--text-secondary);">East Coast. Excellent for transatlantic forwarding to Europe, UK, and Africa.</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--border-color);">
+                                <td style="padding: 12px 16px; font-weight: 600; color: var(--text-primary);">Oregon (OR)</td>
+                                <td style="padding: 12px 16px; color: var(--primary-color); font-weight: 700;">0%</td>
+                                <td style="padding: 12px 16px; font-family: monospace;">97230 (Portland)</td>
+                                <td style="padding: 12px 16px; color: var(--text-secondary);">West Coast. Best choice for shipping to Asia-Pacific, Japan, and Australia.</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--border-color);">
+                                <td style="padding: 12px 16px; font-weight: 600; color: var(--text-primary);">Montana (MT)</td>
+                                <td style="padding: 12px 16px; color: var(--primary-color); font-weight: 700;">0%</td>
+                                <td style="padding: 12px 16px; font-family: monospace;">59715 (Bozeman)</td>
+                                <td style="padding: 12px 16px; color: var(--text-secondary);">Northern Border. Ideal for business entity setup or vehicle registration.</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--border-color);">
+                                <td style="padding: 12px 16px; font-weight: 600; color: var(--text-primary);">New Hampshire (NH)</td>
+                                <td style="padding: 12px 16px; color: var(--primary-color); font-weight: 700;">0%</td>
+                                <td style="padding: 12px 16px; font-family: monospace;">03060 (Nashua)</td>
+                                <td style="padding: 12px 16px; color: var(--text-secondary);">New England. Popular alternative for Atlantic and Canadian freight.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="faq-section" style="margin-top: 40px; border-top: 1px solid var(--border-color); padding-top: 30px;">
+                    <h3 style="font-size: 18px; margin-bottom: 16px;">Frequently Asked Questions</h3>
+                    <div style="margin-bottom: 16px;">
+                        <h4 style="font-size: 14px; margin-bottom: 4px; color: var(--text-primary);">Is it legal to use a virtual US address?</h4>
+                        <p style="font-size: 13.5px; color: var(--text-secondary);">
+                            Yes. Using a virtual U.S. address or package reshipping warehouse is completely legal. It is a standard service authorized by the USPS under form CMRA 1583 (Commercial Mail Receiving Agency guidelines).
+                        </p>
+                    </div>
+                    <div style="margin-bottom: 16px;">
+                        <h4 style="font-size: 14px; margin-bottom: 4px; color: var(--text-primary);">Can I use this address for commercial business registration?</h4>
+                        <p style="font-size: 13.5px; color: var(--text-secondary);">
+                            Yes. Many international entrepreneurs use virtual business addresses in states like Delaware or Wyoming to register LLCs, obtain EIN tax IDs, and run U.S.-based companies remotely.
+                        </p>
+                    </div>
+                    <div style="margin-bottom: 16px;">
+                        <h4 style="font-size: 14px; margin-bottom: 4px; color: var(--text-primary);">How do I get a free virtual US address?</h4>
+                        <p style="font-size: 13.5px; color: var(--text-secondary);">
+                            Many package reshippers offer free U.S. addresses with no monthly membership costs. You only pay for postage, parcel consolidation, and shipping fees when forwarding items to your home country.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            {SIDEBAR_HTML}
+        </div>
+    </div>
+    """
+    
+    html = HEADER.format(title=title, description=description, root_path="", schema_markup="")
+    html += breadcrumbs_html
+    html += body_content.format(SIDEBAR_HTML=SIDEBAR_HTML)
+    html += FOOTER.format(root_path="")
+    
+    with open(os.path.join(DIST_DIR, "virtual-address.html"), "w", encoding="utf-8") as f:
+        f.write(html)
+    print("Generated virtual-address.html")
+
 # Main build execution
 if __name__ == "__main__":
     generate_homepage()
@@ -1526,4 +1656,5 @@ if __name__ == "__main__":
     generate_compare_page()
     generate_timezone_page()
     generate_areacode_page()
+    generate_virtual_address_page()
     print("All pages successfully built!")
